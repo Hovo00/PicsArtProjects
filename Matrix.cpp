@@ -4,6 +4,7 @@ Matrix::Matrix() {
     tokType = TokenType::Matrix;
 }
 Matrix::Matrix(const std::string& str) {
+    tokType = TokenType::Matrix;
     matrix.resize(str.size());
     rowCount = 0;
     colCount = 0;
@@ -16,12 +17,26 @@ Matrix::Matrix(const std::string& str) {
         }
     }
     colCount = matrix[0].size();
+    --rowCount;
     matrix.resize(rowCount);
 }
+Matrix::Matrix(int row, int col) {
+    tokType = TokenType::Matrix;
+    rowCount = row;
+    colCount = col;
+    matrix.resize(row);
+    for(auto & i : matrix) {
+        i.resize(col);
+    }
+}
 
-int Matrix::getColCount() {
+
+int Matrix::getColCount() const{
     return colCount;
 }
-int Matrix::getRowCount() {
+int Matrix::getRowCount() const{
     return rowCount;
+}
+void Matrix::doStuff(){
+        printMat();
 }

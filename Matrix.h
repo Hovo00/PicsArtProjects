@@ -10,12 +10,11 @@
 class Matrix : public Token {
 public:
     Matrix();
+    Matrix(int row, int col);
     Matrix(const std::string&);
-    int getColCount();
-    int getRowCount();
-    virtual void doStuff() override {
-        printMat();
-    }
+    int getColCount() const;
+    int getRowCount() const;
+    virtual void doStuff() override;
     void printMat() {
         for (auto &i : matrix) {
             std::cout << std::endl;
@@ -30,6 +29,7 @@ public:
 private:
     int rowCount;
     int colCount;
+    public:
     std::vector<std::vector<double>> matrix;
 };
 

@@ -14,36 +14,30 @@ public:
 
 class IbinMatOperations : public ImatrixOperation {
 public:
-    virtual double do_operation(Matrix&, Matrix&) = 0;
+    virtual Matrix do_operation(const Matrix&, const Matrix&) = 0;
 
 };
 
 class IternMatOperations : public IbinMatOperations {
 public:
-    virtual double do_operation(Matrix&, Matrix&, Matrix&) = 0;
+    virtual Matrix do_operation(Matrix&, Matrix&, Matrix&) = 0;
 
 };
 
 class matrixAdd : public IbinMatOperations {
 public:
     matrixAdd();
-    virtual double do_operation(Matrix&, Matrix&) override;
+    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
 };
 
 class matrixSub : public IbinMatOperations {
 public:
     matrixSub();
-    virtual double do_operation(Matrix&, Matrix&) override;
-};
-
-class matrixDiv : public IbinMatOperations {
-public:
-    matrixDiv();
-    virtual double do_operation(Matrix&, Matrix&) override;
+    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
 };
 
 class matrixMul : public IbinMatOperations {
 public:
     matrixMul();
-    virtual double do_operation(Matrix&, Matrix&) override;
+    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
 };
