@@ -1,3 +1,0 @@
-/Users/hovogrigoryan/Documents/Picsart/PicsArt_projects/build/CMakeFiles/expression_evaluator.dir
-/Users/hovogrigoryan/Documents/Picsart/PicsArt_projects/build/CMakeFiles/edit_cache.dir
-/Users/hovogrigoryan/Documents/Picsart/PicsArt_projects/build/CMakeFiles/rebuild_cache.dir
