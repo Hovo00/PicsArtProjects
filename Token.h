@@ -1,12 +1,17 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-enum class TokenType {Operator , Matrix, Function};
+#include <iostream>
+#include <vector>
+
+enum class TokenType {Operator, Operand};
+
+class Matrix;
 
 class Token {
 public:
     TokenType tokType;
-    virtual void doStuff() = 0;
+    virtual Matrix doStuff(std::vector<Matrix> = {}) = 0;
     int prec;
 };
 

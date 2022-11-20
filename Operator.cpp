@@ -3,9 +3,13 @@
 Operator::Operator() {
     tokType = TokenType::Operator;
 }
-void Operator::doStuff() {
-
+Matrix IbinMatOperations::doStuff(std::vector<Matrix> vec) {
+    return do_operation(vec[0], vec[1]);
 }
+Matrix IternMatOperations::doStuff(std::vector<Matrix> vec) {
+    return do_operation(vec[0], vec[1], vec[2]);
+}
+
 Matrix matrixMul::do_operation(const Matrix& m1, const Matrix& m2) {
     int n = m1.getRowCount();
     int c = m1.getColCount();
@@ -53,4 +57,3 @@ matrixSub::matrixSub() {
 matrixAdd::matrixAdd() {
     prec = 1;
 }
-

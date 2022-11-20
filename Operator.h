@@ -4,7 +4,6 @@
 class Operator : public Token {
 public:
     Operator();
-    virtual void doStuff() override;
 };
 
 class ImatrixOperation : public Operator{
@@ -14,14 +13,15 @@ public:
 
 class IbinMatOperations : public ImatrixOperation {
 public:
+    virtual Matrix doStuff(std::vector<Matrix>) override;
     virtual Matrix do_operation(const Matrix&, const Matrix&) = 0;
 
 };
 
 class IternMatOperations : public IbinMatOperations {
 public:
-    virtual Matrix do_operation(Matrix&, Matrix&, Matrix&) = 0;
-
+    virtual Matrix doStuff(std::vector<Matrix>) override;
+    virtual Matrix do_operation(const Matrix&, const Matrix&, const Matrix&) = 0;
 };
 
 class matrixAdd : public IbinMatOperations {

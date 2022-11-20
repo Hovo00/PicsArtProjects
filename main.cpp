@@ -11,13 +11,18 @@ int main() {
     std::string inpStr;
     in.getInput(inpStr);
     Parser pars;
+    auto parsed = pars.do_parse(inpStr);
     Tree tree;
-    auto p = pars.do_parse(inpStr);
-    tree.BuildTree(p);
-    auto head = tree.getHead();
-    tree.inOrder(head);
-    matrixSub mul;
-    auto res = mul.do_operation(Matrix("{{1 2 } {3 4}}"), Matrix("{{2 3} {2 2}}"));
-    res.printMat();
+    tree.BuildTree(parsed);
+    auto j = tree.evaluate(tree.getHead());
+    j.printMat();
+    // auto p = pars.do_parse(inpStr);
+    // tree.BuildTree(p);
+    // auto head = tree.getHead();
+    // tree.inOrder(head);
+    // matrixSub mul;
+    // auto res = mul.doStuff(std::vector<Matrix>{Matrix("{{1 2 } {3 4}}"), Matrix("{{2 3} {2 2}}")});
+    // res.printMat();
+
     
 }

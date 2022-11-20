@@ -3,7 +3,7 @@
 void Tree::BuildTree(std::vector<std::shared_ptr<Token> >& tokens) {
     std::stack<std::shared_ptr<Node> > treeStack;
     for (auto& token : tokens) {
-        if (token->tokType == TokenType::Matrix) {
+        if (token->tokType == TokenType::Operand) {
             treeStack.push(std::make_shared<Node>(token));
         }
         else {

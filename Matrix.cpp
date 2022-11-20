@@ -1,10 +1,10 @@
 #include "Matrix.h"
 
 Matrix::Matrix() {
-    tokType = TokenType::Matrix;
+    tokType = TokenType::Operand;
 }
 Matrix::Matrix(const std::string& str) {
-    tokType = TokenType::Matrix;
+    tokType = TokenType::Operand;
     matrix.resize(str.size());
     rowCount = 0;
     colCount = 0;
@@ -21,7 +21,7 @@ Matrix::Matrix(const std::string& str) {
     matrix.resize(rowCount);
 }
 Matrix::Matrix(int row, int col) {
-    tokType = TokenType::Matrix;
+    tokType = TokenType::Operand;
     rowCount = row;
     colCount = col;
     matrix.resize(row);
@@ -37,6 +37,7 @@ int Matrix::getColCount() const{
 int Matrix::getRowCount() const{
     return rowCount;
 }
-void Matrix::doStuff(){
-        printMat();
+Matrix Matrix::doStuff(std::vector<Matrix> vec){
+    printMat();
+    return *this;
 }

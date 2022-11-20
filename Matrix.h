@@ -14,7 +14,7 @@ public:
     Matrix(const std::string&);
     int getColCount() const;
     int getRowCount() const;
-    virtual void doStuff() override;
+    virtual Matrix doStuff(std::vector<Matrix>) override;
     void printMat() {
         for (auto &i : matrix) {
             std::cout << std::endl;
