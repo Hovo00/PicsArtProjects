@@ -5,10 +5,9 @@
 
 class Node {
 public:
-    Node(std::shared_ptr<Token> t = nullptr, std::shared_ptr<Node> l = nullptr ,std::shared_ptr<Node> r = nullptr);
+    Node(std::shared_ptr<Token> = nullptr, std::vector<std::shared_ptr<Node> > = {});
 public:
-    std::shared_ptr<Node> left;
-    std::shared_ptr<Node> right;
+    std::vector<std::shared_ptr<Node> > childs;
     std::shared_ptr<Token> token;
 };
 

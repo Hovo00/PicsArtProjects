@@ -7,25 +7,28 @@
 #include <iostream>
 #include "Token.h"
 
-class Matrix : public Token {
+class Operand : public Token{
+public:
+    virtual void printOperand() = 0;
+};
+
+class Matrix : public Operand {
 public:
     Matrix();
     Matrix(int row, int col);
     Matrix(const std::string&);
+public:
     int getColCount() const;
     int getRowCount() const;
-    virtual Matrix doStuff(std::vector<Matrix>) override;
-    void printMat() {
-        for (auto &i : matrix) {
-            std::cout << std::endl;
-            for (auto &j : i) {
-                std::cout << j << " ";
-            }
-        }
-    }
+    void printMat();
     bool is_digit(char digit) {
     return (digit <= '9' && digit >= '1') ? true : false;
 }
+public:
+    virtual Matrix* doStuff(std::vector<Matrix>) override;
+    virtual void printOperand() override;
+    virtual int tokenData() override;
+  
 private:
     int rowCount;
     int colCount;

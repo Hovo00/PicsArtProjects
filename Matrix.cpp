@@ -37,7 +37,22 @@ int Matrix::getColCount() const{
 int Matrix::getRowCount() const{
     return rowCount;
 }
-Matrix Matrix::doStuff(std::vector<Matrix> vec){
+Matrix* Matrix::doStuff(std::vector<Matrix> vec){
     printMat();
-    return *this;
+    return this;
 }
+void Matrix::printMat() {
+    for (auto &i : matrix) {
+        std::cout << std::endl;
+        for (auto &j : i) {
+            std::cout << j << " ";
+        }
+    }
+    std::cout << std::endl << getColCount() << " " << getRowCount() << std::endl;
+}
+int Matrix::tokenData() {
+    return 1;
+}
+void Matrix::printOperand() {
+    printMat();
+} 

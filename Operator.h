@@ -13,31 +13,32 @@ public:
 
 class IbinMatOperations : public ImatrixOperation {
 public:
-    virtual Matrix doStuff(std::vector<Matrix>) override;
-    virtual Matrix do_operation(const Matrix&, const Matrix&) = 0;
-
+    virtual int tokenData() override;
+    virtual Matrix* doStuff(std::vector<Matrix>) override;
+    virtual Matrix* do_operation(const Matrix&, const Matrix&) = 0;
 };
 
-class IternMatOperations : public IbinMatOperations {
+class IternMatOperations : public ImatrixOperation {
 public:
-    virtual Matrix doStuff(std::vector<Matrix>) override;
-    virtual Matrix do_operation(const Matrix&, const Matrix&, const Matrix&) = 0;
+    virtual int tokenData() override;
+    virtual Matrix* doStuff(std::vector<Matrix>) override;
+    virtual Matrix* do_operation(const Matrix&, const Matrix&, const Matrix&) = 0;
 };
 
 class matrixAdd : public IbinMatOperations {
 public:
     matrixAdd();
-    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
+    virtual Matrix* do_operation(const Matrix&, const Matrix&) override;
 };
 
 class matrixSub : public IbinMatOperations {
 public:
     matrixSub();
-    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
+    virtual Matrix* do_operation(const Matrix&, const Matrix&) override;
 };
 
 class matrixMul : public IbinMatOperations {
 public:
     matrixMul();
-    virtual Matrix do_operation(const Matrix&, const Matrix&) override;
+    virtual Matrix* do_operation(const Matrix&, const Matrix&) override;
 };
