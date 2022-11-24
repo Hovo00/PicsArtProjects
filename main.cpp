@@ -1,9 +1,6 @@
 #include "InputClass.h"
-#include "Token.h"
-#include "Matrix.h"
 #include "Parser.h"
 #include "Tree.h"
-
 
 
 int main() {
@@ -15,5 +12,6 @@ int main() {
     Tree tree;
     tree.BuildTree(parsed);
     auto j = tree.evaluate(tree.getHead());
+    std::cout << std::endl << "Result " << std::endl << std::endl;
     j->printOperand();
 }

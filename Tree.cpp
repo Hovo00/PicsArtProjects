@@ -21,16 +21,15 @@ void Tree::BuildTree(std::vector<std::shared_ptr<Token> >& tokens) {
 
 Operand* Tree::evaluate(std::shared_ptr<Node>& node) {
     if (node->token->tokType == TokenType::Operator) {
-        std::vector<Operand> vec;
+        std::vector<Operand*> vec;
         for (auto& ch : node->childs) {
-            vec.push_back(*(evaluate(ch)));
-            std::reverse(vec.begin(), vec.end());
+            vec.push_back(evaluate(ch));
         }
+        std::reverse(vec.begin(), vec.end());
         return node->token->doStuff(vec);
     }
     return node->token->doStuff();
 }
-
 std::shared_ptr<Node>& Tree::getHead() {
     return head;
 }

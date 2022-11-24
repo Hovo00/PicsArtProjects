@@ -2,9 +2,8 @@
 #define MATRIX_H
 
 #include <string>
-#include <vector>
 #include <stack>
-#include <iostream>
+#include "TypeInfo.h"
 #include "Token.h"
 
 class Operand : public Token{
@@ -21,18 +20,16 @@ public:
     int getColCount() const;
     int getRowCount() const;
     void printMat();
-    bool is_digit(char digit) {
-    return (digit <= '9' && digit >= '1') ? true : false;
-}
+    bool initMatrix(const std::string&);
 public:
-    virtual Matrix* doStuff(std::vector<Matrix>) override;
+    virtual Matrix* doStuff(std::vector<Operand*>) override;
     virtual void printOperand() override;
     virtual int tokenData() override;
   
 private:
     int rowCount;
     int colCount;
-    public:
+public:
     std::vector<std::vector<double>> matrix;
 };
 

@@ -51,17 +51,18 @@ std::vector<std::string> Lexer::infixToPostfix(std::vector<std::string>& infix) 
                 continue;
             }
             if (lexem[0] == ')') {
-//May cause seg fault in feuture (stack empty not checked )CHECK 
-                while (st.top() != "(") {
+                while (!st.empty() && st.top() != "(") {
                     postfix.push_back(st.top());
                     st.pop();
                 }
-                st.pop();
+                if (!st.empty()) {
+                    st.pop();
+                }
                 continue;
             }
             //change here for associativity
             //
-            //std::cout << " bxdooo" << std::endl;
+            //std::cout << " some" << std::endl;
             if (st.empty()) {
                 st.push(lexem);
                 continue;
@@ -80,22 +81,11 @@ std::vector<std::string> Lexer::infixToPostfix(std::vector<std::string>& infix) 
         else {
             postfix.push_back(lexem);
         }
-        //std::cout << " still okey";
     }
     while (!st.empty()) {
         postfix.push_back(st.top());
         st.pop();
     }
-    
     return postfix;
 }
 
-// int Lexer::prec(std::string oper) {
-//     if (oper == "+" || oper == "-") {
-//         return 1;
-//     }
-//     if (oper == "*" || oper == "/") {
-//         return 2;
-//     }
-//     return -1;
-//}

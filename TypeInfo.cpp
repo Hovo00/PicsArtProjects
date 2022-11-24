@@ -1,6 +1,6 @@
 #include "TypeInfo.h"
 
-std::vector<std::string> TypeInfo::operators = {"+", "-", "*", "=", "(", ")"};
+std::vector<std::string> TypeInfo::operators = {"+", "-", "*", "="};
 std::vector<std::string> TypeInfo::functions = {"select", "transpose", "inverse"};
 bool TypeInfo::isReserved(const std::string& str) {
     // for (auto& item : operators) {
@@ -35,7 +35,7 @@ bool TypeInfo::addFunction(const std::string& func, int argc) {
 std::unordered_map<std::string, int> TypeInfo::argCount = {{"select", 3}, {"transpose", 1}, {"inverse", 1}, 
                                                             {"+", 2}, {"-", 2}, {"*", 2}};
 
-std::unordered_map<std::string, int> TypeInfo::prec = {{"+", 1}, {"-", 1}, {"*", 2}, {"(", HIGH_PREC}, {")", HIGH_PREC}};
+std::unordered_map<std::string, int> TypeInfo::prec = {{"+", 1}, {"-", 1}, {"*", 2}};//, {"(", HIGH_PREC}, {")", HIGH_PREC}};
 
 bool TypeInfo::isLetter(char lett) {
     return (lett <= 'z' && lett >= 'A')  ? true : false;
@@ -49,3 +49,4 @@ bool TypeInfo::isOperator(char oper) {
 bool TypeInfo::isDigit(char digit) {
     return (digit <= '9' && digit >= '1') ? true : false;
 }
+//oper == '(' || oper == ')'

@@ -1,11 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include <vector>
-#include <iostream>
-#include <memory>
+
 #include "Token.h"
 #include "Lexer.h"
-#include "Operator.h"
+#include "matrixAdd.h"
+#include "matrixSub.h"
+#include "matrixMul.h"
 
 class Parser {
 public:

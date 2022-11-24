@@ -2,9 +2,9 @@
 
 std::vector<std::shared_ptr<Token> >& Parser::do_parse(std::string& inpStr) {
     auto lexems = lexer.divideTolexems(inpStr);
-    for (auto& v : lexems) {
-        std::cout << v << std::endl;
-    }
+    //  for (auto& v : lexems) {
+    //      std::cout << v << std::endl;
+    //  }
     for (auto& lexem : lexems) {
         addToken(lexem, tokens);
     }
