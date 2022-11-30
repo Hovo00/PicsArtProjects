@@ -1,10 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
 
-//CLEAN UP HERE ***
-
 #include <iostream>
 #include <stack>
+#include "Exception.h"
 
 #include "TypeInfo.h"
 

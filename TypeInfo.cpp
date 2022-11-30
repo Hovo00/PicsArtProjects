@@ -41,7 +41,7 @@ bool TypeInfo::isLetter(char lett) {
     return (lett <= 'z' && lett >= 'A')  ? true : false;
 }
 bool TypeInfo::isSymbol(char symb) {
-    return (symb == '{'|| symb == '}' || symb == ',') ? true : false;
+    return (symb == '{'|| symb == '}' || symb == '.') ? true : false;
 }
 bool TypeInfo::isOperator(char oper) {
     return (oper == '+' || oper == '-' || oper == '/' || oper == '*' || oper == '(' || oper == ')') ? true : false;
@@ -49,4 +49,20 @@ bool TypeInfo::isOperator(char oper) {
 bool TypeInfo::isDigit(char digit) {
     return (digit <= '9' && digit >= '1') ? true : false;
 }
+bool TypeInfo::isValidMatrixSymbol(char i) {
+        return (isDigit(i) || i == '{' || i == '}' || i == ' ');
+    }
+bool TypeInfo::isValidNumber(std::string& inp, int col) {
+    while (col < inp.size() && isDigit(inp[col])) {
+        ++col;
+    }
+    if (col == inp.size()) { 
+        return true;
+    }
+    else if (inp[col] == ' ' || isOperator(inp[col])) {
+        return true;
+    }
+    return false;
+}
+
 //oper == '(' || oper == ')'

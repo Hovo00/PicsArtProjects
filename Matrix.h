@@ -1,14 +1,27 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include <string>
 #include <stack>
+#include <iostream>
 #include "TypeInfo.h"
-#include "Token.h"
+#include "Expression.h"
 
-class Operand : public Token{
+class Operand : public Expression ,
+                public std::enable_shared_from_this<Operand>{
 public:
-    virtual void printOperand() = 0;
+    std::shared_ptr<Operand> evaluate() override;
+    virtual void printValue() = 0;
+};
+
+class Float : public Operand {
+public:
+    std::string getInfo() override;
+    void printValue() override;
+    // float getValue() {
+    //     return value;
+    // }
+private:
+    float value;
 };
 
 class Matrix : public Operand {
@@ -22,10 +35,9 @@ public:
     void printMat();
     bool initMatrix(const std::string&);
 public:
-    virtual Matrix* doStuff(std::vector<Operand*>) override;
-    virtual void printOperand() override;
-    virtual int tokenData() override;
-  
+    std::string getInfo() override;  
+    void printValue() override;
+
 private:
     int rowCount;
     int colCount;

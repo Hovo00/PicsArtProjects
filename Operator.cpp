@@ -1,23 +1,17 @@
 #include "Operator.h"
 
-Operator::Operator() {
-    tokType = TokenType::Operator;
-}
-Matrix* IbinMatOperations::doStuff(std::vector<Operand*> vec) {
-    auto first = static_cast<Matrix*>(vec[0]);
-    auto second = static_cast<Matrix*>(vec[1]);
-    return do_operation(*first, *second);
-}
+std::shared_ptr<Operand> Operator::evaluate() {
+    std::vector<std::shared_ptr<Operand> > vec;
+    for (int i = 0; i < operandCount(); ++i) {
+        vec.push_back(childs[i]->evaluate());
+    }
+    std::reverse(vec.begin(), vec.end());
 
-Matrix* IternMatOperations::doStuff(std::vector<Operand*> vec) {
-    auto first = static_cast<Matrix*>(vec[0]);
-    auto second = static_cast<Matrix*>(vec[1]);
-    auto third = static_cast<Matrix*>(vec[2]);
-    return do_operation(*first, *second, *third);
+    return doOperation(vec);
 }
-int IternMatOperations::tokenData() {
-    return 3;
-}
-int IbinMatOperations::tokenData() {
+int IbinOperations::operandCount() {
     return 2;
+}
+int IternOperations::operandCount() {
+    return 3;
 }

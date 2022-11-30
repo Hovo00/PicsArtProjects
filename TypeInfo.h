@@ -17,9 +17,12 @@ public:
     static bool isSymbol(char);
     static bool isOperator(char);
     static bool isDigit(char);
-private:
+    static bool isValidMatrixSymbol(char);
+    static bool isValidNumber(std::string&, int);
+public:
     static std::unordered_map<std::string, int> prec;
     static std::unordered_map<std::string, int> argCount;
+private:
     static std::vector<std::string> operators;
     static std::vector<std::string> functions;
 };

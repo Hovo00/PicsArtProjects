@@ -11,6 +11,7 @@ std::vector<std::string > Lexer::divideTolexems(std::string& inpStr) {
                 lexems[count].push_back(inpStr[i++]);
             }
             ++count;
+            continue;
          } 
          if (TypeInfo::isLetter(inpStr[i])) {
             lexems[count].push_back('v');
@@ -18,25 +19,35 @@ std::vector<std::string > Lexer::divideTolexems(std::string& inpStr) {
                 lexems[count].push_back(inpStr[i++]);
             }
             ++count;
+            continue;
          }
          if (inpStr[i] == '{') {
             lexems[count].push_back('m');
             lexems[count].push_back(inpStr[i++]);
             int cCount = 1;
             while (cCount != 0) {
+                if(!TypeInfo::isValidMatrixSymbol(inpStr[i])) {
+                    throw invalidMatrixOperand(i);
+                }
                 if (inpStr[i] == '{') { ++cCount; }
                 if (inpStr[i] == '}') { --cCount; }
                 lexems[count].push_back(inpStr[i++]);
             }
             ++count;
+            continue;
          }
          if (TypeInfo::isOperator(inpStr[i])) {
             //lexems[count].push_back('o');
-            lexems[count].push_back(inpStr[i++]);
+            lexems[count].push_back(inpStr[i]);
             ++count;
+            continue;
          }
     }
     lexems.resize(count);
+    std::cout << "more " << std::endl;
+    for(auto & i : lexems) {
+        std::cout << i << std::endl;
+    }
     //return lexems;
     return infixToPostfix(lexems);
 }
@@ -60,9 +71,6 @@ std::vector<std::string> Lexer::infixToPostfix(std::vector<std::string>& infix) 
                 }
                 continue;
             }
-            //change here for associativity
-            //
-            //std::cout << " some" << std::endl;
             if (st.empty()) {
                 st.push(lexem);
                 continue;

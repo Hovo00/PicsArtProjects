@@ -1,15 +1,19 @@
 #include "Matrix.h"
 
 Matrix::Matrix() {
-    tokType = TokenType::Operand;
+
 }
+
 Matrix::Matrix(const std::string& str) {
-    tokType = TokenType::Operand;
     initMatrix(str);
 }
 
+std::shared_ptr<Operand> Operand::evaluate() {
+    return shared_from_this();
+}
+
 Matrix::Matrix(int row, int col) {
-    tokType = TokenType::Operand;
+    //tokType = TokenType::Operand;
     rowCount = row;
     colCount = col;
     matrix.resize(row);
@@ -24,26 +28,6 @@ int Matrix::getColCount() const{
 int Matrix::getRowCount() const{
     return rowCount;
 }
-
-Matrix* Matrix::doStuff(std::vector<Operand*> vec){
-    //printMat();
-    return this;
-}
-void Matrix::printMat() {
-    for (auto &i : matrix) {
-        for (auto &j : i) {
-            std::cout << j << " ";
-        }
-        std::cout << std::endl;
-    }
-    //std::cout << std::endl << getColCount() << " " << getRowCount() << std::endl;
-}
-int Matrix::tokenData() {
-    return 1;
-}
-void Matrix::printOperand() {
-    printMat();
-} 
 
 bool Matrix::initMatrix(const std::string& str) {
     matrix.resize(str.size());
@@ -61,4 +45,19 @@ bool Matrix::initMatrix(const std::string& str) {
     --rowCount;
     matrix.resize(rowCount);
     return true;
+}
+std::string Matrix::getInfo() {
+    return "matrix";
+}
+void Matrix::printValue() {
+    for (auto &i : matrix) {
+        for (auto &j : i) {
+            std::cout << j << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+void Float::printValue() {
+    std::cout << value;
 }
