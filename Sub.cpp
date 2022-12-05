@@ -1,7 +1,7 @@
 #include "Sub.h"
 
 Sub::Sub(std::vector<std::shared_ptr<Expression> >& chlds) {
-    childs = chlds;
+    children = chlds;
 }
 
 std::shared_ptr<Operand> Sub::doOperation(std::vector<std::shared_ptr<Operand> > args) {
@@ -37,17 +37,16 @@ std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Matrix> m1, std::shared_ptr
     }
     return m3;
 }
-std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Matrix>, std::shared_ptr<Float>) {
+std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Matrix> matrix, std::shared_ptr<Float> flt) {
     return std::make_shared<Matrix>();
 }
-std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Float>, std::shared_ptr<Float>) {
+std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Float> flt1, std::shared_ptr<Float> flt2) {
+    return std::make_shared<Float>(flt1->getValue() - flt2->getValue());
+}
+std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Float> flt, std::shared_ptr<Matrix> matrix) {
     return std::make_shared<Matrix>();
 
 }
-std::shared_ptr<Operand> Sub::doOper(std::shared_ptr<Float>, std::shared_ptr<Matrix>) {
-    return std::make_shared<Matrix>();
-
-}
-std::string Sub::getInfo() {
+std::string Sub::getTypename() {
     return "-";
 }

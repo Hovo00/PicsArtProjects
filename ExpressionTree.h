@@ -9,12 +9,11 @@
 
 class ExpressionTree {
 public:
-    bool buildExpressionTree(std::vector<std::string>);
-    std::shared_ptr<Expression> makeExpression(std::string, std::vector<std::shared_ptr<Expression> > = {});
+    bool buildExpressionTree(std::vector<std::string> tokens);
     std::shared_ptr<Expression>& getHead();
-    std::shared_ptr<Operand> evaluate(std::shared_ptr<Expression>);
+    std::shared_ptr<Operand> evaluate(std::shared_ptr<Expression> head);
 private:
     std::shared_ptr<Expression> head;
-
+    std::shared_ptr<Expression> makeExpression(std::string token, std::vector<std::shared_ptr<Expression> > children = {});
 };
 #endif

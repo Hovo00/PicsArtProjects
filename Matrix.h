@@ -5,39 +5,21 @@
 #include <iostream>
 #include "TypeInfo.h"
 #include "Expression.h"
+#include "Operand.h"
 
-class Operand : public Expression ,
-                public std::enable_shared_from_this<Operand>{
-public:
-    std::shared_ptr<Operand> evaluate() override;
-    virtual void printValue() = 0;
-};
-
-class Float : public Operand {
-public:
-    std::string getInfo() override;
-    void printValue() override;
-    // float getValue() {
-    //     return value;
-    // }
-private:
-    float value;
-};
 
 class Matrix : public Operand {
 public:
     Matrix();
     Matrix(int row, int col);
-    Matrix(const std::string&);
+    Matrix(const std::string& str);
 public:
     int getColCount() const;
     int getRowCount() const;
     void printMat();
-    bool initMatrix(const std::string&);
+    bool initMatrix(const std::string& str);
 public:
-    std::string getInfo() override;  
     void printValue() override;
-
 private:
     int rowCount;
     int colCount;

@@ -3,7 +3,7 @@
 std::shared_ptr<Operand> Operator::evaluate() {
     std::vector<std::shared_ptr<Operand> > vec;
     for (int i = 0; i < operandCount(); ++i) {
-        vec.push_back(childs[i]->evaluate());
+        vec.push_back(children[i]->evaluate());
     }
     std::reverse(vec.begin(), vec.end());
 

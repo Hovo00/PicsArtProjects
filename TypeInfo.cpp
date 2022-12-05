@@ -1,23 +1,13 @@
 #include "TypeInfo.h"
 
-std::vector<std::string> TypeInfo::operators = {"+", "-", "*", "="};
+std::vector<std::string> TypeInfo::operators = {"+", "-", "*", "=", "(", ")"};
 std::vector<std::string> TypeInfo::functions = {"select", "transpose", "inverse"};
 bool TypeInfo::isReserved(const std::string& str) {
-    // for (auto& item : operators) {
-    //     if (str == item) {
-    //         return true;
-    //     }
-    // }
-    for (auto& item : functions) {
-        if (str == item) {
-            return true;
-        }
-    }
-    return false;
+    return std::find(functions.begin(), functions.end(), str) != functions.end();
 }
 int TypeInfo::operPrec(const std::string& oper) {
     if (isReserved(oper)) {
-        return HIGH_PREC;
+        return 5;
     }
     return prec[oper];
 }
@@ -37,32 +27,16 @@ std::unordered_map<std::string, int> TypeInfo::argCount = {{"select", 3}, {"tran
 
 std::unordered_map<std::string, int> TypeInfo::prec = {{"+", 1}, {"-", 1}, {"*", 2}};//, {"(", HIGH_PREC}, {")", HIGH_PREC}};
 
-bool TypeInfo::isLetter(char lett) {
-    return (lett <= 'z' && lett >= 'A')  ? true : false;
-}
+
 bool TypeInfo::isSymbol(char symb) {
     return (symb == '{'|| symb == '}' || symb == '.') ? true : false;
 }
 bool TypeInfo::isOperator(char oper) {
-    return (oper == '+' || oper == '-' || oper == '/' || oper == '*' || oper == '(' || oper == ')') ? true : false;
-}
-bool TypeInfo::isDigit(char digit) {
-    return (digit <= '9' && digit >= '1') ? true : false;
+    std::string op;
+    op.push_back(oper);
+    return std::find(operators.begin(), operators.end(), op) != operators.end();
 }
 bool TypeInfo::isValidMatrixSymbol(char i) {
-        return (isDigit(i) || i == '{' || i == '}' || i == ' ');
-    }
-bool TypeInfo::isValidNumber(std::string& inp, int col) {
-    while (col < inp.size() && isDigit(inp[col])) {
-        ++col;
-    }
-    if (col == inp.size()) { 
-        return true;
-    }
-    else if (inp[col] == ' ' || isOperator(inp[col])) {
-        return true;
-    }
-    return false;
+        return (std::isdigit(i) || i == '{' || i == '}' || i == ' ' || i == '-');
 }
 
-//oper == '(' || oper == ')'

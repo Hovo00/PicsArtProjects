@@ -5,12 +5,12 @@
 
 class IinputClass {
 public:
-    virtual void getInput(std::string&) = 0;
+    virtual void getInput(std::string& inpStr) = 0;
 };
 
 class ConsoleInput : public IinputClass {
 public:
-    virtual void getInput(std::string&) override;
+    virtual void getInput(std::string& inpStr) override;
 };
 
 #endif

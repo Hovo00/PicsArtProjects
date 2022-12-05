@@ -4,21 +4,17 @@
 #include <string>
 #include <unordered_map>
 
-constexpr int HIGH_PREC = 5;
 
 class TypeInfo {
 public:
-    static bool isReserved(const std::string&);
-    static int operPrec(const std::string&);
-    static bool addOperator(const std::string&, int, int);
-    static bool addFunction(const std::string&, int);
+    static bool isReserved(const std::string& str);
+    static int operPrec(const std::string& oper);
+    static bool addOperator(const std::string&, int prec, int argCount);
+    static bool addFunction(const std::string&, int argCount);
 public:
-    static bool isLetter(char);
-    static bool isSymbol(char);
-    static bool isOperator(char);
-    static bool isDigit(char);
-    static bool isValidMatrixSymbol(char);
-    static bool isValidNumber(std::string&, int);
+    static bool isSymbol(char symb);
+    static bool isOperator(char oper);
+    static bool isValidMatrixSymbol(char symb);
 public:
     static std::unordered_map<std::string, int> prec;
     static std::unordered_map<std::string, int> argCount;

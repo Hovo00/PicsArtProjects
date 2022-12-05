@@ -1,7 +1,7 @@
 #include "Add.h"
 
-Add::Add(std::vector<std::shared_ptr<Expression> >& chlds) {
-    childs = chlds;
+Add::Add(std::vector<std::shared_ptr<Expression> >& children) {
+    this->children = children;
 }
 
 std::shared_ptr<Operand> Add::doOperation(std::vector<std::shared_ptr<Operand> > args) {
@@ -41,15 +41,12 @@ std::shared_ptr<Operand> Add::doOper(std::shared_ptr<Matrix>, std::shared_ptr<Fl
     return std::make_shared<Matrix>();
 }
 std::shared_ptr<Operand> Add::doOper(std::shared_ptr<Float> f1, std::shared_ptr<Float> f2) {
-    // auto f3 = std::make_shared<Float>(f1->getValue() + f2->getValue());
-    // return f3;
-    return std::make_shared<Matrix>();
-
+    return std::make_shared<Float>(f1->getValue() + f2->getValue());
 }
 std::shared_ptr<Operand> Add::doOper(std::shared_ptr<Float>, std::shared_ptr<Matrix>) {
     return std::make_shared<Matrix>();
 
 }
-std::string Add::getInfo() {
+std::string Add::getTypename() {
     return "+";
 } 

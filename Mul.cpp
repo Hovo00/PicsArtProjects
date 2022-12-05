@@ -1,7 +1,7 @@
 #include "Mul.h"
 
 Mul::Mul(std::vector<std::shared_ptr<Expression> >& chlds) {
-    childs = chlds;
+    children = chlds;
 }
 
 std::shared_ptr<Operand> Mul::doOperation(std::vector<std::shared_ptr<Operand> > args) {
@@ -40,22 +40,17 @@ std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Matrix> m1, std::shared_ptr
     }
     return m3;
 }
-std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Matrix>, std::shared_ptr<Float>) {
+std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Matrix> matrix, std::shared_ptr<Float> flt) {
     return std::make_shared<Matrix>();
 }
-std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Float>, std::shared_ptr<Float>) {
-    return std::make_shared<Matrix>();
-
+std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Float> f1, std::shared_ptr<Float> f2) {
+    std::cout << "I do it" << std::endl;
+    return std::make_shared<Float>(f1->getValue() * f2->getValue());
 }
-std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Float>, std::shared_ptr<Matrix>) {
+std::shared_ptr<Operand> Mul::doOper(std::shared_ptr<Float> f1, std::shared_ptr<Matrix> matrix) {
     return std::make_shared<Matrix>();
-
 }
-std::string Mul::getInfo() {
+std::string Mul::getTypename() {
     return "*";
-}
-
-std::string Float::getInfo() {
-    return "float";
 }
 

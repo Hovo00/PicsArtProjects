@@ -3,40 +3,34 @@
 
 #include <iostream>
 #include <exception>
-
-class invalidMatrixOperand : public std::exception {
+#include <string>
+class customException : public std::exception {
 public:
-    invalidMatrixOperand(int cl) {
-        col = cl;
-    }
-    char const* what() const noexcept override {
-        
-        return "Invalid symbol in matrix brackets in col : ";
-    }
     int col;
-};
-class invalidVariable : public std::exception {
-public:
-    invalidVariable(int cl) {
-        col = cl;
-    }
-    char const* what() const noexcept override {
-        
-        return " Invalid Variable (ambiguity number or variable ) in col : ";
-    }
-    int col;
+    std::string inpStr;
+    void showErrorPlace() const;
 };
 
-class wrondMatrixDimension : public std::exception {
+class invalidMatrixOperand : public customException {
 public:
-    wrondMatrixDimension(int prv, int crr) {
-        prev = prv;
-        curr = crr;
-    }
-    char const* what() const noexcept override {
-        
-        return " Invalid column count : ";
-    }
+    invalidMatrixOperand(int cl, std::string inpSt);
+    char const* what() const noexcept override;
+};
+class invalidVariable : public customException {
+public:
+    invalidVariable(int cl, std::string inpSt);
+    char const* what() const noexcept override;
+};
+class invalidSyntax : public customException {
+public:
+    invalidSyntax(int cl, std::string inpSt);
+    char const* what() const noexcept override;
+};
+
+class wrondMatrixDimension : public customException {
+public:
+    wrondMatrixDimension(int pos, int prv, int crr, std::string inpSt);
+    char const* what() const noexcept override;
     int prev;
     int curr;
 };
