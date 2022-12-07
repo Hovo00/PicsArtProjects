@@ -1,5 +1,13 @@
 #include "Exception.h"
 
+UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::string& message) :errorMessage(message) {
+}
+
+char const* UnsupportedOperatorArguments::what() const noexcept {
+    std::cout << errorMessage;
+    return " ";
+}
+
 void customException::showErrorPlace() const {
     std::cout << std::endl;
     for (int i = 0; i < col; ++i) {

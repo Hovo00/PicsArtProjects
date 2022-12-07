@@ -31,4 +31,7 @@ int main() {
     catch(const invalidSyntax& is) {
         std::cout << is.what() << is.col;
     }
+    catch(const UnsupportedOperatorArguments& excep) {
+        std::cout << excep.what();
+    }
 }

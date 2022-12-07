@@ -7,15 +7,17 @@ Float::Float(std::string numb) {
         temp.push_back(numb[i]);
     }
     value = std::stof(temp);
-    std::cout << "i been here " << value << std::endl;
+}
+std::string Float::getTypename() const {
+    return "float";
 }
 
-void Float::printValue() {
+void Float::printValue() const{
     std::cout << value;
 }
 Float::Float(float numb) {
     value = numb;
 }
-float Float::getValue() {
+float Float::getValue() const{
     return value;
 }

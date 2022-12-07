@@ -8,8 +8,10 @@ public:
     Float(std::string numb);
     Float(float numb);
 public:
-    void printValue() override;
-    float getValue();
+    void printValue() const override;
+    std::string getTypename() const override;
+public:
+    float getValue() const;
 private:
     float value;
 };

@@ -2,26 +2,23 @@
 #define OPERATOR_H
 #include "Matrix.h"
 #include "Expression.h"
+#include "OperationRegistry.h"
+#include "Exception.h"
 
 class Operator : public Expression {
 public:
+    Operator(std::string operatorType, const std::vector<std::shared_ptr<Expression> >& arguments);
+public:
     std::shared_ptr<Operand> evaluate() override;
-public:
-    virtual std::string getTypename() = 0;
-    virtual std::shared_ptr<Operand> doOperation(std::vector<std::shared_ptr<Operand> > operands) = 0;
-    virtual int operandCount() = 0;
-protected:
-    std::vector<std::shared_ptr<Expression> > children;
+    std::string getTypename() const override;
+private:
+    std::vector<std::shared_ptr<Expression> > arguments;
+    std::string operatorType;
+private:
+    std::shared_ptr<Operand> doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const;
+    void throwInvalidArgumentsError(const std::vector<std::shared_ptr<Operand> >& arguments) const;
 };
 
-class IbinOperations : public Operator {
-public:
-    int operandCount() override;
-};
 
-class IternOperations : public Operator {
-public:
-    int operandCount() override;
-};
 
 #endif

@@ -1,7 +1,7 @@
 #include "Matrix.h"
 
-Matrix::Matrix() {
-
+std::string Matrix::getTypename() const {
+    return "matrix";
 }
 
 Matrix::Matrix(const std::string& str) {
@@ -9,7 +9,6 @@ Matrix::Matrix(const std::string& str) {
 }
 
 Matrix::Matrix(int row, int col) {
-    //tokType = TokenType::Operand;
     rowCount = row;
     colCount = col;
     matrix.resize(row);
@@ -47,7 +46,7 @@ bool Matrix::initMatrix(const std::string& str) {
     return true;
 }
 
-void Matrix::printValue() {
+void Matrix::printValue() const{
     for (auto &i : matrix) {
         for (auto &j : i) {
             std::cout << j << " ";

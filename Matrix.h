@@ -10,16 +10,15 @@
 
 class Matrix : public Operand {
 public:
-    Matrix();
     Matrix(int row, int col);
-    Matrix(const std::string& str);
+    Matrix(const std::string& matrixString);
 public:
     int getColCount() const;
     int getRowCount() const;
-    void printMat();
-    bool initMatrix(const std::string& str);
+    bool initMatrix(const std::string& matrixString);
 public:
-    void printValue() override;
+    void printValue() const override;
+    std::string getTypename() const override;
 private:
     int rowCount;
     int colCount;
