@@ -24,6 +24,12 @@ int Matrix::getRowCount() const{
     return rowCount;
 }
 
+float& Matrix::at(int row, int col) {
+    //Add check for correct row and col count
+    return matrix[row][col];
+}
+
+
 bool Matrix::initMatrix(const std::string& str) {
     matrix.resize(str.size());
     rowCount = 0;
@@ -54,4 +60,3 @@ void Matrix::printValue() const{
         std::cout << std::endl;
     }
 }
-

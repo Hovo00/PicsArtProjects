@@ -2,11 +2,7 @@
 
 
 Float::Float(std::string numb) {
-    std::string temp;
-    for (int i = 1; i < numb.size(); ++i) {
-        temp.push_back(numb[i]);
-    }
-    value = std::stof(temp);
+    value = std::stof(numb);
 }
 std::string Float::getTypename() const {
     return "float";

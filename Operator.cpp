@@ -10,11 +10,12 @@ std::string Operator::getTypename() const {
 
 std::shared_ptr<Operand> Operator::evaluate() {
     std::vector<std::shared_ptr<Operand> > vec;
+    //std::cout << operatorType << std::endl;
     for (int i = 0; i < TypeInfo::argCount[operatorType]; ++i) {
         vec.push_back(arguments[i]->evaluate());
     }
     std::reverse(vec.begin(), vec.end());
-    std::cout << vec.size() << std::endl;
+    //std::cout << vec.size() << std::endl;
     return doOperation(vec);
 }
 std::shared_ptr<Operand> Operator::doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const {
@@ -25,6 +26,7 @@ std::shared_ptr<Operand> Operator::doOperation(const std::vector<std::shared_ptr
     if (OperationRegistry::operMap.find(key) == OperationRegistry::operMap.end()) {
        throwInvalidArgumentsError(operands);
     }
+    //std::cout << key << std::endl;
     return OperationRegistry::operMap[key](operands);
 }
 

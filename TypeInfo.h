@@ -13,7 +13,7 @@ public:
     static bool addFunction(const std::string&, int argCount);
 public:
     static bool isSymbol(char symb);
-    static bool isOperator(char oper);
+    static bool isOperator(const std::string& inpStr, int pos);
     static bool isValidMatrixSymbol(char symb);
 public:
     static std::unordered_map<std::string, int> prec;

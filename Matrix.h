@@ -15,6 +15,7 @@ public:
 public:
     int getColCount() const;
     int getRowCount() const;
+    float& at(int row, int col);
     bool initMatrix(const std::string& matrixString);
 public:
     void printValue() const override;
@@ -22,8 +23,7 @@ public:
 private:
     int rowCount;
     int colCount;
-public:
-    std::vector<std::vector<double>> matrix;
+    std::vector<std::vector<float> > matrix;
 };
 
 #endif

@@ -7,11 +7,12 @@
 
 class ExpressionTree {
 public:
-    bool buildExpressionTree(std::vector<std::string> tokens);
+    using VectorOfLexems = std::vector<std::pair<std::string, std::string> >;
+    bool buildExpressionTree(VectorOfLexems lexems);
     std::shared_ptr<Expression>& getHead();
     std::shared_ptr<Operand> evaluate(std::shared_ptr<Expression>& head);
 private:
     std::shared_ptr<Expression> head;
-    std::shared_ptr<Expression> makeExpression(std::string token,std::vector<std::shared_ptr<Expression> > arguments = {});
+    std::shared_ptr<Expression> makeExpression(std::pair<std::string, std::string>  lexem, std::vector<std::shared_ptr<Expression> > arguments = {});
 };
 #endif

@@ -1,20 +1,20 @@
 #include "ExpressionTree.h"
 
-bool ExpressionTree::buildExpressionTree(std::vector<std::string > tokens) {
+bool ExpressionTree::buildExpressionTree(ExpressionTree::VectorOfLexems lexems) {
     std::stack<std::shared_ptr<Expression> > treeStack;
-    for (auto& token : tokens) {
-        if (TypeInfo::isOperator(token[0])) {
+    for (auto& lexem : lexems) {   
+        //std::cout << lexem.first << " " << lexem.second << std::endl;
+        if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
-            std::string str;
-            str.push_back(token[0]);
-            for (int i = 0; i < TypeInfo::argCount[str]; ++i) {
+            std::cout << TypeInfo::argCount[lexem.second] << std::endl ;
+            for (int i = 0; i < TypeInfo::argCount[lexem.second]; ++i) {
                 arguments.push_back(treeStack.top());
                 treeStack.pop();
             }
-            treeStack.push(makeExpression(token, arguments));
+            treeStack.push(makeExpression(lexem, arguments));
         }
         else {
-            treeStack.push(makeExpression(token));
+            treeStack.push(makeExpression(lexem));
         }
     }
     head = treeStack.top();
@@ -25,13 +25,15 @@ bool ExpressionTree::buildExpressionTree(std::vector<std::string > tokens) {
 std::shared_ptr<Expression>& ExpressionTree::getHead() {
     return head;
 }
- std::shared_ptr<Expression> ExpressionTree::makeExpression(std::string token, std::vector<std::shared_ptr<Expression> > arguments) {
-    switch(token[0]) {
-    case 'm' : return std::make_shared<Matrix>(token);
-    case '+' : return std::make_shared<Operator>("+", arguments);
-    case '-' : return std::make_shared<Operator>("-", arguments);
-    case '*' : return std::make_shared<Operator>("*", arguments); 
-    case 'n' : return std::make_shared<Float>(token); 
+ std::shared_ptr<Expression> ExpressionTree::makeExpression(std::pair<std::string, std::string> lexem, std::vector<std::shared_ptr<Expression> > arguments) {
+    if (lexem.first == "oper") {
+        return std::make_shared<Operator>(lexem.second, arguments);
+    }
+    if (lexem.first == "matrix") {
+        return std::make_shared<Matrix>(lexem.second);
+    }
+    if (lexem.first == "float") {
+        return std::make_shared<Float>(lexem.second);
     }
  }
  std::shared_ptr<Operand> ExpressionTree::evaluate(std::shared_ptr<Expression>& head){
