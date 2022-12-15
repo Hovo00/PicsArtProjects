@@ -13,7 +13,7 @@ public:
 public:
     float getValue() const;
 private:
-    float value;
+    float _value;
 };
 
 #endif

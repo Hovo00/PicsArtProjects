@@ -12,13 +12,11 @@ public:
     std::shared_ptr<Operand> evaluate() override;
     std::string getTypename() const override;
 private:
-    std::vector<std::shared_ptr<Expression> > arguments;
-    std::string operatorType;
-private:
     std::shared_ptr<Operand> doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const;
     void throwInvalidArgumentsError(const std::vector<std::shared_ptr<Operand> >& arguments) const;
+private:
+    std::vector<std::shared_ptr<Expression> > _arguments;
+    std::string _operatorType;
 };
-
-
 
 #endif

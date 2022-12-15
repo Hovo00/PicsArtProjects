@@ -9,51 +9,50 @@ Matrix::Matrix(const std::string& str) {
 }
 
 Matrix::Matrix(int row, int col) {
-    rowCount = row;
-    colCount = col;
-    matrix.resize(row);
-    for(auto & i : matrix) {
+    _rowCount = row;
+    _colCount = col;
+    _matrix.resize(row);
+    for (auto & i : _matrix) {
         i.resize(col);
     }
 }
 
 int Matrix::getColCount() const{
-    return colCount;
+    return _colCount;
 }
 int Matrix::getRowCount() const{
-    return rowCount;
+    return _rowCount;
 }
 
 float& Matrix::at(int row, int col) {
     //Add check for correct row and col count
-    return matrix[row][col];
+    return _matrix[row][col];
 }
 
 
-bool Matrix::initMatrix(const std::string& str) {
-    matrix.resize(str.size());
-    rowCount = 0;
-    colCount = 0;
+void Matrix::initMatrix(const std::string& str) {
+    _matrix.resize(str.size());
+    _rowCount = 0;
+    _colCount = 0;
     for (int i = 0; i < str.size(); ++i) {
         if (std::isdigit(str[i]) || str[i] == '-') {
             std::string numb;
-            while(std::isdigit(str[i]) || str[i] == '.' || str[i] == '-') {
+            while(i < str.size() && (std::isdigit(str[i]) || str[i] == '.' || str[i] == '-')) {
                 numb.push_back(str[i++]);
             }
-            matrix[rowCount].push_back(std::stof(numb));            
+            _matrix[_rowCount].push_back(std::stof(numb));            
         }
         if (str[i] == '}') {
-            ++rowCount;
+            ++_rowCount;
         }
     }
-    colCount = matrix[0].size();
-    --rowCount;
-    matrix.resize(rowCount);
-    return true;
+    _colCount = _matrix[0].size();
+    --_rowCount;
+    _matrix.resize(_rowCount);
 }
 
 void Matrix::printValue() const{
-    for (auto &i : matrix) {
+    for (auto &i : _matrix) {
         for (auto &j : i) {
             std::cout << j << " ";
         }

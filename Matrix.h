@@ -16,14 +16,15 @@ public:
     int getColCount() const;
     int getRowCount() const;
     float& at(int row, int col);
-    bool initMatrix(const std::string& matrixString);
 public:
     void printValue() const override;
     std::string getTypename() const override;
 private:
-    int rowCount;
-    int colCount;
-    std::vector<std::vector<float> > matrix;
+    void initMatrix(const std::string& matrixString);
+private:
+    int _rowCount;
+    int _colCount;
+    std::vector<std::vector<float> > _matrix;
 };
 
 #endif

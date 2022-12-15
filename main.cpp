@@ -1,8 +1,9 @@
 #include <iostream>
 #include <variant>
 #include "Lexer.h"
-#include "InputClass.h"
+#include "Input.h"
 #include "ExpressionTree.h"
+#include "Output.h"
 
 int main() {
     try {
@@ -17,21 +18,20 @@ int main() {
     auto res = tree.evaluate(tree.getHead());
     std::cout << std::endl << "Result : " << std::endl;
     res->printValue();  
-    
     }
-    catch(const invalidMatrixOperand& exc) {
-        std::cout << exc.what() << exc.col;
+    catch(const invalidMatrixOperand& excep) {
+        ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
-    catch(const invalidVariable& var) {
-        std::cout << var.what() << var.col;
+    catch(const invalidVariable& excep) {
+        ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
-    catch(const wrondMatrixDimension& wmd) {
-        std::cout << wmd.what() << wmd.curr << " previous defined " << wmd.prev;
+    catch(const wrondMatrixDimension& excep) {
+        ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
-    catch(const invalidSyntax& is) {
-        std::cout << is.what() << is.col;
+    catch(const invalidSyntax& excep) {
+        ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
     catch(const UnsupportedOperatorArguments& excep) {
-        std::cout << excep.what();
+        ConsoleOutput::printErrorMessage(std::string(excep.what()));
     }
 }

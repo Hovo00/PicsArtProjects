@@ -1,13 +1,13 @@
 #include "ExpressionTree.h"
 
-bool ExpressionTree::buildExpressionTree(ExpressionTree::VectorOfLexems lexems) {
+void ExpressionTree::buildExpressionTree(ExpressionTree::VectorOfLexems lexems) {
+
     std::stack<std::shared_ptr<Expression> > treeStack;
-    for (auto& lexem : lexems) {   
-        //std::cout << lexem.first << " " << lexem.second << std::endl;
+    for (const auto& lexem : lexems) {   
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
-            std::cout << TypeInfo::argCount[lexem.second] << std::endl ;
-            for (int i = 0; i < TypeInfo::argCount[lexem.second]; ++i) {
+            std::cout << TypeInfo::argumentCount(lexem.second) << std::endl ;
+            for (int i = 0; i < TypeInfo::argumentCount(lexem.second); ++i) {
                 arguments.push_back(treeStack.top());
                 treeStack.pop();
             }
@@ -17,13 +17,12 @@ bool ExpressionTree::buildExpressionTree(ExpressionTree::VectorOfLexems lexems) 
             treeStack.push(makeExpression(lexem));
         }
     }
-    head = treeStack.top();
-    treeStack.pop(); 
-    return true;
+    _head = treeStack.top();
+    treeStack.pop();
 }
 
 std::shared_ptr<Expression>& ExpressionTree::getHead() {
-    return head;
+    return _head;
 }
  std::shared_ptr<Expression> ExpressionTree::makeExpression(std::pair<std::string, std::string> lexem, std::vector<std::shared_ptr<Expression> > arguments) {
     if (lexem.first == "oper") {
@@ -36,7 +35,7 @@ std::shared_ptr<Expression>& ExpressionTree::getHead() {
         return std::make_shared<Float>(lexem.second);
     }
  }
- std::shared_ptr<Operand> ExpressionTree::evaluate(std::shared_ptr<Expression>& head){
+ std::shared_ptr<Operand> ExpressionTree::evaluate(std::shared_ptr<Expression>& head) {
     OperationRegistry::initializeOperationMap();
     return head->evaluate();
  }

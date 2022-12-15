@@ -23,7 +23,7 @@ std::shared_ptr<Operand> OperationRegistry::floatAddition(std::vector<std::share
     auto f2 = std::static_pointer_cast<Float>(arguments[1]);
     return std::make_shared<Float>(f1->getValue() + f2->getValue());
 }
-std::shared_ptr<Operand> OperationRegistry::matrixSubtract(std::vector<std::shared_ptr<Operand> > arguments) {
+std::shared_ptr<Operand> OperationRegistry::matrixSubtraction(std::vector<std::shared_ptr<Operand> > arguments) {
     auto m1 = std::static_pointer_cast<Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getColCount() && m1->getRowCount() == m2->getRowCount());
@@ -37,12 +37,12 @@ std::shared_ptr<Operand> OperationRegistry::matrixSubtract(std::vector<std::shar
     }
     return m3;
 }
-std::shared_ptr<Operand> OperationRegistry::floatSubtract(std::vector<std::shared_ptr<Operand> > arguments) {
+std::shared_ptr<Operand> OperationRegistry::floatSubtraction(std::vector<std::shared_ptr<Operand> > arguments) {
     auto f1 = std::static_pointer_cast<Float>(arguments[0]);
     auto f2 = std::static_pointer_cast<Float>(arguments[1]);
     return std::make_shared<Float>(f1->getValue() - f2->getValue());
 }
-std::shared_ptr<Operand> OperationRegistry::matrixMult(std::vector<std::shared_ptr<Operand> > arguments) {
+std::shared_ptr<Operand> OperationRegistry::matrixMultiplication(std::vector<std::shared_ptr<Operand> > arguments) {
     auto m1 = std::static_pointer_cast<Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getRowCount());
@@ -59,12 +59,16 @@ std::shared_ptr<Operand> OperationRegistry::matrixMult(std::vector<std::shared_p
     }
     return m3;
 }
-std::shared_ptr<Operand> OperationRegistry::floatMult(std::vector<std::shared_ptr<Operand> > arguments) {
+std::shared_ptr<Operand> OperationRegistry::floatMultiplication(std::vector<std::shared_ptr<Operand> > arguments) {
     auto f1 = std::static_pointer_cast<Float>(arguments[0]);
     auto f2 = std::static_pointer_cast<Float>(arguments[1]);
     return std::make_shared<Float>(f1->getValue() * f2->getValue());
 }
-
+std::shared_ptr<Operand> OperationRegistry::floatDivision(std::vector<std::shared_ptr<Operand> > arguments) {
+    auto f1 = std::static_pointer_cast<Float>(arguments[0]);
+    auto f2 = std::static_pointer_cast<Float>(arguments[1]);
+    return std::make_shared<Float>(f1->getValue() / f2->getValue());
+}
 
 std::shared_ptr<Operand> OperationRegistry::matrixDeterminant(std::vector<std::shared_ptr<Operand> > arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
@@ -204,16 +208,16 @@ std::shared_ptr<Operand> OperationRegistry::Select(std::vector<std::shared_ptr<O
 
 void OperationRegistry::initializeOperationMap() {
     OperationRegistry::operMap["+matrixmatrix"] = OperationRegistry::matrixAddition;
-    OperationRegistry::operMap["-matrixmatrix"] = OperationRegistry::matrixSubtract;
-    OperationRegistry::operMap["*matrixmatrix"] = OperationRegistry::matrixMult;
+    OperationRegistry::operMap["-matrixmatrix"] = OperationRegistry::matrixSubtraction;
+    OperationRegistry::operMap["*matrixmatrix"] = OperationRegistry::matrixMultiplication;
     OperationRegistry::operMap["+floatfloat"] = OperationRegistry::floatAddition;
-    OperationRegistry::operMap["-floatfloat"] = OperationRegistry::floatSubtract;
-    OperationRegistry::operMap["*floatfloat"] = OperationRegistry::floatMult;
+    OperationRegistry::operMap["-floatfloat"] = OperationRegistry::floatSubtraction;
+    OperationRegistry::operMap["*floatfloat"] = OperationRegistry::floatMultiplication;
     OperationRegistry::operMap["inversematrix"] = OperationRegistry::matrixInverse;
     OperationRegistry::operMap["detmatrix"] = OperationRegistry::matrixDeterminant;
     OperationRegistry::operMap["transposematrix"] = OperationRegistry::matrixTranspose;
     OperationRegistry::operMap["sinfloat"] = OperationRegistry::sinus;
     OperationRegistry::operMap["cosfloat"] = OperationRegistry::cosinus;
     OperationRegistry::operMap["selectmatrixmatrixmatrix"] = OperationRegistry::Select;
-
+    OperationRegistry::operMap["/floatfloat"] = OperationRegistry::floatDivision;
 }

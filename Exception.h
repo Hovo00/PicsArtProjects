@@ -1,5 +1,5 @@
-#ifndef EXCEPTIONXX_Haaaaaa
-#define EXCEPTIONXX_Haaaaaa
+#ifndef EXCEPTIONXX_H
+#define EXCEPTIONXX_H
 
 #include <iostream>
 #include <exception>
@@ -15,33 +15,33 @@ private:
 
 class customException : public std::exception {
 public:
-    int col;
-    std::string inpStr;
-    void showErrorPlace() const;
+    customException(int column, std::string inputExpression);
+    const int column;
+    const std::string inputExpression;
 };
 
 class invalidMatrixOperand : public customException {
 public:
-    invalidMatrixOperand(int cl, std::string inpSt);
+    invalidMatrixOperand(int column, std::string inputExpression);
     char const* what() const noexcept override;
 };
 class invalidVariable : public customException {
 public:
-    invalidVariable(int cl, std::string inpSt);
+    invalidVariable(int cl, std::string inputExpression);
     char const* what() const noexcept override;
 };
 class invalidSyntax : public customException {
 public:
-    invalidSyntax(int cl, std::string inpSt);
+    invalidSyntax(int cl, std::string inputExpression);
     char const* what() const noexcept override;
 };
 
 class wrondMatrixDimension : public customException {
 public:
-    wrondMatrixDimension(int pos, int prv, int crr, std::string inpSt);
+    wrondMatrixDimension(int column, int previous, int current, std::string inputExpression);
     char const* what() const noexcept override;
-    int prev;
-    int curr;
+    const int previous;
+    const int current;
 };
 
 #endif

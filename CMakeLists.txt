@@ -4,9 +4,9 @@ set(CMAKE_CXX_STANDARD 14)
 
 project(expression_evaluator LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME} main.cpp Expression.cpp Operator.cpp  Matrix.cpp 
-ExpressionTree.cpp TypeInfo.cpp Lexer.cpp InputClass.cpp Exception.cpp Operand.cpp Float.cpp 
-OperationRegistry.cpp)
+add_executable(${PROJECT_NAME} main.cpp Operator.cpp  Matrix.cpp 
+ExpressionTree.cpp TypeInfo.cpp Lexer.cpp Input.cpp Exception.cpp Operand.cpp Float.cpp 
+OperationRegistry.cpp Output.cpp)
 
 
 

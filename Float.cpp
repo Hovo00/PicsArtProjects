@@ -1,19 +1,19 @@
 #include "Float.h"
 
 
-Float::Float(std::string numb) {
-    value = std::stof(numb);
+Float::Float(std::string number) {
+    _value = std::stof(number);
 }
 std::string Float::getTypename() const {
     return "float";
 }
 
 void Float::printValue() const{
-    std::cout << value;
+    std::cout << _value;
 }
-Float::Float(float numb) {
-    value = numb;
+Float::Float(float number) {
+    _value = number;
 }
 float Float::getValue() const{
-    return value;
+    return _value;
 }
