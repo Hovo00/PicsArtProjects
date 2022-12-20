@@ -4,15 +4,17 @@
 #include "Matrix.h"
 #include "TypeInfo.h"
 #include "Operator.h"
+#include "ConvertFunctions.h"
 
 class ExpressionTree {
 public:
     using VectorOfLexems = std::vector<std::pair<std::string, std::string> >;
-    void buildExpressionTree(VectorOfLexems lexems);
+    void buildExpressionTree(const VectorOfLexems& lexems);
     std::shared_ptr<Expression>& getHead();
-    std::shared_ptr<Operand> evaluate(std::shared_ptr<Expression>& head);
+    std::shared_ptr<Operand> evaluate(const std::shared_ptr<Expression>& head);
 private:
-    std::shared_ptr<Expression> makeExpression(std::pair<std::string, std::string>  lexem, std::vector<std::shared_ptr<Expression> > arguments = {});
+    std::shared_ptr<Expression> makeExpression(const std::pair<std::string, std::string>&  lexem, 
+                                               const std::vector<std::shared_ptr<Expression> >& arguments = {});
 private:
     std::shared_ptr<Expression> _head;
 };

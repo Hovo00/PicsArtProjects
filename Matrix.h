@@ -11,16 +11,14 @@
 class Matrix : public Operand {
 public:
     Matrix(int row, int col);
-    Matrix(const std::string& matrixString);
+    Matrix(const std::vector<std::vector<float> >& matrix);
 public:
     int getColCount() const;
     int getRowCount() const;
     float& at(int row, int col);
 public:
-    void printValue() const override;
-    std::string getTypename() const override;
-private:
-    void initMatrix(const std::string& matrixString);
+    void print() const override;
+    std::string getTypeName() const override;
 private:
     int _rowCount;
     int _colCount;

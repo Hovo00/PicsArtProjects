@@ -6,7 +6,7 @@ project(expression_evaluator LANGUAGES CXX)
 
 add_executable(${PROJECT_NAME} main.cpp Operator.cpp  Matrix.cpp 
 ExpressionTree.cpp TypeInfo.cpp Lexer.cpp Input.cpp Exception.cpp Operand.cpp Float.cpp 
-OperationRegistry.cpp Output.cpp)
+OperationRegistry.cpp Output.cpp Functions.cpp ConvertFunctions.cpp)
 
 
 

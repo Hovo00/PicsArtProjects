@@ -4,7 +4,7 @@ Operator::Operator(std::string operType, const std::vector<std::shared_ptr<Expre
                                                                                                   _arguments(args){
 }
 
-std::string Operator::getTypename() const {
+std::string Operator::getTypeName() const {
     return _operatorType;
 }
 
@@ -19,19 +19,10 @@ std::shared_ptr<Operand> Operator::evaluate() {
 std::shared_ptr<Operand> Operator::doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const {
     std::string key = _operatorType;
     for (auto & operand : operands) {
-        key += operand->getTypename();
+        key += operand->getTypeName();
     }
-    if (OperationRegistry::operMap.find(key) == OperationRegistry::operMap.end()) {
-       throwInvalidArgumentsError(operands);
+    if (!OperationRegistry::exist(key)) {
+        throw UnsupportedOperatorArguments(operands, _operatorType);
     }
-    return OperationRegistry::operMap[key](operands);
-}
-
-void Operator::throwInvalidArgumentsError(const std::vector<std::shared_ptr<Operand> >& arguments) const{
-    std::string errorMess = "operator ";
-    errorMess += (_operatorType + " unsupported for arguments of type ");
-    for (auto& operand : arguments) {
-        errorMess += operand->getTypename() + ", ";
-    }
-    throw UnsupportedOperatorArguments(errorMess);
+    return OperationRegistry::Operation(key, operands);
 }

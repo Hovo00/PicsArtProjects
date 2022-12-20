@@ -10,7 +10,7 @@ public:
     Operator(std::string operatorType, const std::vector<std::shared_ptr<Expression> >& arguments);
 public:
     std::shared_ptr<Operand> evaluate() override;
-    std::string getTypename() const override;
+    std::string getTypeName() const override;
 private:
     std::shared_ptr<Operand> doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const;
     void throwInvalidArgumentsError(const std::vector<std::shared_ptr<Operand> >& arguments) const;

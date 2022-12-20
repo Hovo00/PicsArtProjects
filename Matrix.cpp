@@ -1,11 +1,12 @@
 #include "Matrix.h"
 
-std::string Matrix::getTypename() const {
+std::string Matrix::getTypeName() const {
     return "matrix";
 }
 
-Matrix::Matrix(const std::string& str) {
-    initMatrix(str);
+Matrix::Matrix(const std::vector<std::vector<float> >& matrix) : _matrix(matrix) {
+    _colCount = matrix[0].size();
+    _rowCount = matrix.size();
 }
 
 Matrix::Matrix(int row, int col) {
@@ -29,29 +30,7 @@ float& Matrix::at(int row, int col) {
     return _matrix[row][col];
 }
 
-
-void Matrix::initMatrix(const std::string& str) {
-    _matrix.resize(str.size());
-    _rowCount = 0;
-    _colCount = 0;
-    for (int i = 0; i < str.size(); ++i) {
-        if (std::isdigit(str[i]) || str[i] == '-') {
-            std::string numb;
-            while(i < str.size() && (std::isdigit(str[i]) || str[i] == '.' || str[i] == '-')) {
-                numb.push_back(str[i++]);
-            }
-            _matrix[_rowCount].push_back(std::stof(numb));            
-        }
-        if (str[i] == '}') {
-            ++_rowCount;
-        }
-    }
-    _colCount = _matrix[0].size();
-    --_rowCount;
-    _matrix.resize(_rowCount);
-}
-
-void Matrix::printValue() const{
+void Matrix::print() const{
     for (auto &i : _matrix) {
         for (auto &j : i) {
             std::cout << j << " ";

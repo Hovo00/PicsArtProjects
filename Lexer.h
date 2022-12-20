@@ -9,20 +9,19 @@
 class Lexer {
 public:
     using VectorOfLexems  = std::vector<std::pair<std::string, std::string> >;
-    VectorOfLexems divideTolexems(const std::string& inputExpression);
+    static VectorOfLexems divideTolexems(const std::string& inputExpression);
 private:
-    VectorOfLexems infixToPostfix(const VectorOfLexems& infixExpression);
-    void initializeVariables();
-    void inputVariable(int lexemIndex);
+    static VectorOfLexems infixToPostfix(const VectorOfLexems& infixExpression);
+    static void initializeVariables(VectorOfLexems& lexems);
+    static void inputVariable(VectorOfLexems& lexems, int lexemIndex);
 private:
-    void addNumberToLexems(const std::string& inputExpression, int& pos, int lexemIndex);
-    void addVariableToLexems(const std::string& inputExpression, int& pos, int lexemIndex);
-    void addMatrixToLexems(const std::string& inputExpression, int& pos, int lexemIndex);
-    void addFunctionToLexems(const std::string& inputExpression, int& pos, int& lexemCount);
-    void addOperatorToLexems(const std::string& inputExpression, int& pos, int lexemIndex);
-    void addNumberToMatrix(const std::string& inputExpression, int& pos, int lexemIndex);
-private:
-    VectorOfLexems lexems;
+    static void addNumberToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int lexemIndex);
+    static void addVariableToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int lexemIndex);
+    static void addMatrixToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int lexemIndex);
+    static void addFunctionToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemCount);
+    static void addOperatorToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int lexemIndex);
+    static void addNumberToMatrix(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int lexemIndex);
+
 };
 
 #endif

@@ -5,11 +5,10 @@
 
 class Float : public Operand {
 public:
-    Float(std::string numb);
     Float(float numb);
 public:
-    void printValue() const override;
-    std::string getTypename() const override;
+    void print() const override;
+    std::string getTypeName() const override;
 public:
     float getValue() const;
 private:

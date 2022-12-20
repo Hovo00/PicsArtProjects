@@ -4,34 +4,21 @@
 #include <iostream>
 #include <functional>
 #include <memory>
-#include <cmath>
-#include "Matrix.h"
-#include "Float.h"
-#include "Exception.h"
+#include "Functions.h"
 
-namespace OperationRegistry {
-    std::shared_ptr<Operand> matrixAddition(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> floatAddition(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> matrixSubtraction(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> floatSubtraction(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> matrixMultiplication(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> floatMultiplication(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> floatDivision(std::vector<std::shared_ptr<Operand> > arguments);
 
-    std::shared_ptr<Operand> matrixInverse(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> matrixDeterminant(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> matrixTranspose(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> Select(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> sinus(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Operand> cosinus(std::vector<std::shared_ptr<Operand> > arguments);
-    std::shared_ptr<Matrix> removeRowAndColumn(const std::shared_ptr<Matrix>& matrix, int removeRow, int removeCol);
-    
-    bool equalMatrix(const std::shared_ptr<Operand>& matrix1, const std::shared_ptr<Operand>& matrix2);
-    void flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix);
-    using FUNCTION = std::function<std::shared_ptr<Operand>(std::vector<std::shared_ptr<Operand> >)>;
-
-    extern std::unordered_map<std::string, FUNCTION> operMap;
-    extern void initializeOperationMap();
+class OperationRegistry {
+public:
+    using OPERAND = std::shared_ptr<Operand>;
+    using FUNCTION = std::function<std::shared_ptr<Operand>(std::vector<OPERAND>)>;
+    static void addOperator(const std::string& operatorName, FUNCTION Operator, const std::string& key, int argCount, int precedence);
+    static void addFunction(const std::string& functionName, FUNCTION Function, const std::string& key, int argCount);
+    static void addOperatorOverload(const std::string& operatorName, FUNCTION Operator, const std::string& key);
+    static void addFunctionOverload(const std::string& functionName, FUNCTION Function, const std::string& key);
+    static OPERAND Operation(const std::string& key, const std::vector<OPERAND >& operands);
+    static bool exist(const std::string& key);
+private:
+    static std::unordered_map<std::string, FUNCTION> _operationMap;
 };
 
 #endif

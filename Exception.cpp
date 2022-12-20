@@ -1,18 +1,26 @@
 #include "Exception.h"
 
-UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::string& message) :errorMessage(message) {
+UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<Operand> >& args,
+                                                           const std::string& operType) : arguments(args),
+                                                                                          operatorType(operType) {
 
 }
 
-customException::customException(int col, std::string inputExpr) : column(col),
-                                                                  inputExpression(inputExpr) {
-
-}
 char const* UnsupportedOperatorArguments::what() const noexcept {
+    std::string errorMessage = "operator ";
+    errorMessage += (operatorType + " unsupported for arguments of type ");
+    for (const auto& operand : arguments) {
+        errorMessage += operand->getTypeName() + ", ";
+    }
     return errorMessage.data();
 }
 
-invalidMatrixOperand::invalidMatrixOperand(int col, std::string inputExp) : customException(col, inputExp) {
+customException::customException(int col, const std::string& inputExpr) : column(col),
+                                                                  inputExpression(inputExpr) {
+
+}
+
+invalidMatrixOperand::invalidMatrixOperand(int col, const std::string& inputExp) : customException(col, inputExp) {
 
 }
 
@@ -22,7 +30,7 @@ char const* invalidMatrixOperand::what() const noexcept {
     return errorMessage.c_str();
 }
 
-invalidVariable::invalidVariable(int col, std::string inputExp) : customException(col, inputExp){
+invalidVariable::invalidVariable(int col, const std::string& inputExp) : customException(col, inputExp){
 
 }
 
@@ -31,7 +39,7 @@ char const* invalidVariable::what() const noexcept {
     errorMessage += std::to_string(column);
     return errorMessage.data();
 }
-invalidSyntax::invalidSyntax(int col, std::string inputExp) : customException(col, inputExp){
+invalidSyntax::invalidSyntax(int col, const std::string& inputExp) : customException(col, inputExp){
    
 }
 char const* invalidSyntax::what() const noexcept {
@@ -39,7 +47,7 @@ char const* invalidSyntax::what() const noexcept {
     errorMessage += std::to_string(column);
     return errorMessage.data();
 }
-wrondMatrixDimension::wrondMatrixDimension(int col, int prev, int curr, std::string inputExp) : customException(col, inputExp) ,
+wrondMatrixDimension::wrondMatrixDimension(int col, int prev, int curr, const std::string& inputExp) : customException(col, inputExp) ,
                                                                                                 previous(prev), current(curr) {
 
 }
