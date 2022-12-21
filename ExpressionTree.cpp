@@ -1,9 +1,8 @@
 #include "ExpressionTree.h"
 
 void ExpressionTree::buildExpressionTree(const ExpressionTree::VectorOfLexems& lexems) {
-
     std::stack<std::shared_ptr<Expression> > treeStack;
-    for (const auto& lexem : lexems) {   
+    for (const auto& lexem : lexems) {
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
             for (int i = 0; i < TypeInfo::argumentCount(lexem.second); ++i) {

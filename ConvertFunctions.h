@@ -2,6 +2,7 @@
 #define CONVERTFUNCTION_H
 #include <vector>
 #include <string>
+#include <iostream>
 
 namespace ConvertFunctions {
     float stringToFloat(const std::string& number);

@@ -13,12 +13,13 @@ public:
     static void addOperator(const std::string&, int prec, int argCount);
     static void addFunction(const std::string&, int argCount);
 public:
-    static bool isSymbol(char symb);
-    static bool isOperator(const std::string& expression, int pos);
+    static bool isOperatorSymbol(char symb);
+    static bool isOperator(const std::string& Operator);
     static bool isValidMatrixSymbol(char symbol);
 private:
     static std::unordered_map<std::string, int> _prec;
     static std::unordered_map<std::string, int> _argCount;
+    static std::vector<char> _operatorSymbols;
     static std::vector<std::string> _operators;
     static std::vector<std::string> _functions;
 };

@@ -19,6 +19,8 @@ std::unordered_map<std::string, OperationRegistry::FUNCTION> OperationRegistry::
                                                                                             {"+floatfloat", Functions::floatAddition},
                                                                                             {"-floatfloat", Functions::floatSubtraction},
                                                                                             {"*floatfloat", Functions::floatMultiplication},
+                                                                                            {"*floatmatrix", Functions::floatMatrixMultiplication},
+                                                                                            {"*matrixfloat", Functions::matrixFloatMultiplication},
                                                                                             {"inversematrix", Functions::matrixInverse},
                                                                                             {"detmatrix", Functions::matrixDeterminant},
                                                                                             {"transposematrix", Functions::matrixTranspose},

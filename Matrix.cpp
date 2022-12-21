@@ -31,10 +31,14 @@ float& Matrix::at(int row, int col) {
 }
 
 void Matrix::print() const{
+    std::cout << '{';
     for (auto &i : _matrix) {
+        std::cout << '{' << ' ';
         for (auto &j : i) {
             std::cout << j << " ";
         }
-        std::cout << std::endl;
+        std::cout << "} ";
     }
+    std::cout << '}' << std::endl;
+
 }

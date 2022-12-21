@@ -25,6 +25,8 @@ namespace Functions {
     std::shared_ptr<Operand> sinus(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> cosinus(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Matrix> removeRowAndColumn(const std::shared_ptr<Matrix>& matrix, int removeRow, int removeCol);
+    std::shared_ptr<Operand> matrixFloatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
+    std::shared_ptr<Operand> floatMatrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
 
     bool equalMatrix(const std::shared_ptr<Operand>& matrix1, const std::shared_ptr<Operand>& matrix2);
     void flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix);

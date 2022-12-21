@@ -2,9 +2,10 @@
 
 Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr) {
     Lexer::VectorOfLexems lexems;
-    lexems.resize(inpStr.size());
+    lexems.resize(inpStr.size() * 2);
     int lexemCount = 0;
-    for (int i = 0; i < inpStr.size(); ++i) {
+    int i = 0;
+    while (i < inpStr.size()) {
         if (std::isdigit(inpStr[i])) {
             addNumberToLexems(inpStr, lexems, i, lexemCount);
             ++lexemCount;
@@ -20,25 +21,19 @@ Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr) {
             addMatrixToLexems(inpStr, lexems, i, lexemCount);
             ++lexemCount;
         }
-        if (TypeInfo::isOperator(inpStr, i)) {
-            if (inpStr[i] == '(') {
-            }
-
-            if (inpStr[i] == '-') {
-                if ((lexemCount == 0 || lexems[lexemCount - 1].second == "(") && std::isdigit(inpStr[i+1])) {
-                    addNumberToLexems(inpStr, lexems, i, lexemCount);
-                }
-                else if (lexems[lexemCount - 1].first != "oper" || lexems[lexemCount - 1].second == ")"){
-                    addOperatorToLexems(inpStr, lexems, i, lexemCount);
-                }
-                else {
-                    throw invalidSyntax(i, inpStr);
-                }
-            }
-            else {
-                addOperatorToLexems(inpStr, lexems, i, lexemCount);
-            }
+        else if (TypeInfo::isOperatorSymbol(inpStr[i])) {
+            addOperatorToLexems(inpStr, lexems, i, lexemCount);
             ++lexemCount;
+        }
+        else if (inpStr[i] == '(' || inpStr[i] == ')') {
+            addBracketToLexems(inpStr[i], lexems, i, lexemCount);
+            ++lexemCount;
+        }
+        else if (inpStr[i] == ' ') {
+            ++i;
+        }
+        else {
+            throw invalidSyntax(i, inpStr);
         }
     }
     lexems.resize(lexemCount);
@@ -48,23 +43,11 @@ Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr) {
 
 void Lexer::addNumberToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int lexemIndex) {
     lexems[lexemIndex].first = "float";
-    lexems[lexemIndex].second.push_back(inpStr[pos++]);
-    while (pos < inpStr.size() && std::isdigit(inpStr[pos])) {
-        lexems[lexemIndex].second.push_back(inpStr[pos++]);
+    lexems[lexemIndex].second = cutNumberFromExpression(inpStr, pos);
+    if (pos == inpStr.size()) {
+        return;
     }
-    if (inpStr[pos] == '.') {
-        if (pos + 1 == inpStr.size() || inpStr[pos + 1] == ' ') {
-            throw invalidSyntax(pos, inpStr);
-        }
-        lexems[lexemIndex].second.push_back(inpStr[pos++]);
-        while(pos < inpStr.size() && std::isdigit(inpStr[pos])) {
-            lexems[lexemIndex].second.push_back(inpStr[pos++]);
-        }
-    }
-    if (std::isalpha(inpStr[pos])) {
-        throw invalidVariable(pos, inpStr);
-    }
-    if (inpStr[pos] == '(' || inpStr[pos] == '{' ||inpStr[pos] == '}') {
+    if (!TypeInfo::isOperatorSymbol(inpStr[pos]) && inpStr[pos] != ')' && inpStr[pos] != ' ') {
         throw invalidSyntax(pos, inpStr);
     }
 }
@@ -73,16 +56,21 @@ void Lexer::addVariableToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     while (pos < inpStr.size() && std::isalpha(inpStr[pos])) {
         lexems[lexemIndex].second.push_back(inpStr[pos++]);
     }
-    if (std::isdigit(inpStr[pos]) && !TypeInfo::isFunction(lexems[lexemIndex].second)) {
-        throw invalidVariable(pos, inpStr);
+    if (pos == inpStr.size()) {
+        return;
     }
-   // std::cout << lexems[lexemIndex].second << std::endl;
-    if (inpStr[pos] == '.' || inpStr[pos] == '{') {
-        throw invalidSyntax(pos, inpStr);
+    if (inpStr[pos] != ' ' && !TypeInfo::isOperatorSymbol(inpStr[pos]) && inpStr[pos] != ')') {
+        if (!TypeInfo::isFunction(lexems[lexemIndex].second)) {
+            throw invalidVariable(pos, inpStr);
+        }
     }
 }
+
 void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int lexemIndex) {
     lexems[lexemIndex].first = "matrix";
+    if (inpStr[pos] == '-') {
+        lexems[lexemIndex].second.push_back(inpStr[pos++]);
+    }
     lexems[lexemIndex].second.push_back(inpStr[pos++]);
     int closingBrecketsExpected = 1;
     int openingBrecketsCount = 1;
@@ -93,64 +81,67 @@ void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& 
         if(!TypeInfo::isValidMatrixSymbol(inpStr[pos])) {
             throw invalidMatrixOperand(pos, inpStr);
         }
-        if (inpStr[pos] == '-') {
-            if (!std::isdigit(inpStr[pos + 1])) {
+        if (inpStr[pos] == '-' || std::isdigit(inpStr[pos])) {
+            lexems[lexemIndex].second += cutNumberFromExpression(inpStr, pos);
+            if (pos == inpStr.size()) {
                 throw invalidSyntax(pos, inpStr);
             }
-            addNumberToMatrix(inpStr, lexems, pos, lexemIndex);
+            if (inpStr[pos] != '}' && inpStr[pos] != ' ') {
+                throw invalidSyntax(pos, inpStr);
+            }
             if (openingBrecketsCount < 3) {
                 ++dimension;
             }
             ++currentRawElementsCount;
         }
-        else if (std::isdigit(inpStr[pos])) {
-            addNumberToMatrix(inpStr, lexems, pos, lexemIndex);
-            // if openingBrecketsCount < 3 it means that will still count elements of first row
-            if (openingBrecketsCount < 3) {
-                ++dimension;
-            }
-            ++currentRawElementsCount;
-        }
-        if (inpStr[pos] == '{') {
+        else if (inpStr[pos] == '{') {
             ++closingBrecketsExpected;
             ++openingBrecketsCount;
             if (openingBrecketsCount - closingBrecketsCount > 2) {
                 throw invalidSyntax(pos, inpStr);
             }
+            lexems[lexemIndex].second.push_back(inpStr[pos++]);
         }
-        if (inpStr[pos] == '}') {
+        else if (inpStr[pos] == '}') {
             --closingBrecketsExpected;
             ++closingBrecketsCount;
             if (currentRawElementsCount != dimension && closingBrecketsExpected != 0) {
                throw wrondMatrixDimension(pos, dimension, currentRawElementsCount, inpStr);
             }
             currentRawElementsCount = 0;
+            lexems[lexemIndex].second.push_back(inpStr[pos++]);
         }
-        lexems[lexemIndex].second.push_back(inpStr[pos++]);;
-    }
-}
-void Lexer::addNumberToMatrix(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int lexemIndex) {
-    lexems[lexemIndex].second.push_back(inpStr[pos++]);;
-    while (pos < inpStr.size() && std::isdigit(inpStr[pos])) {
-        lexems[lexemIndex].second.push_back(inpStr[pos++]);;
-    }
-    if (inpStr[pos] == '.') {
-        if (!std::isdigit(inpStr[pos + 1])) {
-            throw invalidSyntax(pos + 1, inpStr);
+        else if (inpStr[pos] == ' ') {
+            lexems[lexemIndex].second.push_back(inpStr[pos++]);
         }
-        lexems[lexemIndex].second.push_back(inpStr[pos++]);;
-        while (pos < inpStr.size() && std::isdigit(inpStr[pos])) {
-            lexems[lexemIndex].second.push_back(inpStr[pos++]);;
-        }
-    }
-    if (inpStr[pos] != ' ' && inpStr[pos] != '}') {
-        throw invalidSyntax(pos, inpStr);
     }
 }
 
-void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int lexemIndex) {
+void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex) {
+    std::string Operator;
+    while (pos < inpStr.size() && TypeInfo::isOperatorSymbol(inpStr[pos])) {
+        Operator.push_back(inpStr[pos++]);
+    }
+    if (!TypeInfo::isOperator(Operator) || pos == inpStr.size()) {
+        throw invalidSyntax(pos, inpStr);
+    }
+    if (Operator == "-") {
+        // check does it something like , -4 or 5 + -4 (allowed cases)
+        if (lexemIndex == 0 || lexemIndex > 0 && (lexems[lexemIndex - 1].first == "oper" || lexems[lexemIndex - 1].second == "(")) {
+            addNegativeLexem(inpStr, lexems, pos, lexemIndex);
+            return;
+        }
+    }
+    // such cases as,  * 5 or 4 + * 5 are not allowed
+    else if (lexemIndex == 0 || lexemIndex > 0 && lexems[lexemIndex - 1].first == "oper") {
+        if (!TypeInfo::isFunction(lexems[lexemIndex - 1].second)) {
+            throw invalidSyntax(pos - 1, inpStr);
+        }
+    }
+
+    //oterwise its normal case , as 4 * 5 or 4 - 5 
     lexems[lexemIndex].first = "oper";
-    lexems[lexemIndex].second.push_back(inpStr[pos]);
+    lexems[lexemIndex].second = Operator;
 }
 
 Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) {
@@ -161,19 +152,7 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) 
     std::stack<std::pair<std::string, std::string> > st;
     for (auto& lexem : infix) {
         if (lexem.first == "oper") {
-            if (lexem.second == "(") {
-                st.push(lexem);
-            }
-            else if (lexem.second == ")") {
-                while (!st.empty() && st.top().second != "(") {
-                    postfix.push_back(st.top());
-                    st.pop();
-                }
-                if (!st.empty()) {
-                    st.pop();
-                }
-            }
-            else if (st.empty()) {
+            if (st.empty()) {
                 st.push(lexem);
             }
             else if (TypeInfo::precedence(st.top().second) < TypeInfo::precedence(lexem.second)) {
@@ -185,6 +164,18 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) 
                     st.pop();
                 }
                 st.push(lexem);
+            }
+        }
+        else if (lexem.second == "(") {
+            st.push(lexem);
+        }
+        else if (lexem.second == ")") {
+            while (!st.empty() && st.top().second != "(") {
+                postfix.push_back(st.top());
+                st.pop();
+            }
+            if (!st.empty()) {
+                st.pop();
             }
         }
         else {
@@ -229,7 +220,9 @@ void Lexer::inputVariable(Lexer::VectorOfLexems& lexems, int lexemIndex) {
     else if (userInput[0] == '{') {
         addMatrixToLexems(userInput, lexems, i, lexemIndex);
     }
-    else throw invalidSyntax(i, userInput);
+    else {
+        throw invalidSyntax(i, userInput);
+    }
 }
 
 void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemCount) {
@@ -240,9 +233,6 @@ void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     int argCount = TypeInfo::argumentCount(lexems[lexemCount].second);
     int commasCount = 0;
     while (inpStr[pos] != ')' && pos < inpStr.size()) {
-        while(inpStr[pos] == ' ' && pos < inpStr.size()) {
-            ++pos;
-        }
         if (std::isdigit(inpStr[pos])) {
             addNumberToLexems(inpStr, lexems, pos, lexemCount + 1);
             ++lexemCount;
@@ -262,9 +252,70 @@ void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems
         }
         ++pos;
         }
-    //++pos;
+        else if (inpStr[pos] == ' ') {
+            ++pos;
+        }
+        else {
+            throw invalidSyntax(pos, inpStr);
+        }
     }
     if (argCount - commasCount != 1) {
         throw invalidSyntax(pos, inpStr);
     }
+    if (inpStr[pos] != ')') {
+        throw invalidSyntax(pos, inpStr);
+    }
+    ++pos;
 }
+std::string Lexer::cutNumberFromExpression(const std::string& inpStr, int& pos) {
+    if (inpStr[pos] == '-') {
+        if (pos + 1 >= inpStr.size() || !std::isdigit(inpStr[pos + 1])) {
+            throw invalidSyntax(pos, inpStr);
+        }
+    }
+    std::string number;
+    number.push_back(inpStr[pos++]);
+    int pointsCount = 0;
+    while (pos < inpStr.size() && (std::isdigit(inpStr[pos]) || inpStr[pos] == '.')) {
+        if (inpStr[pos] == '.') {
+            if (++pointsCount > 1) {
+                throw invalidSyntax(pos, inpStr);
+            }
+        }
+        number.push_back(inpStr[pos++]);
+    }
+    if (inpStr[pos - 1] == '.') {
+        throw invalidSyntax(pos, inpStr);
+    }
+    return number;
+}
+void Lexer::addBracketToLexems(char bracket, VectorOfLexems& lexems, int& pos, int lexemIndex) {
+    lexems[lexemIndex].first = "bracket";
+    lexems[lexemIndex].second.push_back(bracket);
+    ++pos;
+}
+void Lexer::addNegativeLexem(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) {
+    if (std::isdigit(inputExpression[pos])) {
+        --pos;
+        addNumberToLexems(inputExpression, lexems, pos, lexemIndex);
+    }
+    else if (inputExpression[pos] == '{') {
+        --pos;
+        addMatrixToLexems(inputExpression, lexems, pos, lexemIndex);
+    }
+    else if (std::isalpha(inputExpression[pos]) || inputExpression[pos] == '(') {
+        //problem with resize check later
+        lexems[lexemIndex].first = "float";
+        lexems[lexemIndex].second = "-1";
+        lexems[++lexemIndex].first = "oper";
+        lexems[lexemIndex].second = "*";
+        if (inputExpression[pos] == '(') {
+            return;
+        }
+        addVariableToLexems(inputExpression, lexems, pos, ++lexemIndex);
+    }
+    else {
+        throw invalidSyntax(pos, inputExpression);
+    }
+}
+

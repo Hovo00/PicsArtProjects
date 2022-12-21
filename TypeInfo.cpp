@@ -1,7 +1,8 @@
 #include "TypeInfo.h"
 
-std::vector<std::string> TypeInfo::_operators = {"+", "-", "*", "=", "/", "(", ")"};
+std::vector<std::string> TypeInfo::_operators = {"+", "-", "*", "/"};
 std::vector<std::string> TypeInfo::_functions = {"select", "transpose", "inverse", "det", "sin", "cos"};
+std::vector<char> TypeInfo::_operatorSymbols = {'+', '-', '*', '/', '=', '?', '!'};
 bool TypeInfo::isFunction(const std::string& str) {
     return std::find(_functions.begin(), _functions.end(), str) != _functions.end();
 }
@@ -34,14 +35,11 @@ std::unordered_map<std::string, int> TypeInfo::_argCount = {{"select", 3}, {"tra
 std::unordered_map<std::string, int> TypeInfo::_prec = {{"+", 1}, {"-", 1}, {"*", 2}, {"/", 2}};//, {"(", HIGH_PREC}, {")", HIGH_PREC}};
 
 
-bool TypeInfo::isSymbol(char symb) {
-    return (symb == '{'|| symb == '}' || symb == '.' || symb == '+' || symb == '=' || symb == '*' || symb == '-' || symb == ')' || symb == '(');
+bool TypeInfo::isOperatorSymbol(char symbol) {
+    return std::find(_operatorSymbols.begin(), _operatorSymbols.end(), symbol) != _operatorSymbols.end();
 }
-bool TypeInfo::isOperator(const std::string& inpStr, int pos) {
-    //change in feuture if there will be more then one character operators
-    std::string op;
-    op.push_back(inpStr[pos]);
-    return std::find(_operators.begin(), _operators.end(), op) != _operators.end();
+bool TypeInfo::isOperator(const std::string& Operator) {
+    return std::find(_operators.begin(), _operators.end(), Operator) != _operators.end();
 }
 bool TypeInfo::isValidMatrixSymbol(char i) {
         return (std::isdigit(i) || i == '{' || i == '}' || i == ' ' || i == '-');
