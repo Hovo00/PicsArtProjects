@@ -8,21 +8,23 @@ std::string Operator::getTypeName() const {
     return _operatorType;
 }
 
-std::shared_ptr<Operand> Operator::evaluate() {
+std::shared_ptr<Operand> Operator::evaluate(const OperationRegistry& registry) {
     std::vector<std::shared_ptr<Operand> > vec;
-    for (int i = 0; i < TypeInfo::argumentCount(_operatorType); ++i) {
-        vec.push_back(_arguments[i]->evaluate());
+    for (int i = 0; i < registry.operationInfo(_operatorType).argumentCount; ++i) {
+        vec.push_back(_arguments[i]->evaluate(registry));
     }
     std::reverse(vec.begin(), vec.end());
-    return doOperation(vec);
+    return doOperation(vec, registry);
 }
-std::shared_ptr<Operand> Operator::doOperation(const std::vector<std::shared_ptr<Operand> >& operands) const {
+std::shared_ptr<Operand> Operator::doOperation(const std::vector<std::shared_ptr<Operand> >& operands,
+                                               const OperationRegistry& registry) const {
     std::string key = _operatorType;
     for (auto & operand : operands) {
         key += operand->getTypeName();
     }
-    if (!OperationRegistry::exist(key)) {
+
+    if (!registry.exist(key)) {
         throw UnsupportedOperatorArguments(operands, _operatorType);
     }
-    return OperationRegistry::Operation(key, operands);
+    return registry.Operation(key, operands);
 }

@@ -1,11 +1,17 @@
 #include "ExpressionTree.h"
 
-void ExpressionTree::buildExpressionTree(const ExpressionTree::VectorOfLexems& lexems) {
+ExpressionTree::ExpressionTree(const OperationRegistry& registry) : _operationRegistry(registry),
+                                                                    _lexer(registry) {
+
+}
+
+void ExpressionTree::buildExpressionTree(std::string& inputExpression) {
+    auto lexems = _lexer.divideTolexems(inputExpression);
     std::stack<std::shared_ptr<Expression> > treeStack;
     for (const auto& lexem : lexems) {
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
-            for (int i = 0; i < TypeInfo::argumentCount(lexem.second); ++i) {
+            for (int i = 0; i < _operationRegistry.operationInfo(lexem.second).argumentCount; ++i) {
                 arguments.push_back(treeStack.top());
                 treeStack.pop();
             }
@@ -35,5 +41,5 @@ std::shared_ptr<Expression>& ExpressionTree::getHead() {
     }
  }
  std::shared_ptr<Operand> ExpressionTree::evaluate(const std::shared_ptr<Expression>& head) {
-    return head->evaluate();
+    return head->evaluate(_operationRegistry);
  }

@@ -37,7 +37,7 @@ void Matrix::print() const{
         for (auto &j : i) {
             std::cout << j << " ";
         }
-        std::cout << "} ";
+        std::cout << "}";
     }
     std::cout << '}' << std::endl;
 

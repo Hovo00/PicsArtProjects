@@ -4,9 +4,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 project(expression_evaluator LANGUAGES CXX)
 
-add_executable(${PROJECT_NAME} main.cpp Operator.cpp  Matrix.cpp 
-ExpressionTree.cpp TypeInfo.cpp Lexer.cpp Input.cpp Exception.cpp Operand.cpp Float.cpp 
-OperationRegistry.cpp Output.cpp Functions.cpp ConvertFunctions.cpp)
+add_executable(${PROJECT_NAME} main.cpp Operator.cpp  Lexer.cpp Matrix.cpp Bool.cpp 
+ExpressionTree.cpp Input.cpp Exception.cpp Operand.cpp Float.cpp DontKnow.cpp
+OperationRegistry.cpp Output.cpp BoolOperations.cpp ConvertFunctions.cpp FloatOperations.cpp
+MatrixOperations.cpp)
 
 
 

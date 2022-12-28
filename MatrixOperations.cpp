@@ -1,6 +1,6 @@
-#include "Functions.h"
+#include "MatrixOperations.h"
 
-std::shared_ptr<Operand> Functions::matrixAddition(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixAddition(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto m1 = std::static_pointer_cast<Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getColCount() && m1->getRowCount() == m2->getRowCount());
@@ -15,12 +15,8 @@ std::shared_ptr<Operand> Functions::matrixAddition(const std::vector<std::shared
     }
     return m3;
 }
-std::shared_ptr<Operand> Functions::floatAddition(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto f1 = std::static_pointer_cast<Float>(arguments[0]);
-    auto f2 = std::static_pointer_cast<Float>(arguments[1]);
-    return std::make_shared<Float>(f1->getValue() + f2->getValue());
-}
-std::shared_ptr<Operand> Functions::matrixSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments) {
+
+std::shared_ptr<Operand> MatrixOperations::matrixSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto m1 = std::static_pointer_cast<Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getColCount() && m1->getRowCount() == m2->getRowCount());
@@ -34,12 +30,7 @@ std::shared_ptr<Operand> Functions::matrixSubtraction(const std::vector<std::sha
     }
     return m3;
 }
-std::shared_ptr<Operand> Functions::floatSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto f1 = std::static_pointer_cast<Float>(arguments[0]);
-    auto f2 = std::static_pointer_cast<Float>(arguments[1]);
-    return std::make_shared<Float>(f1->getValue() - f2->getValue());
-}
-std::shared_ptr<Operand> Functions::matrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto m1 = std::static_pointer_cast<Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getRowCount());
@@ -56,31 +47,7 @@ std::shared_ptr<Operand> Functions::matrixMultiplication(const std::vector<std::
     }
     return m3;
 }
-std::shared_ptr<Operand> Functions::floatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto f1 = std::static_pointer_cast<Float>(arguments[0]);
-    auto f2 = std::static_pointer_cast<Float>(arguments[1]);
-    return std::make_shared<Float>(f1->getValue() * f2->getValue());
-}
-std::shared_ptr<Operand> Functions::floatDivision(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto f1 = std::static_pointer_cast<Float>(arguments[0]);
-    auto f2 = std::static_pointer_cast<Float>(arguments[1]);
-    return std::make_shared<Float>(f1->getValue() / f2->getValue());
-}
-std::shared_ptr<Operand> Functions::matrixFloatDivision(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
-    auto flt = std::static_pointer_cast<Float>(arguments[1]);
-    int rows = matrix->getRowCount();
-    int cols = matrix->getColCount();
-    auto result = std::make_shared<Matrix>(rows, cols);
-    for (int i = 0; i < rows; ++i) {
-        for (int j = 0; j < cols; ++j) {
-            result->at(i, j) = matrix->at(i, j) / flt->getValue();
-        }
-    }
-    return result;
-}
-
-std::shared_ptr<Operand> Functions::matrixDeterminant(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixDeterminant(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
     float det = 0;
     int n = matrix->getRowCount();
@@ -108,8 +75,7 @@ std::shared_ptr<Operand> Functions::matrixDeterminant(const std::vector<std::sha
    }
    return std::make_shared<Float>(det);
 }
-
-std::shared_ptr<Matrix> Functions::removeRowAndColumn(const std::shared_ptr<Matrix>& matrix, int removeRow, int removeCol) {
+std::shared_ptr<Matrix> MatrixOperations::removeRowAndColumn(const std::shared_ptr<Matrix>& matrix, int removeRow, int removeCol) {
     int size = matrix->getRowCount();
     int subI = 0;
     int subJ = 0;
@@ -137,8 +103,7 @@ std::shared_ptr<Matrix> Functions::removeRowAndColumn(const std::shared_ptr<Matr
     }
     return subMatrix;
 }
-
-void Functions::flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix) {
+void MatrixOperations::flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix) {
     int size = matrix->getColCount();
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j <= i; ++j) {
@@ -146,8 +111,7 @@ void Functions::flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix) {
         }
     }
 }
-
-std::shared_ptr<Operand> Functions::matrixInverse(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixInverse(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
     int size =  matrix->getRowCount();
     auto inverseMatrix = std::make_shared<Matrix>(size, size);
@@ -164,7 +128,7 @@ std::shared_ptr<Operand> Functions::matrixInverse(const std::vector<std::shared_
     }
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-            auto subMatrix = Functions::removeRowAndColumn(matrix, i, j);
+            auto subMatrix = MatrixOperations::removeRowAndColumn(matrix, i, j);
             auto coFactor = std::static_pointer_cast<Float>(matrixDeterminant(std::vector<std::shared_ptr<Operand> >{subMatrix}));
             inverseMatrix->at(i, j) = pow(-1, i + j) * coFactor->getValue() / determinant->getValue();;
         }
@@ -172,8 +136,7 @@ std::shared_ptr<Operand> Functions::matrixInverse(const std::vector<std::shared_
     flipMatrixAlongDiagonal(inverseMatrix);
     return inverseMatrix;
 }
-
-std::shared_ptr<Operand> Functions::matrixTranspose(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixTranspose(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
     auto transposedMatrix = std::make_shared<Matrix>(matrix->getColCount(), matrix->getRowCount());
     for (int i = 0; i < matrix->getRowCount(); ++i) {
@@ -183,16 +146,7 @@ std::shared_ptr<Operand> Functions::matrixTranspose(const std::vector<std::share
     }
     return transposedMatrix;
 }
-std::shared_ptr<Operand> Functions::sinus(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto varFloat = std::static_pointer_cast<Float>(arguments[0]);
-    return std::make_shared<Float>(std::sin(varFloat->getValue() * 3.14159 / 180));
-}
-std::shared_ptr<Operand> Functions::cosinus(const std::vector<std::shared_ptr<Operand> >& arguments) {
-    auto varFloat = std::static_pointer_cast<Float>(arguments[0]);
-    return std::make_shared<Float>(std::cos(varFloat->getValue() * 3.14159 / 180));
-}
-
-bool Functions::equalMatrix(const std::shared_ptr<Operand>& m1, const std::shared_ptr<Operand>& m2) {
+bool MatrixOperations::equalMatrix(const std::shared_ptr<Operand>& m1, const std::shared_ptr<Operand>& m2) {
     auto matrix1 = std::static_pointer_cast<Matrix>(m1);
     auto matrix2 = std::static_pointer_cast<Matrix>(m2);
     if (matrix1->getColCount() != matrix2->getColCount() || matrix1->getRowCount() != matrix2->getRowCount()) {
@@ -207,8 +161,7 @@ bool Functions::equalMatrix(const std::shared_ptr<Operand>& m1, const std::share
     }
     return true;
 }
-
-std::shared_ptr<Operand> Functions::Select(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::Select(const std::vector<std::shared_ptr<Operand> >& arguments) {
     if (arguments[0]->getTypeName() != "matrix" || arguments[1]->getTypeName() != "matrix" || arguments[2]->getTypeName() != "matrix") {
         throw UnsupportedOperatorArguments(arguments, "select");
     }
@@ -219,7 +172,49 @@ std::shared_ptr<Operand> Functions::Select(const std::vector<std::shared_ptr<Ope
     auto result = matrixMultiplication(args); 
     return equalMatrix(matrix1, result) ? matrix1 : result;
 }
-std::shared_ptr<Operand> Functions::matrixFloatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixEqual(const std::vector<std::shared_ptr<Operand> >& arguments) {
+    auto matrix1 = std::static_pointer_cast<Matrix>(arguments[0]);
+    auto matrix2 = std::static_pointer_cast<Matrix>(arguments[1]);
+    if (matrix1->getRowCount() != matrix2->getRowCount() || matrix1->getColCount() != matrix2->getColCount()) {
+        return std::make_shared<Bool>(false);
+    }
+    for (int i = 0; i < matrix1->getRowCount(); ++i) {
+        for (int j = 0; j < matrix1->getColCount(); ++j) {
+            if (matrix1->at(i, j) != matrix2->at(i, j)) {
+                return std::make_shared<Bool>(false);
+            }
+        }
+    }
+    return std::make_shared<Bool>(true);
+}
+std::shared_ptr<Operand> MatrixOperations::matrixFloatDivision(const std::vector<std::shared_ptr<Operand> >& arguments) {
+    auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
+    auto flt = std::static_pointer_cast<Float>(arguments[1]);
+    int rows = matrix->getRowCount();
+    int cols = matrix->getColCount();
+    auto result = std::make_shared<Matrix>(rows, cols);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            result->at(i, j) = matrix->at(i, j) / flt->getValue();
+        }
+    }
+    return result;
+}
+
+std::shared_ptr<Operand> MatrixOperations::matrixFloatAddition(const std::vector<std::shared_ptr<Operand> >& arguments) {
+    auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
+    auto flt = std::static_pointer_cast<Float>(arguments[1]);
+    int rows = matrix->getRowCount();
+    int cols = matrix->getColCount();
+    auto result = std::make_shared<Matrix>(rows, cols);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            result->at(i, j) = matrix->at(i, j) + flt->getValue();
+        }
+    }
+    return result;
+}
+std::shared_ptr<Operand> MatrixOperations::matrixFloatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
     auto flt = std::static_pointer_cast<Float>(arguments[1]);
     int rows = matrix->getRowCount();
@@ -232,9 +227,21 @@ std::shared_ptr<Operand> Functions::matrixFloatMultiplication(const std::vector<
     }
     return result;
 }
-std::shared_ptr<Operand> Functions::floatMatrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
+std::shared_ptr<Operand> MatrixOperations::matrixFloatSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments) {
+    auto matrix = std::static_pointer_cast<Matrix>(arguments[0]);
+    auto flt = std::static_pointer_cast<Float>(arguments[1]);
+    int rows = matrix->getRowCount();
+    int cols = matrix->getColCount();
+    auto result = std::make_shared<Matrix>(rows, cols);
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            result->at(i, j) = matrix->at(i, j) - flt->getValue();
+        }
+    }
+    return result;
+}
+std::shared_ptr<Operand> MatrixOperations::floatMatrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<Matrix>(arguments[1]);
     auto flt = std::static_pointer_cast<Float>(arguments[0]);
     return matrixFloatMultiplication(std::vector<std::shared_ptr<Operand> >{matrix, flt});
 }
-

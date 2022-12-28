@@ -1,35 +1,35 @@
-#ifndef FUNCTIONS_H_SS
-#define FUNCTIONS_H_SS
+#ifndef MATRIXOPERATIONS_H
+#define MATRIXOPERATIONS_H
 
-#include <iostream>
+#include <vector>
+#include <memory>
 #include <cmath>
 
 #include "Matrix.h"
+#include "Bool.h"
 #include "Float.h"
+
 #include "Exception.h"
 
 
-namespace Functions {
+namespace MatrixOperations {
     std::shared_ptr<Operand> matrixAddition(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> floatAddition(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> floatSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> floatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> floatDivision(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> matrixFloatDivision(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixInverse(const std::vector<std::shared_ptr<Operand> >& arguments);
+    std::shared_ptr<Operand> matrixEqual(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixDeterminant(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixTranspose(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> Select(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> sinus(const std::vector<std::shared_ptr<Operand> >& arguments);
-    std::shared_ptr<Operand> cosinus(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Matrix> removeRowAndColumn(const std::shared_ptr<Matrix>& matrix, int removeRow, int removeCol);
+    std::shared_ptr<Operand> matrixFloatDivision(const std::vector<std::shared_ptr<Operand> >& arguments);
+    std::shared_ptr<Operand> matrixFloatAddition(const std::vector<std::shared_ptr<Operand> >& arguments);
+    std::shared_ptr<Operand> matrixFloatSubtraction(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> matrixFloatMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
     std::shared_ptr<Operand> floatMatrixMultiplication(const std::vector<std::shared_ptr<Operand> >& arguments);
-
-    bool equalMatrix(const std::shared_ptr<Operand>& matrix1, const std::shared_ptr<Operand>& matrix2);
+    
     void flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix);
+    bool equalMatrix(const std::shared_ptr<Operand>& matrix1, const std::shared_ptr<Operand>& matrix2);
 };
 
 #endif

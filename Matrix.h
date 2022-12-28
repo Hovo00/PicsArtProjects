@@ -3,7 +3,7 @@
 
 #include <stack>
 #include <iostream>
-#include "TypeInfo.h"
+//#include "TypeInfo.h"
 #include "Expression.h"
 #include "Operand.h"
 
