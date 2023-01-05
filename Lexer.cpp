@@ -67,7 +67,7 @@ void Lexer::addVariableToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     //here error
     if (inpStr[pos] != ' ' && !_operationRegistry.isOperatorSymbol(inpStr[pos]) && inpStr[pos] != ')' && inpStr[pos] != ',') {
         if (!_operationRegistry.isFunction(lexems[lexemIndex].second)) {
-            throw invalidVariable(pos, inpStr);
+            throw InvalidVariable(pos, inpStr);
         }
     }
 }
@@ -85,7 +85,7 @@ void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& 
     int currentRawElementsCount = 0;
     while (pos < inpStr.size() && closingBrecketsExpected != 0) {
         if(!isValidMatrixSymbol(inpStr[pos])) {
-            throw invalidMatrixOperand(pos, inpStr);
+            throw InvalidMatrixOperand(pos, inpStr);
         }
         if (inpStr[pos] == '-' || std::isdigit(inpStr[pos])) {
             lexems[lexemIndex].second += cutNumberFromExpression(inpStr, pos);
@@ -112,7 +112,7 @@ void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& 
             --closingBrecketsExpected;
             ++closingBrecketsCount;
             if (currentRawElementsCount != dimension && closingBrecketsExpected != 0) {
-               throw wrondMatrixDimension(pos, dimension, currentRawElementsCount, inpStr);
+               throw WrondMatrixDimension(pos, dimension, currentRawElementsCount, inpStr);
             }
             currentRawElementsCount = 0;
             lexems[lexemIndex].second.push_back(inpStr[pos++]);
@@ -130,7 +130,7 @@ void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     }
     //std::cout << pos << " " << (_operationRegistry.isOperator(inpStr, pos)) << std::endl;
     if (!_operationRegistry.isOperator(Operator) || (pos == inpStr.size() && 
-        _operationRegistry.operationInfo(Operator).notation != "postfix")) {
+        _operationRegistry.operationInfo(Operator).notation != Notation::Postfix)) {
         throw invalidSyntax(pos, inpStr);
     }
     if (Operator == "-") {
@@ -177,7 +177,7 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) 
                       (_operationRegistry.operationInfo(st.top().second).precedence >= _operationRegistry.operationInfo(lexem.second).precedence)) {
 
                     if ((_operationRegistry.operationInfo(st.top().second).precedence == _operationRegistry.operationInfo(lexem.second).precedence) && 
-                         _operationRegistry.operationInfo(st.top().second).associativity == "rightToLeft") {
+                         _operationRegistry.operationInfo(st.top().second).associativity == Associativity::RightToLeft) {
                         break;
                     }
                     postfix.push_back(st.top());

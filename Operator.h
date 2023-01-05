@@ -9,10 +9,10 @@ class Operator : public Expression {
 public:
     Operator(std::string operatorType, const std::vector<std::shared_ptr<Expression> >& arguments);
 public:
-    std::shared_ptr<Operand> evaluate(const OperationRegistry& registry) override;
+    std::shared_ptr<const Operand> evaluate(const OperationRegistry& registry) const override;
     std::string getTypeName() const override;
 private:
-    std::shared_ptr<Operand> doOperation(const std::vector<std::shared_ptr<Operand> >& operands,
+    std::shared_ptr<const Operand> doOperation(const std::vector<std::shared_ptr<const Operand> >& operands,
                                          const OperationRegistry& registry) const;
 private:
     std::vector<std::shared_ptr<Expression> > _arguments;

@@ -1,7 +1,6 @@
 #ifndef EXCEPTIONXX_H
 #define EXCEPTIONXX_H
 
-#include <iostream>
 #include <exception>
 #include <string>
 #include <vector>
@@ -10,39 +9,43 @@
 
 class UnsupportedOperatorArguments : public std::exception {
 public:
-    UnsupportedOperatorArguments(const std::vector<std::shared_ptr<Operand> >& arguments, const std::string& operatorType);
+    UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& arguments, const std::string& operatorType, 
+                                 const std::vector<std::vector<std::string> >& candidateArguments);
     char const* what() const noexcept override;
 private:
-    std::vector<std::shared_ptr<Operand> > arguments;
+    std::vector<std::shared_ptr<const Operand> > arguments;
     std::string operatorType;
+    std::vector<std::vector<std::string> > candidateArguments;
 };
 
-class customException : public std::exception {
+class CustomException : public std::exception {
 public:
-    customException(int column, const std::string& inputExpression);
+    CustomException(int column, const std::string& inputExpression);
     const int column;
     const std::string inputExpression;
 };
 
-class invalidMatrixOperand : public customException {
+class InvalidMatrixOperand : public CustomException {
 public:
-    invalidMatrixOperand(int column, const std::string& inputExpression);
+    InvalidMatrixOperand(int column, const std::string& inputExpression);
     char const* what() const noexcept override;
 };
-class invalidVariable : public customException {
+
+class InvalidVariable : public CustomException {
 public:
-    invalidVariable(int cl, const std::string& inputExpression);
+    InvalidVariable(int cl, const std::string& inputExpression);
     char const* what() const noexcept override;
 };
-class invalidSyntax : public customException {
+
+class invalidSyntax : public CustomException {
 public:
     invalidSyntax(int cl, const std::string& inputExpression);
     char const* what() const noexcept override;
 };
 
-class wrondMatrixDimension : public customException {
+class WrondMatrixDimension : public CustomException {
 public:
-    wrondMatrixDimension(int column, int previous, int current, const std::string& inputExpression);
+    WrondMatrixDimension(int column, int previous, int current, const std::string& inputExpression);
     char const* what() const noexcept override;
     const int previous;
     const int current;

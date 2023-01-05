@@ -5,7 +5,7 @@
 
 
 namespace BoolOperations {
-      std::shared_ptr<Operand> questionMarkBool(const std::vector<std::shared_ptr<Operand> >& arguments);
+      std::shared_ptr<const Operand> questionMarkBool(const std::vector<std::shared_ptr<const Operand> >& arguments);
 
 };
 

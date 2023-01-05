@@ -1,9 +1,9 @@
 #include "Exception.h"
 
-UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<Operand> >& args,
-                                                           const std::string& operType) : arguments(args),
-                                                                                          operatorType(operType) {
-
+UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& args, const std::string& operType,
+                                                           const std::vector<std::vector<std::string> >& candidateArgs) : arguments(args),
+                                                                                                                         operatorType(operType),
+                                                                                                                         candidateArguments(candidateArgs) {
 }
 
 char const* UnsupportedOperatorArguments::what() const noexcept {
@@ -15,31 +15,32 @@ char const* UnsupportedOperatorArguments::what() const noexcept {
     return errorMessage.data();
 }
 
-customException::customException(int col, const std::string& inputExpr) : column(col),
+CustomException::CustomException(int col, const std::string& inputExpr) : column(col),
                                                                   inputExpression(inputExpr) {
 
 }
 
-invalidMatrixOperand::invalidMatrixOperand(int col, const std::string& inputExp) : customException(col, inputExp) {
+InvalidMatrixOperand::InvalidMatrixOperand(int col, const std::string& inputExp) : CustomException(col, inputExp) {
 
 }
 
-char const* invalidMatrixOperand::what() const noexcept { 
+char const* InvalidMatrixOperand::what() const noexcept { 
     std::string errorMessage = "Invalid symbol in matrix brackets in col : ";
     errorMessage += std::to_string(column);
     return errorMessage.c_str();
 }
 
-invalidVariable::invalidVariable(int col, const std::string& inputExp) : customException(col, inputExp){
+InvalidVariable::InvalidVariable(int col, const std::string& inputExp) : CustomException(col, inputExp){
 
 }
 
-char const* invalidVariable::what() const noexcept {
+char const* InvalidVariable::what() const noexcept {
     std::string errorMessage = "Invalid Variable (ambiguity number or variable ) in col : ";
     errorMessage += std::to_string(column);
     return errorMessage.data();
 }
-invalidSyntax::invalidSyntax(int col, const std::string& inputExp) : customException(col, inputExp){
+
+invalidSyntax::invalidSyntax(int col, const std::string& inputExp) : CustomException(col, inputExp){
    
 }
 char const* invalidSyntax::what() const noexcept {
@@ -47,11 +48,13 @@ char const* invalidSyntax::what() const noexcept {
     errorMessage += std::to_string(column);
     return errorMessage.data();
 }
-wrondMatrixDimension::wrondMatrixDimension(int col, int prev, int curr, const std::string& inputExp) : customException(col, inputExp) ,
+
+WrondMatrixDimension::WrondMatrixDimension(int col, int prev, int curr, const std::string& inputExp) : CustomException(col, inputExp) ,
                                                                                                 previous(prev), current(curr) {
 
 }
-char const* wrondMatrixDimension::what() const noexcept {
+
+char const* WrondMatrixDimension::what() const noexcept {
     std::string errorMessage = " Invalid column count : ";
     errorMessage += std::to_string(current) + " at column " + std::to_string(column) + " previous defined " + std::to_string(previous);
     return errorMessage.data();

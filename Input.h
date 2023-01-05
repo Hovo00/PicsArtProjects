@@ -3,12 +3,12 @@
 #include <iostream>
 #include <string>
 
-class Iinput {
+class InputBase {
 public:
     virtual void getInput(std::string& inpStr) = 0;
 };
 
-class ConsoleInput : public Iinput {
+class ConsoleInput : public InputBase {
 public:
     virtual void getInput(std::string& inpStr) override;
 };

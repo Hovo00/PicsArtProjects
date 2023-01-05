@@ -10,12 +10,12 @@ constexpr const char * GREEN = "\e[0;32m";
 constexpr const char * NOCOLOR = "\e[0m";
 constexpr const char * REDWHITE = "\e[41m";
 
-class Ioutput {
+class OutputBase {
 public:
 
 };
 
-class ConsoleOutput : public Ioutput {
+class ConsoleOutput : public OutputBase {
 public: 
     static void showErrorPlace(const std::string& errorMessage, const std::string& inputExpression, int pos);
     static void printErrorMessage(const std::string& errorMessage);

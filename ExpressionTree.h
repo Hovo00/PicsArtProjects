@@ -12,10 +12,10 @@
 class ExpressionTree {
 public:
     ExpressionTree(const OperationRegistry& registry);
-    using VectorOfLexems = std::vector<std::pair<std::string, std::string> >;
+    //using VectorOfLexems = std::vector<std::pair<std::string, std::string> >;
     void buildExpressionTree(std::string& inputExpression);
-    std::shared_ptr<Expression>& getHead();
-    std::shared_ptr<Operand> evaluate(const std::shared_ptr<Expression>& head);
+    const std::shared_ptr<Expression>& getHead() const;
+    std::shared_ptr<const Operand> evaluate(const std::shared_ptr<Expression>& head) const;
 private:
     std::shared_ptr<Expression> makeExpression(const std::pair<std::string, std::string>&  lexem, 
                                                const std::vector<std::shared_ptr<Expression> >& arguments = {});

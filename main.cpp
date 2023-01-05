@@ -4,7 +4,7 @@
 #include "Input.h"
 #include "ExpressionTree.h"
 #include "Output.h"
-#include "DontKnow.h"
+#include "MapInitialization.h"
 
 int main() {
     try {
@@ -20,13 +20,13 @@ int main() {
     res->print();
     std::cout << std::endl;  
 }
-    catch(const invalidMatrixOperand& excep) {
+    catch(const InvalidMatrixOperand& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
-    catch(const invalidVariable& excep) {
+    catch(const InvalidVariable& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
-    catch(const wrondMatrixDimension& excep) {
+    catch(const WrondMatrixDimension& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
     }
     catch(const invalidSyntax& excep) {

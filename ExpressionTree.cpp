@@ -25,7 +25,7 @@ void ExpressionTree::buildExpressionTree(std::string& inputExpression) {
     treeStack.pop();
 }
 
-std::shared_ptr<Expression>& ExpressionTree::getHead() {
+const std::shared_ptr<Expression>& ExpressionTree::getHead() const{
     return _head;
 }
  std::shared_ptr<Expression> ExpressionTree::makeExpression(const std::pair<std::string, std::string>& lexem,
@@ -39,7 +39,8 @@ std::shared_ptr<Expression>& ExpressionTree::getHead() {
     if (lexem.first == "float") {
         return std::make_shared<Float>(ConvertFunctions::stringToFloat(lexem.second));
     }
+    return std::make_shared<Float>(0);
  }
- std::shared_ptr<Operand> ExpressionTree::evaluate(const std::shared_ptr<Expression>& head) {
+ std::shared_ptr<const Operand> ExpressionTree::evaluate(const std::shared_ptr<Expression>& head) const{
     return head->evaluate(_operationRegistry);
  }

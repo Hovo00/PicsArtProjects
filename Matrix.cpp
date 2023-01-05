@@ -25,10 +25,16 @@ int Matrix::getRowCount() const{
     return _rowCount;
 }
 
-float& Matrix::at(int row, int col) {
+const float& Matrix::at(int row, int col) const{
     //Add check for correct row and col count
     return _matrix[row][col];
 }
+
+float& Matrix::at(int row, int col) {
+    return const_cast<float&>(const_cast<const Matrix*>(this)->at(row, col));
+
+}
+
 
 void Matrix::print() const{
     std::cout << '{';
@@ -40,5 +46,4 @@ void Matrix::print() const{
         std::cout << "}";
     }
     std::cout << '}' << std::endl;
-
 }

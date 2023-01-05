@@ -15,7 +15,9 @@ public:
 public:
     int getColCount() const;
     int getRowCount() const;
+    const float& at(int row, int col) const;
     float& at(int row, int col);
+
 public:
     void print() const override;
     std::string getTypeName() const override;
