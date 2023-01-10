@@ -1,10 +1,9 @@
-#include "MatrixOperations.h"
+#include "MatrixOperations.hpp"
 
 std::shared_ptr<const Operand> MatrixOperations::matrixAddition(const std::vector<std::shared_ptr<const Operand> >& arguments) {
     auto m1 = std::static_pointer_cast<const Matrix>(arguments[0]);
     auto m2 = std::static_pointer_cast<const Matrix>(arguments[1]);
     assert(m1->getColCount() == m2->getColCount() && m1->getRowCount() == m2->getRowCount());
-
     int n = m1->getRowCount();
     int m = m2->getColCount();
     auto m3 = std::make_shared<Matrix>(n, m);
@@ -49,7 +48,7 @@ std::shared_ptr<const Operand> MatrixOperations::matrixMultiplication(const std:
 }
 std::shared_ptr<const Operand> MatrixOperations::matrixDeterminant(const std::vector<std::shared_ptr<const Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<const Matrix>(arguments[0]);
-    float det = 0;
+    double det = 0;
     int n = matrix->getRowCount();
     auto subMatrix = std::make_shared<Matrix>(n - 1, n - 1);
     if (n == 2) {
@@ -169,7 +168,7 @@ std::shared_ptr<const Operand> MatrixOperations::Select(const std::vector<std::s
     std::vector<std::shared_ptr<const Operand> > args;
     args.push_back(arguments[1]);
     args.push_back(arguments[2]);
-    auto result = matrixMultiplication(args); 
+    auto result = matrixMultiplication(args);
     return equalMatrix(matrix1, result) ? matrix1 : result;
 }
 std::shared_ptr<const Operand> MatrixOperations::matrixEqual(const std::vector<std::shared_ptr<const Operand> >& arguments) {
@@ -240,7 +239,7 @@ std::shared_ptr<const Operand> MatrixOperations::matrixFloatSubtraction(const st
     }
     return result;
 }
-std::shared_ptr<const Operand> MatrixOperations::floatMatrixMultiplication(const std::vector<std::shared_ptr<const Operand> >& arguments) {
+std::shared_ptr<const Operand> MatrixOperations::doubleMatrixMultiplication(const std::vector<std::shared_ptr<const Operand> >& arguments) {
     auto matrix = std::static_pointer_cast<const Matrix>(arguments[1]);
     auto flt = std::static_pointer_cast<const Float>(arguments[0]);
     return matrixFloatMultiplication(std::vector<std::shared_ptr<const Operand> >{matrix, flt});

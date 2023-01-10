@@ -1,4 +1,4 @@
-#include "Output.h"
+#include "Output.hpp"
 
 void ConsoleOutput::showErrorPlace(const std::string& errorMessage, const std::string& inputExpression, int pos) {
     printErrorMessage(errorMessage);

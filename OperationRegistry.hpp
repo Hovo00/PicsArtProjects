@@ -30,7 +30,7 @@ enum class OperationType {Function, Operator};
 // sin(30) prefix , (a + b) infix, (a == b) ? postfix
 enum class Notation {Prefix, Infix, Postfix};
 
-struct OperationInfo {  
+struct OperationInfo {
     OperationType operationType;
     int precedence;
     int argumentCount;

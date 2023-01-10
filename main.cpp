@@ -1,24 +1,38 @@
-#include <iostream>
-#include <variant>
-#include "Lexer.h"
-#include "Input.h"
-#include "ExpressionTree.h"
-#include "Output.h"
-#include "MapInitialization.h"
+#include <fstream>
+#include "Input.hpp"
+#include "Evaluator.hpp"
+#include "Output.hpp"
+#include "MapInitialization.hpp"
+#ifdef DEBUG
+#include "ApplicationTesting.hpp"
+#endif
 
-int main() {
+int main(int argc, char *argv[]) {
     try {
-    ConsoleInput in;
-    std::string input;
-    in.getInput(input);
+    std::string inputExpression(argv[1]);
     OperationRegistry operationRegistry;
     initializeOperationMap(operationRegistry);
-    ExpressionTree tree(operationRegistry);
-    tree.buildExpressionTree(input);
-    auto res = tree.evaluate(tree.getHead());
-    std::cout << std::endl << "Result :   " ;
-    res->print();
-    std::cout << std::endl;  
+    #ifdef DEBUG
+        ApplicationTesting::runTestCases(operationRegistry);
+    #endif
+    Evaluator evaluator(operationRegistry);
+    auto result = evaluator.evaluate(inputExpression);
+    ConsoleInput input;
+    std::cout << std::endl << "Result :  ";
+    std::cout << result->toString();
+    std::cout << std::endl;
+    while (true) {
+        std::string inputExpression;
+        input.getInput(inputExpression);
+        if (inputExpression == "quit") {
+            break;
+        }
+        Evaluator evaluator(operationRegistry);
+        auto result = evaluator.evaluate(inputExpression);
+        std::cout << std::endl << "Result :  ";
+        std::cout << result->toString();
+        std::cout << std::endl;
+    }
 }
     catch(const InvalidMatrixOperand& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);
@@ -38,7 +52,7 @@ int main() {
 }
 
 // ({{2 2} {2 2}} == {{2 2} {2 2}}) ? 4 : 5
-//({{2 2} {2 2}} == {{1 1} {1 1}} * 2) ? 17 : 2 
+//({{2 2} {2 2}} == {{1 1} {1 1}} * 2) ? 17 : 2
 // -{{2 2} {2 2}}
 // -({{2 2} {2 2}} + 4 * {{2 33.3} {2 3}} + det(a))
 // {{3242 2344} {2334.c 2344}}

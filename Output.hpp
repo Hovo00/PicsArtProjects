@@ -16,7 +16,7 @@ public:
 };
 
 class ConsoleOutput : public OutputBase {
-public: 
+public:
     static void showErrorPlace(const std::string& errorMessage, const std::string& inputExpression, int pos);
     static void printErrorMessage(const std::string& errorMessage);
 };

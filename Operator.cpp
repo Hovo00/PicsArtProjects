@@ -1,4 +1,4 @@
-#include "Operator.h"
+#include "Operator.hpp"
 
 Operator::Operator(std::string operType, const std::vector<std::shared_ptr<Expression> >& args) : _operatorType(operType),
                                                                                                   _arguments(args){
@@ -26,7 +26,7 @@ std::shared_ptr<const Operand> Operator::doOperation(const std::vector<std::shar
 
     if (!registry.exist(OperationKey(_operatorType, argumentsType))) {
         auto argumentsInfo = registry.operationArgumentsInfo(_operatorType);
-        for (const auto & collection : argumentsInfo) {
+        for (const auto& collection : argumentsInfo) {
             int i = 0;
             std::vector<std::shared_ptr<const Operand> > convertedArguments;
             std::vector<std::string> convertedArgumentsType;
@@ -41,7 +41,6 @@ std::shared_ptr<const Operand> Operator::doOperation(const std::vector<std::shar
                     convertedArgumentsType.push_back(arguments[i]->getTypeName());
                 }
                 if (registry.exist(OperationKey(_operatorType, convertedArgumentsType))) {
-                    std::cout << "hereooo" << std::endl;
                     return registry.operate(OperationKey(_operatorType, convertedArgumentsType), convertedArguments);
                 }
                 ++i;

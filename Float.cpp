@@ -1,17 +1,21 @@
-#include "Float.h"
+#include "Float.hpp"
+#include <string>
 
 std::string Float::getTypeName() const {
     return "float";
 }
 
-void Float::print() const{
-    std::cout << _value;
+std::string Float::toString() const {
+    //string stream for removing trailing zeroes
+    std::stringstream number;
+    number << _value;
+    return number.str();
 }
 
-Float::Float(float number){
+Float::Float(double number){
     _value = number;
 }
 
-float Float::getValue() const{
+double Float::getValue() const{
     return _value;
 }

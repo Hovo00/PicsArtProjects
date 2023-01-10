@@ -1,4 +1,4 @@
-#include "OperationRegistry.h"
+#include "OperationRegistry.hpp"
 
 OperationKey::OperationKey(const std::string& operName, const std::vector<std::string>& argName) : operationName(operName),
                                                                                                    argumentsName(argName) {
@@ -33,7 +33,7 @@ void OperationRegistry::addFunction(const std::string& functionName, FUNCTION Fu
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add function with already existing key");
     assert(_operationTypeInfo.find(functionName) == _operationTypeInfo.end() && "trying to add existing operator");
     _operationArgumentsInfo[functionName].push_back(key.argumentsName);
-    _operationTypeInfo[functionName] = OperationInfo{OperationType::Function, 10000, argc, Associativity::LeftToRight, Notation::Prefix};
+    _operationTypeInfo[functionName] = OperationInfo{OperationType::Function, 10000, argc, Associativity::RightToLeft, Notation::Prefix};
     _operationMap[key] = Function;
 }
 
@@ -55,7 +55,7 @@ bool OperationRegistry::isOperatorSymbol(char symbol) const {
     return std::find(_operatorSymbols.begin(), _operatorSymbols.end(), symbol) != _operatorSymbols.end();
 }
 
-OperationRegistry::Operand OperationRegistry::operate(const OperationKey& key, const std::vector<std::shared_ptr<const Operand> >& operands) const{
+OperationRegistry::OPERAND OperationRegistry::operate(const OperationKey& key, const std::vector<std::shared_ptr<const Operand> >& operands) const{
 
     return (OperationRegistry::_operationMap.at(key))(operands);
 }

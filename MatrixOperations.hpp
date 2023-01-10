@@ -5,11 +5,11 @@
 #include <memory>
 #include <cmath>
 
-#include "Matrix.h"
-#include "Bool.h"
-#include "Float.h"
+#include "Matrix.hpp"
+#include "Bool.hpp"
+#include "Float.hpp"
 
-#include "Exception.h"
+#include "Exception.hpp"
 
 
 namespace MatrixOperations {
@@ -26,8 +26,7 @@ namespace MatrixOperations {
     std::shared_ptr<const Operand> matrixFloatAddition(const std::vector<std::shared_ptr<const Operand> >& arguments);
     std::shared_ptr<const Operand> matrixFloatSubtraction(const std::vector<std::shared_ptr<const Operand> >& arguments);
     std::shared_ptr<const Operand> matrixFloatMultiplication(const std::vector<std::shared_ptr<const Operand> >& arguments);
-    std::shared_ptr<const Operand> floatMatrixMultiplication(const std::vector<std::shared_ptr<const Operand> >& arguments);
-    
+    std::shared_ptr<const Operand> doubleMatrixMultiplication(const std::vector<std::shared_ptr<const Operand> >& arguments);
     void flipMatrixAlongDiagonal(std::shared_ptr<Matrix>& matrix);
     bool equalMatrix(const std::shared_ptr<const Operand>& matrix1, const std::shared_ptr<const Operand>& matrix2);
 };

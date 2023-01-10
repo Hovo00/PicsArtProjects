@@ -1,14 +1,14 @@
-#include "ConvertFunctions.h"
+#include "ConvertFunctions.hpp"
 
- float ConvertFunctions::stringToFloat(const std::string& number ) {
+ double ConvertFunctions::stringToFloat(const std::string& number ) {
     return std::stof(number);
-}    
-std::vector<std::vector<float> > ConvertFunctions::stringToMatrix(const std::string& matrixStr) {
+}
+std::vector<std::vector<double> > ConvertFunctions::stringToMatrix(const std::string& matrixStr) {
     int sign = 1;
     if (matrixStr[0] == '-') {
         sign = -1;
     }
-    std::vector<std::vector<float> > matrix;
+    std::vector<std::vector<double> > matrix;
     matrix.resize(matrixStr.size());
     int rowCount = 0;
     int colCount = 0;

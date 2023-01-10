@@ -1,14 +1,14 @@
-#include "ExpressionTree.h"
+#include "Evaluator.hpp"
 
-ExpressionTree::ExpressionTree(const OperationRegistry& registry) : _operationRegistry(registry),
+Evaluator::Evaluator(const OperationRegistry& registry) : _operationRegistry(registry),
                                                                     _lexer(registry) {
 
 }
 
-void ExpressionTree::buildExpressionTree(std::string& inputExpression) {
+void Evaluator::buildExpressionTree(std::string& inputExpression) {
     auto lexems = _lexer.divideTolexems(inputExpression);
     std::stack<std::shared_ptr<Expression> > treeStack;
-    for (const auto& lexem : lexems) {
+    for (auto& lexem : lexems) {
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
             for (int i = 0; i < _operationRegistry.operationInfo(lexem.second).argumentCount; ++i) {
@@ -25,10 +25,10 @@ void ExpressionTree::buildExpressionTree(std::string& inputExpression) {
     treeStack.pop();
 }
 
-const std::shared_ptr<Expression>& ExpressionTree::getHead() const{
+const std::shared_ptr<Expression>& Evaluator::getHead() const{
     return _head;
 }
- std::shared_ptr<Expression> ExpressionTree::makeExpression(const std::pair<std::string, std::string>& lexem,
+ std::shared_ptr<Expression> Evaluator::makeExpression(const std::pair<std::string, std::string>& lexem,
                                                             const std::vector<std::shared_ptr<Expression> >& arguments) {
     if (lexem.first == "oper") {
         return std::make_shared<Operator>(lexem.second, arguments);
@@ -41,6 +41,10 @@ const std::shared_ptr<Expression>& ExpressionTree::getHead() const{
     }
     return std::make_shared<Float>(0);
  }
- std::shared_ptr<const Operand> ExpressionTree::evaluate(const std::shared_ptr<Expression>& head) const{
+ std::shared_ptr<const Operand> Evaluator::_evaluate(const std::shared_ptr<Expression>& head) const {
     return head->evaluate(_operationRegistry);
  }
+ std::shared_ptr<const Operand> Evaluator::evaluate(std::string& inputExpression) {
+    buildExpressionTree(inputExpression);
+    return _evaluate(_head);
+}

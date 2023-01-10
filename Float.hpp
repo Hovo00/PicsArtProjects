@@ -1,18 +1,19 @@
 #ifndef FLOAT_H
 #define FLOAT_H
 #include <iostream>
-#include "Operand.h"
+#include <sstream>
+#include "Operand.hpp"
 
 class Float : public Operand {
 public:
-    Float(float numb);
+    Float(double numb);
 public:
-    void print() const override;
+    std::string toString() const override;
     std::string getTypeName() const override;
 public:
-    float getValue() const;
+    double getValue() const;
 private:
-    float _value;
+    double _value;
 };
 
 #endif

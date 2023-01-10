@@ -1,4 +1,4 @@
-#include "Exception.h"
+#include "Exception.hpp"
 
 UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& args, const std::string& operType,
                                                            const std::vector<std::vector<std::string> >& candidateArgs) : arguments(args),
@@ -16,7 +16,7 @@ char const* UnsupportedOperatorArguments::what() const noexcept {
 }
 
 CustomException::CustomException(int col, const std::string& inputExpr) : column(col),
-                                                                  inputExpression(inputExpr) {
+                                                                          inputExpression(inputExpr) {
 
 }
 
@@ -24,7 +24,7 @@ InvalidMatrixOperand::InvalidMatrixOperand(int col, const std::string& inputExp)
 
 }
 
-char const* InvalidMatrixOperand::what() const noexcept { 
+char const* InvalidMatrixOperand::what() const noexcept {
     std::string errorMessage = "Invalid symbol in matrix brackets in col : ";
     errorMessage += std::to_string(column);
     return errorMessage.c_str();
@@ -41,7 +41,7 @@ char const* InvalidVariable::what() const noexcept {
 }
 
 invalidSyntax::invalidSyntax(int col, const std::string& inputExp) : CustomException(col, inputExp){
-   
+
 }
 char const* invalidSyntax::what() const noexcept {
     std::string errorMessage = "Invalid Syntax at col : ";

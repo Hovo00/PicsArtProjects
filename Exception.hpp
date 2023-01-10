@@ -1,11 +1,10 @@
-#ifndef EXCEPTIONXX_H
-#define EXCEPTIONXX_H
+#ifndef EXCEPTIONXX_HPP
+#define EXCEPTIONXX_HPP
 
 #include <exception>
 #include <string>
 #include <vector>
-
-#include "Operand.h"
+#include "Operand.hpp"
 
 class UnsupportedOperatorArguments : public std::exception {
 public:

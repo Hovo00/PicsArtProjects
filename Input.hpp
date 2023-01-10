@@ -10,7 +10,7 @@ public:
 
 class ConsoleInput : public InputBase {
 public:
-    virtual void getInput(std::string& inpStr) override;
+    void getInput(std::string& inpStr) override;
 };
 
 #endif

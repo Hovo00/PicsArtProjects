@@ -1,9 +1,9 @@
 #ifndef OPERATOR_H
 #define OPERATOR_H
 
-#include "Expression.h"
-#include "OperationRegistry.h"
-#include "Exception.h"
+#include "Expression.hpp"
+#include "OperationRegistry.hpp"
+#include "Exception.hpp"
 
 class Operator : public Expression {
 public:

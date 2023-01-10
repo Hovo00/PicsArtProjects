@@ -5,8 +5,8 @@
 #include <iostream>
 
 namespace ConvertFunctions {
-    float stringToFloat(const std::string& number);
-    std::vector<std::vector<float> > stringToMatrix(const std::string& number);
+    double stringToFloat(const std::string& number);
+    std::vector<std::vector<double> > stringToMatrix(const std::string& number);
 };
 
 #endif

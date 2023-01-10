@@ -1,0 +1,20 @@
+case1
+expression - ({{2 2} {2 2}} == {{2 2} {2 2}}) ? 4 : 5
+expected answer - 41
+received answer - 4
+case3
+expression - -{{2 2} {2 2}}
+expected answer - {{-2 -2} {-2 -2}}
+received answer - 0
+case5
+expression - ( ( ( inverse(32323) )))
+expected answer - 32323
+received answer - -32323
+case7
+expression - ((22 * 55))
+expected answer - 144
+received answer - 1210
+case8
+expression - sin(30) * cos(30) / 3 * 144 * 12 - 7
+expected answer - 123.8
+received answer - 242.415

@@ -1,4 +1,5 @@
-#include "Bool.h"
+#include "Bool.hpp"
+#include <string>
 
 std::string Bool::getTypeName() const {
     return "bool";
@@ -7,8 +8,9 @@ std::string Bool::getTypeName() const {
 bool Bool::getValue() const {
     return _value;
 }
-void Bool::print() const {
-    std::cout << _value << std::endl;
+
+std::string Bool::toString() const {
+    return std::to_string(_value);
 }
 
 Bool::Bool(bool value) {
