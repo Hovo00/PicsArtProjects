@@ -8,7 +8,7 @@ Evaluator::Evaluator(const OperationRegistry& registry) : _operationRegistry(reg
 void Evaluator::buildExpressionTree(std::string& inputExpression) {
     auto lexems = _lexer.divideTolexems(inputExpression);
     std::stack<std::shared_ptr<Expression> > treeStack;
-    for (auto& lexem : lexems) {
+    for (const auto& lexem : lexems) {
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
             for (int i = 0; i < _operationRegistry.operationInfo(lexem.second).argumentCount; ++i) {

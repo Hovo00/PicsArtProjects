@@ -6,7 +6,7 @@
 
 class Float : public Operand {
 public:
-    Float(double numb);
+    Float(double number);
 public:
     std::string toString() const override;
     std::string getTypeName() const override;

@@ -4,7 +4,6 @@ Lexer::Lexer(const OperationRegistry& registry) : _operationRegistry(registry){
 
 }
 
-
 Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr) const{
     Lexer::VectorOfLexems lexems;
     lexems.resize(inpStr.size() * 2);
@@ -129,7 +128,6 @@ void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     while (pos < inpStr.size() && _operationRegistry.isOperatorSymbol(inpStr[pos])) {
         Operator.push_back(inpStr[pos++]);
     }
-    //std::cout << pos << " " << (_operationRegistry.isOperator(inpStr, pos)) << std::endl;
     if (!_operationRegistry.isOperator(Operator) || (pos == inpStr.size() &&
         _operationRegistry.operationInfo(Operator).notation != Notation::Postfix)) {
         throw invalidSyntax(pos, inpStr);
@@ -138,7 +136,6 @@ void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems
         // check does it something like , -4 or 5 + -4 (allowed cases)
         if (lexemIndex == 0 || lexemIndex > 0 && (lexems[lexemIndex - 1].first == "oper" || lexems[lexemIndex - 1].second == "(")) {
             addNegativeLexem(inpStr, lexems, pos, lexemIndex);
-            ++lexemIndex;
             return;
         }
     }
@@ -161,7 +158,7 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) 
     //  }
     Lexer::VectorOfLexems postfix;
     std::stack<std::pair<std::string, std::string> > st;
-    for (auto& lexem : infix) {
+    for (const auto& lexem : infix) {
         if (lexem.first == "oper") {
             if (lexem.second == "?") {
                 if (st.empty()) {
@@ -179,7 +176,7 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix) 
                 while (!st.empty() && st.top().first == "oper" &&
                       (_operationRegistry.operationInfo(st.top().second).precedence >= _operationRegistry.operationInfo(lexem.second).precedence)) {
 
-                    if ((_operationRegistry.operationInfo(st.top().second).precedence == _operationRegistry.operationInfo(lexem.second).precedence) && 
+                    if ((_operationRegistry.operationInfo(st.top().second).precedence == _operationRegistry.operationInfo(lexem.second).precedence) &&
                          _operationRegistry.operationInfo(st.top().second).associativity == Associativity::RightToLeft) {
                         break;
                     }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <iomanip>
-#include <stdlib.h>
+#include <cstdlib>
 
 constexpr const char * RED = "\e[0;31m";
 constexpr const char * GREEN = "\e[0;32m";

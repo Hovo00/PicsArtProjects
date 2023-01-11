@@ -3,36 +3,37 @@
 #include "Evaluator.hpp"
 #include "Output.hpp"
 #include "MapInitialization.hpp"
-#ifdef DEBUG
-#include "ApplicationTesting.hpp"
-#endif
+
 
 int main(int argc, char *argv[]) {
     try {
-    std::string inputExpression(argv[1]);
+    std::string inputExpression;
+    if (argc == 1) {
+        inputExpression = "1";
+    }
+    else {
+        inputExpression = argv[1];
+    }
     OperationRegistry operationRegistry;
     initializeOperationMap(operationRegistry);
-    #ifdef DEBUG
-        ApplicationTesting::runTestCases(operationRegistry);
-    #endif
     Evaluator evaluator(operationRegistry);
     auto result = evaluator.evaluate(inputExpression);
     ConsoleInput input;
     std::cout << std::endl << "Result :  ";
     std::cout << result->toString();
     std::cout << std::endl;
-    while (true) {
-        std::string inputExpression;
-        input.getInput(inputExpression);
-        if (inputExpression == "quit") {
-            break;
-        }
-        Evaluator evaluator(operationRegistry);
-        auto result = evaluator.evaluate(inputExpression);
-        std::cout << std::endl << "Result :  ";
-        std::cout << result->toString();
-        std::cout << std::endl;
-    }
+    // while (true) {
+    //     std::string inputExpression;
+    //     input.getInput(inputExpression);
+    //     if (inputExpression == "quit") {
+    //         break;
+    //     }
+    //     Evaluator evaluator(operationRegistry);
+    //     auto result = evaluator.evaluate(inputExpression);
+    //     std::cout << std::endl << "Result :  ";
+    //     std::cout << result->toString();
+    //     std::cout << std::endl;
+    // }
 }
     catch(const InvalidMatrixOperand& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);

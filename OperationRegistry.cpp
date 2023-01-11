@@ -16,7 +16,7 @@ bool OperationKey::operator==(const OperationKey &otherKey) const {
     }
     return true;
 }
-void OperationRegistry::addOperator(const std::string& operatorName, FUNCTION Operator, const OperationKey& key, int argCount,
+void OperationRegistry::addOperator(const std::string& operatorName, Operation Operator, const OperationKey& key, int argCount,
                                     int precedence, Associativity associativity, Notation notation) {
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add operator with already existing key");
     assert(_operationTypeInfo.find(operatorName) == _operationTypeInfo.end() && "trying to add existing operator");
@@ -29,7 +29,7 @@ void OperationRegistry::addOperator(const std::string& operatorName, FUNCTION Op
         }
     }
 }
-void OperationRegistry::addFunction(const std::string& functionName, FUNCTION Function, const OperationKey& key, int argc) {
+void OperationRegistry::addFunction(const std::string& functionName, Operation Function, const OperationKey& key, int argc) {
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add function with already existing key");
     assert(_operationTypeInfo.find(functionName) == _operationTypeInfo.end() && "trying to add existing operator");
     _operationArgumentsInfo[functionName].push_back(key.argumentsName);
@@ -55,7 +55,7 @@ bool OperationRegistry::isOperatorSymbol(char symbol) const {
     return std::find(_operatorSymbols.begin(), _operatorSymbols.end(), symbol) != _operatorSymbols.end();
 }
 
-OperationRegistry::OPERAND OperationRegistry::operate(const OperationKey& key, const std::vector<std::shared_ptr<const Operand> >& operands) const{
+OperationRegistry::OperandRef OperationRegistry::operate(const OperationKey& key, const std::vector<std::shared_ptr<const Operand> >& operands) const{
 
     return (OperationRegistry::_operationMap.at(key))(operands);
 }
@@ -64,7 +64,7 @@ bool OperationRegistry::isOperator(const std::string& Operator) const {
     return _operationTypeInfo.find(Operator) != _operationTypeInfo.end();
 }
 
-OperationRegistry::ARGUMENTINFO OperationRegistry::operationArgumentsInfo(const std::string& operation) const{
+OperationRegistry::ArgumentInfo OperationRegistry::operationArgumentsInfo(const std::string& operation) const{
     //add checks
     return _operationArgumentsInfo.at(operation);
 
@@ -89,7 +89,7 @@ OperationRegistry::ARGUMENTINFO OperationRegistry::operationArgumentsInfo(const 
 //     return 0;
 // }
 
-void OperationRegistry::addOperationOverload(const std::string& operationName, FUNCTION Operator, const OperationKey& key) {
+void OperationRegistry::addOperationOverload(const std::string& operationName, Operation Operator, const OperationKey& key) {
     assert(!exist(key) && "trying to overload not existing operation");
     _operationMap[key] = Operator;
     _operationArgumentsInfo[operationName].push_back(key.argumentsName);
@@ -99,7 +99,7 @@ std::vector<std::string>  OperationRegistry::conversionInfo(const std::string& o
     //add checks
     return _conversionInfo.at(operandType);
 }
-void OperationRegistry::addConversion(const std::string& operandType1, const std::string& operandType2, FUNCTION convertFunction) {
+void OperationRegistry::addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction) {
     //add checks
     _operationMap[OperationKey("conversion",std::vector<std::string>{operandType1, operandType2})] = convertFunction;
     _conversionInfo[operandType1].push_back(operandType2);

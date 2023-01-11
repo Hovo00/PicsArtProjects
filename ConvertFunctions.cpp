@@ -14,11 +14,11 @@ std::vector<std::vector<double> > ConvertFunctions::stringToMatrix(const std::st
     int colCount = 0;
     for (int i = 1; i < matrixStr.size(); ++i) {
         if (std::isdigit(matrixStr[i]) || matrixStr[i] == '-') {
-            std::string numb;
+            std::string number;
             while(i < matrixStr.size() && (std::isdigit(matrixStr[i]) || matrixStr[i] == '.' || matrixStr[i] == '-')) {
-                numb.push_back(matrixStr[i++]);
+                number.push_back(matrixStr[i++]);
             }
-            matrix[rowCount].push_back(sign * std::stof(numb));
+            matrix[rowCount].push_back(sign * std::stof(number));
         }
         if (matrixStr[i] == '}') {
             ++rowCount;

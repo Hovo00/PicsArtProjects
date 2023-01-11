@@ -15,6 +15,7 @@ private:
     std::vector<std::shared_ptr<const Operand> > arguments;
     std::string operatorType;
     std::vector<std::vector<std::string> > candidateArguments;
+    mutable std::string errorMessage;
 };
 
 class CustomException : public std::exception {
@@ -22,6 +23,7 @@ public:
     CustomException(int column, const std::string& inputExpression);
     const int column;
     const std::string inputExpression;
+    mutable std::string errorMessage;
 };
 
 class InvalidMatrixOperand : public CustomException {
