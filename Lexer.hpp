@@ -8,27 +8,32 @@
 
 class Lexer {
 public:
-    Lexer(const OperationRegistry& operationRegistry);
     using VectorOfLexems  = std::vector<std::pair<std::string, std::string> >;
-    VectorOfLexems divideTolexems(const std::string& inputExpression) const;
+    VectorOfLexems divideTolexems(const std::string& inputExpression, const OperationRegistry& registry) const;
 private:
-    VectorOfLexems infixToPostfix(const VectorOfLexems& infixExpression) const;
-    void initializeVariables(VectorOfLexems& lexems) const;
-    void inputVariable(VectorOfLexems& lexems, int lexemIndex) const;
+    VectorOfLexems infixToPostfix(const VectorOfLexems& infixExpression, const OperationRegistry& registry) const;
+    void initializeVariables(VectorOfLexems& lexems, const OperationRegistry& registry) const;
+    void inputVariable(VectorOfLexems& lexems, int lexemIndex, const OperationRegistry& registry) const;
 private:
-    std::string cutNumberFromExpression(const std::string& inputExpression, int& pos) const;
-    //can be variable , matrix or double
-    void addNegativeLexem(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) const;
+    std::string cutNumberFromExpression(const std::string& inputExpression, int& pos,
+                                        const OperationRegistry& registry) const;
+    //can be variable , matrix or float
+    void addNegativeLexem(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex,
+                          const OperationRegistry& registry) const;
     bool isValidMatrixSymbol(char symbol) const;
 
-    void addBracketToLexems(char bracket, VectorOfLexems& lexems, int& pos, int lexemIndex) const;
-    void addNumberToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) const;
-    void addVariableToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) const;
-    void addMatrixToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) const;
-    void addFunctionToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemCount) const;
-    void addOperatorToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex) const;
-private:
-    const OperationRegistry& _operationRegistry;
+    void addBracketToLexems(char bracket, VectorOfLexems& lexems, int& pos, int lexemIndex,
+                                const OperationRegistry& registry) const;
+    void addNumberToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex,
+                                const OperationRegistry& registry) const;
+    void addVariableToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex,
+                                const OperationRegistry& registry) const;
+    void addMatrixToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex,
+                                const OperationRegistry& registry) const;
+    void addFunctionToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemCount,
+                                const OperationRegistry& registry) const;
+    void addOperatorToLexems(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex,
+                                const OperationRegistry& registry) const;
 };
 
 #endif

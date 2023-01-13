@@ -42,12 +42,12 @@ bool OperationRegistry::exist(const OperationKey& key) const{
     return (_operationMap.find(key) != _operationMap.end());
 }
 
-OperationInfo OperationRegistry::operationInfo(const std::string& Operation) const {
+const OperationInfo& OperationRegistry::operationInfo(const std::string& Operation) const {
     return _operationTypeInfo.at(Operation);
 }
 
 bool OperationRegistry::isFunction(const std::string& expression) const {
-    return (_operationTypeInfo.find(expression) != _operationTypeInfo.end() 
+    return (_operationTypeInfo.find(expression) != _operationTypeInfo.end()
             && _operationTypeInfo.at(expression).operationType == OperationType::Function);
 }
 
@@ -64,10 +64,33 @@ bool OperationRegistry::isOperator(const std::string& Operator) const {
     return _operationTypeInfo.find(Operator) != _operationTypeInfo.end();
 }
 
-OperationRegistry::ArgumentInfo OperationRegistry::operationArgumentsInfo(const std::string& operation) const{
+const OperationRegistry::ArgumentInfo& OperationRegistry::operationArgumentsInfo(const std::string& operation) const{
     //add checks
     return _operationArgumentsInfo.at(operation);
 
+}
+
+void OperationRegistry::addOperationOverload(const std::string& operationName, Operation Operator, const OperationKey& key) {
+    assert(!exist(key) && "trying to overload not existing operation");
+    _operationMap[key] = Operator;
+    _operationArgumentsInfo[operationName].push_back(key.argumentsName);
+}
+
+const std::vector<std::string>&  OperationRegistry::conversionInfo(const std::string& operandType) const{
+    //add checks
+    return _conversionInfo.at(operandType);
+}
+void OperationRegistry::addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction) {
+    //add checks
+    _operationMap[OperationKey("conversion",std::vector<std::string>{operandType1, operandType2})] = convertFunction;
+    _conversionInfo[operandType1].push_back(operandType2);
+}
+bool OperationRegistry::isConvertable(const std::string& operandType1, const std::string& operandType2) const{
+    if (_conversionInfo.find(operandType1) == _conversionInfo.end()) {
+        return false;
+    }
+    auto convertableTypes = _conversionInfo.at(operandType1);
+    return std::find(convertableTypes.begin(), convertableTypes.end(), operandType2) != convertableTypes.end();
 }
 
 // int OperationRegistry::isOperator(const std::string& inputExpression, int pos) const {
@@ -88,28 +111,3 @@ OperationRegistry::ArgumentInfo OperationRegistry::operationArgumentsInfo(const 
 //     }
 //     return 0;
 // }
-
-void OperationRegistry::addOperationOverload(const std::string& operationName, Operation Operator, const OperationKey& key) {
-    assert(!exist(key) && "trying to overload not existing operation");
-    _operationMap[key] = Operator;
-    _operationArgumentsInfo[operationName].push_back(key.argumentsName);
-}
-
-std::vector<std::string>  OperationRegistry::conversionInfo(const std::string& operandType) const{
-    //add checks
-    return _conversionInfo.at(operandType);
-}
-void OperationRegistry::addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction) {
-    //add checks
-    _operationMap[OperationKey("conversion",std::vector<std::string>{operandType1, operandType2})] = convertFunction;
-    _conversionInfo[operandType1].push_back(operandType2);
-}
-bool OperationRegistry::isConvertable(const std::string& operandType1, const std::string& operandType2) const{
-    if (_conversionInfo.find(operandType1) == _conversionInfo.end()) {
-        return false;
-    }
-    auto convertableTypes = _conversionInfo.at(operandType1);
-    return std::find(convertableTypes.begin(), convertableTypes.end(), operandType2) != convertableTypes.end();
-}
-
-

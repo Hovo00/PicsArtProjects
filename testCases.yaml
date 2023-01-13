@@ -1,6 +1,6 @@
 CASE1:
   expression : '({{2 2} {2 2}} == {{2 2} {2 2}}) ? 4 : 5'
-  expected : "42"
+  expected : "4"
 CASE2:
   expression : '({{2 2} {2 2}} == {{1 1} {1 1}} * 2) ? 17 : 2'
   expected : "17"

@@ -3,18 +3,22 @@ import yaml
 from pprint import pprint
 import os
 
+build_dir = "build"
+flag = True
+
 def getResultFromString(output):
     return (output.split(':')[-1]).strip()
 
 def runTestCase(case):
-    program = './expression_evaluator "' + case + '"' + '> res.txt'
+    exec_dir = os.path.join(build_dir, 'expression_evaluator ')
+    program = exec_dir + '-s "' + case + '"' + '> res.txt'
     sub.run(program, shell = True)
     with open("res.txt", "r") as file:
         output = file.read()
     return getResultFromString(output)
 
 def getTestCasesFromFile():
-    filePath = "../testCases.yaml"
+    filePath = "testCases.yaml"
     with open(filePath, "r") as file:
         testCases = yaml.load(file, Loader=yaml.FullLoader)
     return testCases
@@ -29,7 +33,11 @@ def runAllCases(testCases):
     for testCase in testCases:
         result = runTestCase(testCases[testCase]["expression"])
         if result != testCases[testCase]["expected"]:
+            flag = False
             printFailedCase(testCases, testCase, result)
+    os.remove("res.txt")
 
 testCases = getTestCasesFromFile()
 runAllCases(testCases)
+if flag:
+    print("All casses succseed")

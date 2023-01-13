@@ -1,7 +1,7 @@
 #ifndef MAPININITIALIZATION_H
 #define MAPININITIALIZATION_H
 
-#include "OperationRegistry.hpp"
+#include "Evaluator.hpp"
 #include "BoolOperations.hpp"
 #include "FloatOperations.hpp"
 #include "MatrixOperations.hpp"
@@ -9,6 +9,6 @@
 
 
 
-void initializeOperationMap(OperationRegistry& registry);
+void initEvaluatorOperationMap(Evaluator& evaluator);
 
 #endif

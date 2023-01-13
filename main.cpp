@@ -8,32 +8,36 @@
 int main(int argc, char *argv[]) {
     try {
     std::string inputExpression;
+    bool mode = true;
     if (argc == 1) {
-        inputExpression = "1";
+        inputExpression = "";
+    }
+    else if (strcmp(argv[1], "-c")) {
+        mode = false;
+        inputExpression = argv[2];
     }
     else {
         inputExpression = argv[1];
     }
-    OperationRegistry operationRegistry;
-    initializeOperationMap(operationRegistry);
-    Evaluator evaluator(operationRegistry);
+    std::cout << argv[1] << std::endl;
+    Evaluator evaluator;
+    initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);
     ConsoleInput input;
     std::cout << std::endl << "Result :  ";
     std::cout << result->toString();
     std::cout << std::endl;
-    // while (true) {
-    //     std::string inputExpression;
-    //     input.getInput(inputExpression);
-    //     if (inputExpression == "quit") {
-    //         break;
-    //     }
-    //     Evaluator evaluator(operationRegistry);
-    //     auto result = evaluator.evaluate(inputExpression);
-    //     std::cout << std::endl << "Result :  ";
-    //     std::cout << result->toString();
-    //     std::cout << std::endl;
-    // }
+    while (mode) {
+        std::string inputExpression;
+        input.getInput(inputExpression);
+        if (inputExpression == "quit") {
+            break;
+        }
+        auto result = evaluator.evaluate(inputExpression);
+        std::cout << std::endl << "Result :  ";
+        std::cout << result->toString();
+        std::cout << std::endl;
+    }
 }
     catch(const InvalidMatrixOperand& excep) {
         ConsoleOutput::showErrorPlace(std::string(excep.what()), excep.inputExpression, excep.column);

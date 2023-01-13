@@ -51,20 +51,15 @@ public:
     void addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction);
     //
     OperandRef operate(const OperationKey& key, const std::vector<OperandRef >& operands) const;
-    OperationInfo operationInfo(const std::string& Operator) const;
-    ArgumentInfo operationArgumentsInfo(const std::string& operation) const;
-    std::vector<std::string> conversionInfo(const std::string& operandType) const;
+    const OperationInfo& operationInfo(const std::string& Operator) const;
+    const ArgumentInfo& operationArgumentsInfo(const std::string& operation) const;
+    const std::vector<std::string>& conversionInfo(const std::string& operandType) const;
 public:
     bool isFunction(const std::string& expression) const;
     bool isOperator(const std::string& Operator) const;
     bool isConvertable(const std::string& operandType1, const std::string& operandType2) const;
-    //int isOperator(const std::string& inputExpression, int pos) const;
     bool exist(const OperationKey& key) const;
-public:
-//remove
     bool isOperatorSymbol(char symbol) const;
-private:
-    void initializeOperationMap();
 private:
     std::unordered_map<std::string, std::vector<std::string> > _conversionInfo;
     std::unordered_map<std::string , ArgumentInfo > _operationArgumentsInfo;

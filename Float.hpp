@@ -1,6 +1,5 @@
 #ifndef FLOAT_H
 #define FLOAT_H
-#include <iostream>
 #include <sstream>
 #include "Operand.hpp"
 
