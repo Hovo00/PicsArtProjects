@@ -7,7 +7,7 @@ void Evaluator::buildExpressionTree(std::string& inputExpression) {
     for (const auto& lexem : lexems) {
         if (lexem.first == "oper") {
             std::vector<std::shared_ptr<Expression> > arguments;
-            for (int i = 0; i < _operationRegistry.operationInfo(lexem.second).argumentCount; ++i) {
+            for (int i = 0; i < _operationRegistry.operationInfo(lexem.second).second.argumentCount; ++i) {
                 arguments.push_back(treeStack.top());
                 treeStack.pop();
             }
@@ -20,22 +20,19 @@ void Evaluator::buildExpressionTree(std::string& inputExpression) {
     _head = treeStack.top();
     treeStack.pop();
 }
-void Evaluator::addOperator(const std::string& operatorName, Operation Operator, const OperationKey& key, int argCount,
-                     int precedence, Associativity associativity, Notation notation) {
-    _operationRegistry.addOperator(operatorName, Operator, key, argCount, precedence, associativity, notation);
+void Evaluator::addOperator(Operation Operator, const OperationKey& key, int precedence, Associativity associativity, Notation notation) {
+    _operationRegistry.addOperator(Operator, key, precedence, associativity, notation);
 }
-void Evaluator::addFunction(const std::string& functionName, Operation Function, const OperationKey& key, int argCount) {
-    _operationRegistry.addFunction(functionName, Function, key, argCount);
-}
-void Evaluator::addOperationOverload(const std::string& operationName, Operation Operator, const OperationKey& key) {
-    _operationRegistry.addOperationOverload(operationName, Operator, key);
+void Evaluator::addFunction(Operation Function, const OperationKey& key) {
+    _operationRegistry.addFunction(Function, key);
 }
 void Evaluator::addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction) {
     _operationRegistry.addConversion(operandType1, operandType2, convertFunction);
 }
 
  std::shared_ptr<Expression> Evaluator::makeExpression(const std::pair<std::string, std::string>& lexem,
-                                                            const std::vector<std::shared_ptr<Expression> >& arguments) {
+                                                            const std::vector<std::shared_ptr<Expression> >& arguments
+                                                            ) {
     if (lexem.first == "oper") {
         return std::make_shared<Operator>(lexem.second, arguments);
     }
@@ -45,8 +42,11 @@ void Evaluator::addConversion(const std::string& operandType1, const std::string
     if (lexem.first == "float") {
         return std::make_shared<Float>(ConvertFunctions::stringToFloat(lexem.second));
     }
+
     return std::make_shared<Float>(0);
+
  }
+
  std::shared_ptr<const Operand> Evaluator::_evaluate(const std::shared_ptr<Expression>& head) const {
     return head->evaluate(_operationRegistry);
  }

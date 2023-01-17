@@ -1,4 +1,5 @@
 #include <fstream>
+#include "Exception.hpp"
 #include "Input.hpp"
 #include "Evaluator.hpp"
 #include "Output.hpp"
@@ -9,17 +10,18 @@ int main(int argc, char *argv[]) {
     try {
     std::string inputExpression;
     bool mode = true;
+    std::cout << argc << std::endl;
     if (argc == 1) {
-        inputExpression = "";
+        inputExpression = " ";
     }
-    else if (strcmp(argv[1], "-c")) {
+    else if (std::string(argv[1]) == "-s") {
         mode = false;
         inputExpression = argv[2];
     }
     else {
         inputExpression = argv[1];
     }
-    std::cout << argv[1] << std::endl;
+    //inputExpression = "1 + 2";
     Evaluator evaluator;
     initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);
@@ -53,6 +55,10 @@ int main(int argc, char *argv[]) {
     }
     catch(const UnsupportedOperatorArguments& excep) {
         ConsoleOutput::printErrorMessage(std::string(excep.what()));
+    }
+    catch(const EmptyExpression& excep) {
+        ConsoleOutput::printErrorMessage(std::string(excep.what()));
+
     }
 }
 

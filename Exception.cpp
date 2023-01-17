@@ -59,3 +59,9 @@ char const* WrondMatrixDimension::what() const noexcept {
     errorMessage += std::to_string(current) + " at column " + std::to_string(column) + " previous defined " + std::to_string(previous);
     return errorMessage.data();
 }
+
+
+char const* EmptyExpression::what() const noexcept {
+    errorMessage = " Enter not empty expression";
+    return errorMessage.data();
+}

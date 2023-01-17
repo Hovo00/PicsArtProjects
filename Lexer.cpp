@@ -1,11 +1,13 @@
 #include "Lexer.hpp"
+#include "Exception.hpp"
 #include "OperationRegistry.hpp"
+#include <exception>
 
 // Lexer::Lexer(std::shared_ptr<OperationRegistry> registry) : registry(registry){
 
 // }
 
-Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr, const OperationRegistry& registry) const{
+Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr, const OperationRegistry& registry){
     Lexer::VectorOfLexems lexems;
     lexems.resize(inpStr.size() * 2);
     int lexemCount = 0;
@@ -34,13 +36,16 @@ Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr, const Ope
             throw invalidSyntax(i, inpStr);
         }
     }
+    if (lexemCount == 0) {
+       throw EmptyExpression();
+    }
     lexems.resize(lexemCount);
     initializeVariables(lexems, registry);
     return infixToPostfix(lexems, registry);
 }
 
 void Lexer::addNumberToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex,
-                              const OperationRegistry& registry) const{
+                              const OperationRegistry& registry) {
     lexems[lexemIndex].first = "float";
     lexems[lexemIndex].second = cutNumberFromExpression(inpStr, pos, registry);
     ++lexemIndex;
@@ -51,12 +56,12 @@ void Lexer::addNumberToLexems(const std::string& inpStr, Lexer::VectorOfLexems& 
         throw invalidSyntax(pos, inpStr);
     }
 }
-void Lexer::addVariableToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) const{
+void Lexer::addVariableToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) {
     lexems[lexemIndex].first = "var";
     while (pos < inpStr.size() && std::isalpha(inpStr[pos])) {
         lexems[lexemIndex].second.push_back(inpStr[pos++]);
     }
-    if (registry.isFunction(lexems[lexemIndex].second)) {
+    if (isFunction(lexems[lexemIndex].second, registry)) {
         addFunctionToLexems(inpStr, lexems, pos, lexemIndex, registry);
         return;
     }
@@ -66,14 +71,14 @@ void Lexer::addVariableToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     }
     //here error
     if (inpStr[pos] != ' ' && !registry.isOperatorSymbol(inpStr[pos]) && inpStr[pos] != ')' && inpStr[pos] != ',') {
-        if (!registry.isFunction(lexems[lexemIndex].second)) {
+        if (!isFunction(lexems[lexemIndex].second, registry)) {
             throw InvalidVariable(pos, inpStr);
         }
     }
     ++lexemIndex;
 }
 
-void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) const{
+void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry){
     lexems[lexemIndex].first = "matrix";
     if (inpStr[pos] == '-') {
         lexems[lexemIndex].second.push_back(inpStr[pos++]);
@@ -125,13 +130,13 @@ void Lexer::addMatrixToLexems(const std::string& inpStr, Lexer::VectorOfLexems& 
     ++lexemIndex;
 }
 
-void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) const{
+void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) {
     std::string Operator;
     while (pos < inpStr.size() && registry.isOperatorSymbol(inpStr[pos])) {
         Operator.push_back(inpStr[pos++]);
     }
-    if (!registry.isOperator(Operator) || (pos == inpStr.size() &&
-        registry.operationInfo(Operator).notation != Notation::Postfix)) {
+    if (!isOperator(Operator, registry) || (pos == inpStr.size() &&
+        registry.operationInfo(Operator).second.notation != Notation::Postfix)) {
         throw invalidSyntax(pos, inpStr);
     }
     if (Operator == "-") {
@@ -143,7 +148,7 @@ void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     }
     // such cases as,  * 5 or 4 + * 5 are not allowed
     else if (lexemIndex == 0 || lexemIndex > 0 && lexems[lexemIndex - 1].first == "oper") {
-        if (!registry.isFunction(lexems[lexemIndex - 1].second)) {
+        if (!isFunction(lexems[lexemIndex - 1].second, registry)) {
             throw invalidSyntax(pos - 1, inpStr);
         }
     }
@@ -154,7 +159,7 @@ void Lexer::addOperatorToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     ++lexemIndex;
 }
 
-Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, const OperationRegistry& registry) const{
+Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, const OperationRegistry& registry) {
     // for(auto & i : infix) {
     //      std::cout << i.second << " "  << i.first << std::endl;
     //  }
@@ -171,15 +176,15 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
                 st.push(lexem);
             }
             else if (st.top().first != "oper" ||
-                    registry.operationInfo(st.top().second).precedence < registry.operationInfo(lexem.second).precedence) {
+                    registry.operationInfo(st.top().second).second.precedence < registry.operationInfo(lexem.second).second.precedence) {
                 st.push(lexem);
             }
             else {
                 while (!st.empty() && st.top().first == "oper" &&
-                      (registry.operationInfo(st.top().second).precedence >= registry.operationInfo(lexem.second).precedence)) {
+                      (registry.operationInfo(st.top().second).second.precedence >= registry.operationInfo(lexem.second).second.precedence)) {
 
-                    if ((registry.operationInfo(st.top().second).precedence == registry.operationInfo(lexem.second).precedence) &&
-                         registry.operationInfo(st.top().second).associativity == Associativity::RightToLeft) {
+                    if ((registry.operationInfo(st.top().second).second.precedence == registry.operationInfo(lexem.second).second.precedence) &&
+                         registry.operationInfo(st.top().second).second.associativity == Associativity::RightToLeft) {
                         break;
                     }
                     postfix.push_back(st.top());
@@ -213,7 +218,7 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
     return postfix;
 }
 
-void Lexer::initializeVariables(Lexer::VectorOfLexems& lexems, const OperationRegistry& registry) const{
+void Lexer::initializeVariables(Lexer::VectorOfLexems& lexems, const OperationRegistry& registry) {
     std::unordered_map<std::string, int> knownVariables;
     for (int i = 0; i < lexems.size(); ++i) {
         if (lexems[i].first == "var") {
@@ -229,7 +234,7 @@ void Lexer::initializeVariables(Lexer::VectorOfLexems& lexems, const OperationRe
     }
 }
 
-void Lexer::inputVariable(Lexer::VectorOfLexems& lexems, int lexemIndex, const OperationRegistry& registry) const{
+void Lexer::inputVariable(Lexer::VectorOfLexems& lexems, int lexemIndex, const OperationRegistry& registry) {
     std::string userInput;
     std::cout << "Enter variable " << lexems[lexemIndex].second << " ";
     std::getline(std::cin, userInput);
@@ -246,13 +251,13 @@ void Lexer::inputVariable(Lexer::VectorOfLexems& lexems, int lexemIndex, const O
     }
 }
 
-void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemCount, 
-                                const OperationRegistry& registry) const{
+void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems& lexems, int& pos, int& lexemCount,
+                                const OperationRegistry& registry) {
     if (inpStr[pos++] != '(') {
         throw invalidSyntax(pos, inpStr);
     }
     lexems[lexemCount].first = "oper";
-    int argCount = registry.operationInfo(lexems[lexemCount++].second).argumentCount;
+    int argCount = registry.operationInfo(lexems[lexemCount++].second).second.argumentCount;
     int commasCount = 0;
     while (inpStr[pos] != ')' && pos < inpStr.size()) {
         if (std::isdigit(inpStr[pos])) {
@@ -290,7 +295,7 @@ void Lexer::addFunctionToLexems(const std::string& inpStr, Lexer::VectorOfLexems
     ++pos;
 }
 std::string Lexer::cutNumberFromExpression(const std::string& inpStr, int& pos,
-                                           const OperationRegistry& registry) const{
+                                           const OperationRegistry& registry) {
     if (inpStr[pos] == '-') {
         if (pos + 1 >= inpStr.size() || !std::isdigit(inpStr[pos + 1])) {
             throw invalidSyntax(pos, inpStr);
@@ -312,12 +317,12 @@ std::string Lexer::cutNumberFromExpression(const std::string& inpStr, int& pos,
     }
     return number;
 }
-void Lexer::addBracketToLexems(char bracket, VectorOfLexems& lexems, int& pos, int lexemIndex, const OperationRegistry& registry) const{
+void Lexer::addBracketToLexems(char bracket, VectorOfLexems& lexems, int& pos, int lexemIndex, const OperationRegistry& registry) {
     lexems[lexemIndex].first = "bracket";
     lexems[lexemIndex].second.push_back(bracket);
     ++pos;
 }
-void Lexer::addNegativeLexem(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) const{
+void Lexer::addNegativeLexem(const std::string& inputExpression, VectorOfLexems& lexems, int& pos, int& lexemIndex, const OperationRegistry& registry) {
     if (std::isdigit(inputExpression[pos])) {
         --pos;
         addNumberToLexems(inputExpression, lexems, pos, lexemIndex, registry);
@@ -342,8 +347,15 @@ void Lexer::addNegativeLexem(const std::string& inputExpression, VectorOfLexems&
     }
 }
 
-bool Lexer::isValidMatrixSymbol(char symbol) const {
+bool Lexer::isValidMatrixSymbol(char symbol) {
 
     return (std::isdigit(symbol) || symbol == '{' || symbol == '}' || symbol == ' ' || symbol == '-');
+}
+bool Lexer::isOperator(const std::string& expression, const OperationRegistry& registry) {
+    return registry.existOperation(expression);
+}
+bool Lexer::isFunction(const std::string& expression, const OperationRegistry& registry) {
+    return (registry.existOperation(expression) &&
+            registry.operationInfo(expression).second.operationType == OperationType::Function);
 }
 

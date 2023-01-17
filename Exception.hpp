@@ -52,4 +52,10 @@ public:
     const int current;
 };
 
+class EmptyExpression : std::exception {
+public:
+    char const* what() const noexcept override;
+    mutable std::string errorMessage;
+};
+
 #endif

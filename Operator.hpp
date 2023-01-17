@@ -10,7 +10,6 @@ public:
     Operator(std::string operatorType, const std::vector<std::shared_ptr<Expression> >& arguments);
 public:
     std::shared_ptr<const Operand> evaluate(const OperationRegistry& registry) const override;
-    std::string getTypeName() const override;
 private:
     std::shared_ptr<const Operand> doOperation(const std::vector<std::shared_ptr<const Operand> >& operands,
                                          const OperationRegistry& registry) const;
