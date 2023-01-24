@@ -58,4 +58,9 @@ public:
     mutable std::string errorMessage;
 };
 
+// class invalidTernar : std::exception {
+//     public:
+//     char const* what() const noexcept override;
+// };
+
 #endif

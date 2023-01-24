@@ -20,13 +20,14 @@ void Evaluator::buildExpressionTree(std::string& inputExpression) {
     _head = treeStack.top();
     treeStack.pop();
 }
-void Evaluator::addOperator(Operation Operator, const OperationKey& key, int precedence, Associativity associativity, Notation notation) {
+void Evaluator::addOperator(OperationHandler Operator, const OperationKey& key, int precedence, Associativity associativity, Notation notation) {
+    _lexer.registerSymbols(key);
     _operationRegistry.addOperator(Operator, key, precedence, associativity, notation);
 }
-void Evaluator::addFunction(Operation Function, const OperationKey& key) {
+void Evaluator::addFunction(OperationHandler Function, const OperationKey& key) {
     _operationRegistry.addFunction(Function, key);
 }
-void Evaluator::addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction) {
+void Evaluator::addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction) {
     _operationRegistry.addConversion(operandType1, operandType2, convertFunction);
 }
 

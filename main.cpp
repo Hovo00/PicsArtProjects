@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
     try {
     std::string inputExpression;
     bool mode = true;
-    std::cout << argc << std::endl;
     if (argc == 1) {
         inputExpression = " ";
     }
@@ -21,7 +20,8 @@ int main(int argc, char *argv[]) {
     else {
         inputExpression = argv[1];
     }
-    //inputExpression = "1 + 2";
+    //std::cout << (2 == 4 ? 12 : 3)<< std::endl;
+    //inputExpression = "4 ? 2 : 2";
     Evaluator evaluator;
     initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);
@@ -58,22 +58,8 @@ int main(int argc, char *argv[]) {
     }
     catch(const EmptyExpression& excep) {
         ConsoleOutput::printErrorMessage(std::string(excep.what()));
-
+    }
+    catch(const std::string& excep) {
+        ConsoleOutput::printErrorMessage(excep);
     }
 }
-
-// ({{2 2} {2 2}} == {{2 2} {2 2}}) ? 4 : 5
-//({{2 2} {2 2}} == {{1 1} {1 1}} * 2) ? 17 : 2
-// -{{2 2} {2 2}}
-// -({{2 2} {2 2}} + 4 * {{2 33.3} {2 3}} + det(a))
-// {{3242 2344} {2334.c 2344}}
-// {{23.234 32.4} {234.4. 323}}
-// {{232 23} {232 22 } {    324  34  44}}
-//( ( ( inverse(32323) )))
-//det(a) * transpose(c)
-//{{23 32} {24 224}}
-//{{32 2324} {2344 2}}
-//124 * (sin(30) + -3 * 4-222 * 6) / 12
-//select({{2 2} {2 2}}, {{ 22 2} {2 2}}, {{2332 3 } {22 22}})
-//select({{2 2} {2 2}}, {{ 22 2} {2 2}}, {{2332 3 } {22 22}} , {{2 2} {2 2}})
-//(a == b) * 4

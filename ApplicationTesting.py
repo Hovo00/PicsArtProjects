@@ -4,7 +4,6 @@ from pprint import pprint
 import os
 
 build_dir = "build"
-flag = True
 
 def getResultFromString(output):
     return (output.split(':')[-1]).strip()
@@ -30,14 +29,16 @@ def printFailedCase(testCases, case, receivedResult):
     print("     Received : " + receivedResult)
 
 def runAllCases(testCases):
+    flag = True
     for testCase in testCases:
         result = runTestCase(testCases[testCase]["expression"])
         if result != testCases[testCase]["expected"]:
             flag = False
             printFailedCase(testCases, testCase, result)
     os.remove("res.txt")
+    return flag
 
 testCases = getTestCasesFromFile()
-runAllCases(testCases)
-if flag:
-    print("All casses succseed")
+flag = runAllCases(testCases)
+if flag == True:
+    print("All casses sucseed")

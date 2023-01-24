@@ -161,9 +161,6 @@ bool MatrixOperations::equalMatrix(const std::shared_ptr<const Operand>& m1, con
     return true;
 }
 std::shared_ptr<const Operand> MatrixOperations::Select(const std::vector<std::shared_ptr<const Operand> >& arguments) {
-    // if (arguments[0]->getTypeName() != "matrix" || arguments[1]->getTypeName() != "matrix" || arguments[2]->getTypeName() != "matrix") {
-    //     throw UnsupportedOperatorArguments(arguments, "select", registry.operationArgumentsInfo("select"));
-    // }
     auto matrix1 = std::static_pointer_cast<const Matrix>(arguments[0]);
     std::vector<std::shared_ptr<const Operand> > args;
     args.push_back(arguments[1]);

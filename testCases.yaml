@@ -37,3 +37,39 @@ CASE12:
 CASE13:
   expression : '(1 == 1) + (1 == 2)'
   expected : "1"
+CASE14:
+  expression : '{{-20 20} {2 2}} + -30'
+  expected : "{{ -50 -10 } { -28 -28 } }"
+CASE15:
+  expression : '{{-20.32 20.33} {2 2.23}} -30.23'
+  expected : "{{ -50.55 -9.9 } { -28.23 -28 } }"
+CASE16:
+  expression : '-inverse(-30.5) + 255 + det({{2 3} {5 42}})'
+  expected : "293.5"
+CASE17:
+  expression : 'select({{2 2} {2 2}} * 2 , sin(90) * {{2 3} {2 2}}, {{1 1} {1 1}})'
+  expected : "{{ 5 5 } { 4 4 } }"
+CASE18:
+  expression : 'select({{2 2} {2 2}} * 2 , sin(90) * {{2 2} {2 2}}, {{1 1} {1 1}})'
+  expected : "{{ 4 4 } { 4 4 } }"
+CASE19:
+  expression : '-inverse(-cos(60))'
+  expected : "-0.5"
+CASE20:
+  expression : 'select({{2 2} {2 2}} * 2 , sin(90) * {{2 2} {2 2}}, {{1 1} {1 1}})'
+  expected : "{{ 4 4 } { 4 4 } }"
+CASE21:
+  expression : '-inverse(-cos(sin(0)) + 125 - 12 )'
+  expected : "112"
+CASE22:
+  expression : '0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9'
+  expected : "22"
+CASE23:
+  expression : '0 + 144 ? 0 ? (144 == 55) ? 0 : 12 == 48 ? 9 : 22 : 1: 2 == 2 ? 5 == 22 ? 0 : 17 - 4 == 13 ? 22 == 18 ? 5 : 13 : 2 : 9'
+  expected : "1"
+CASE24:
+  expression : '{{2 2} {2 2}} * 2 == {{4 4} {4 3}} ? 12 + 22 : sin(30) * sin(30) + cos(30) * cos(30)'
+  expected : "1"
+CASE25:
+  expression : '{{2 2} {2 2}} * 2 == {{4 4} {4 4}} ? 12 + 22 : sin(30) * sin(30) + cos(30) * cos(30)'
+  expected: "34"

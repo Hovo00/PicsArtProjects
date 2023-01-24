@@ -50,4 +50,5 @@ std::shared_ptr<const Operand> FloatOperations::thernardouble(const std::vector<
         return std::make_shared<Float>(flt1->getValue());
     }
     return std::make_shared<Float>(flt2->getValue());
+    return boolean->getValue() ? arguments[1] : arguments[2];
 }

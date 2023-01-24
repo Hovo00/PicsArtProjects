@@ -12,15 +12,14 @@
 class Evaluator {
 public:
     using OperandRef = std::shared_ptr<const Operand>;
-    using Operation = std::function<std::shared_ptr<const Operand>(std::vector<OperandRef>)>;
+    using OperationHandler = std::function<std::shared_ptr<const Operand>(std::vector<OperandRef>)>;
     using OverloadInfo = std::vector<std::vector<std::string> >;
 public:
     std::shared_ptr<const Operand> evaluate(std::string& inputExpression);
 
-    void addOperator(Operation Operator, const OperationKey& key, int precedence,
-                     Associativity associativity, Notation notation);
-    void addFunction(Operation Function, const OperationKey& key);
-    void addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction);
+    void addOperator(OperationHandler Operator, const OperationKey& key, int precedence, Associativity associativity, Notation notation);
+    void addFunction(OperationHandler Function, const OperationKey& key);
+    void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction);
 private:
     void buildExpressionTree(std::string& inputExpression);
     std::shared_ptr<Expression> makeExpression(const std::pair<std::string, std::string>&  lexem,

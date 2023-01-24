@@ -45,27 +45,24 @@ struct OperationProperties {
 class OperationRegistry {
 public:
     using OperandRef = std::shared_ptr<const Operand>;
-    using Operation = std::function<std::shared_ptr<const Operand>(std::vector<OperandRef>)>;
+    using OperationHandler = std::function<std::shared_ptr<const Operand>(std::vector<OperandRef>)>;
     using OverloadInfo = std::vector<std::vector<std::string> >;
     using OperationInfo = std::pair<OverloadInfo, OperationProperties>;
 public:
-    void addOperator(Operation Operator, const OperationKey& key, int precedence, Associativity assoc, Notation note);
-    void addFunction(Operation Function, const OperationKey& key);
-    void addConversion(const std::string& operandType1, const std::string& operandType2, Operation convertFunction);
-    //
+    void addOperator(OperationHandler Operator, const OperationKey& key, int precedence, Associativity assoc, Notation note);
+    void addFunction(OperationHandler Function, const OperationKey& key);
+    void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertion);
+
     OperandRef operate(const OperationKey& key, const std::vector<OperandRef >& operands) const;
-    const OperationInfo& operationInfo(const std::string& operation) const;
+    const OperationInfo& operationInfo(const std::string& OperationHandler) const;
 public:
     bool areConvertableTypes(const std::string& operandType1, const std::string& operandType2) const;
     bool existKey(const OperationKey& key) const;
     bool existOperation(const std::string& operationName) const;
-    bool isOperatorSymbol(char symbol) const;
 private:
     std::unordered_map<std::string, std::vector<std::string> > _conversionInfo;
-    std::unordered_map<OperationKey, Operation> _operationMap;
+    std::unordered_map<OperationKey, OperationHandler> _operationMap;
     std::unordered_map<std::string, OperationInfo> _operationInfo;
-//remove
-    std::vector<char> _operatorSymbols;
 };
 
 #endif
