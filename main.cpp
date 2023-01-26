@@ -20,8 +20,8 @@ int main(int argc, char *argv[]) {
     else {
         inputExpression = argv[1];
     }
-    //std::cout << (2 == 4 ? 12 : 3)<< std::endl;
-    //inputExpression = "4 ? 2 : 2";
+    std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9)<< std::endl;
+    inputExpression = "0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9";
     Evaluator evaluator;
     initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);

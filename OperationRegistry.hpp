@@ -10,21 +10,21 @@
 
 class Operand;
 
-struct OperationKey {
-    OperationKey(const std::string& operationName, const std::vector<std::string>& argumentsType);
-    bool operator==(const OperationKey &other) const;
+struct OperationSigniture {
+    OperationSigniture(const std::string& operationName, const std::vector<std::string>& argumentsType);
+    bool operator==(const OperationSigniture &other) const;
     const std::string operationName;
     const std::vector<std::string> argumentsType;
 };
 
 template<>
-struct std::hash<OperationKey> {
-    size_t operator()(const OperationKey& key) const {
-        std::string finalKey = key.operationName;
-        for (int i = 0; i < key.argumentsType.size(); ++i) {
-            finalKey += key.argumentsType[i];
+struct std::hash<OperationSigniture> {
+    size_t operator()(const OperationSigniture& signiture) const {
+        std::string key = signiture.operationName;
+        for (int i = 0; i < signiture.argumentsType.size(); ++i) {
+            key += signiture.argumentsType[i];
         }
-        return std::hash<std::string>{}(finalKey);
+        return std::hash<std::string>{}(key);
     }
 };
 
@@ -49,19 +49,19 @@ public:
     using OverloadInfo = std::vector<std::vector<std::string> >;
     using OperationInfo = std::pair<OverloadInfo, OperationProperties>;
 public:
-    void addOperator(OperationHandler Operator, const OperationKey& key, int precedence, Associativity assoc, Notation note);
-    void addFunction(OperationHandler Function, const OperationKey& key);
-    void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertion);
+    void addOperator(const OperationSigniture& sign, OperationHandler handler, int precedence, Associativity assoc, Notation note);
+    void addFunction(const OperationSigniture& sign, OperationHandler handler);
+    void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler conversion);
 
-    OperandRef operate(const OperationKey& key, const std::vector<OperandRef >& operands) const;
+    OperandRef operate(const OperationSigniture& sign, const std::vector<OperandRef >& operands) const;
     const OperationInfo& operationInfo(const std::string& OperationHandler) const;
 public:
     bool areConvertableTypes(const std::string& operandType1, const std::string& operandType2) const;
-    bool existKey(const OperationKey& key) const;
+    bool existSigniture(const OperationSigniture& sign) const;
     bool existOperation(const std::string& operationName) const;
 private:
     std::unordered_map<std::string, std::vector<std::string> > _conversionInfo;
-    std::unordered_map<OperationKey, OperationHandler> _operationMap;
+    std::unordered_map<OperationSigniture, OperationHandler> _operationMap;
     std::unordered_map<std::string, OperationInfo> _operationInfo;
 };
 

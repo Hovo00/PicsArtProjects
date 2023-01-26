@@ -1,4 +1,5 @@
 #include "Exception.hpp"
+#include <string>
 
 UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& args, const std::string& operType,
                                                            const std::vector<std::vector<std::string> >& candidateArgs) : arguments(args),
@@ -65,3 +66,24 @@ char const* EmptyExpression::what() const noexcept {
     errorMessage = " Enter not empty expression";
     return errorMessage.data();
 }
+
+// invalidTernar::invalidTernar(VectorOfLexems inputExpression,
+//                              int ternSymblCount,
+//                              const std::pair<std::string, std::string> ternarySymbols): ternSymbolCount(ternSymblCount),
+//                                                                                         inputExpression(inputExpr),
+//                                                                                         ternarSymbols(ternarySymbols) {
+// }
+// char const* invalidTernar::what() const noexcept override {
+//     if (ternSymbolCount < 0) {
+//         errorMessage = "l";
+//         for (int i = inputExpr.size(); i > 0; --i) {
+//             if (inputExpression[i].second == ternarSymbols.second) {
+//                 errorMessage = "Redudant ternary symbol " + ternarSymbol.second + "at column " + std::to_string(i);
+//                 return errorMessage;
+//             }
+//         }
+//         return errorMessage;
+//     }
+// }
+
+

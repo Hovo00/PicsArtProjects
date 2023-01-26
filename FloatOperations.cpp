@@ -38,10 +38,6 @@ std::shared_ptr<const Operand> FloatOperations::doubleEqual(const std::vector<st
     auto flt2 = std::static_pointer_cast<const Float>(arguments[1]);
     return std::make_shared<Bool>(flt1->getValue() == flt2->getValue());
 }
-std::shared_ptr<const Operand> FloatOperations::questionMarkFloat(const std::vector<std::shared_ptr<const Operand> >& arguments) {
-    auto flt = std::static_pointer_cast<const Float>(arguments[0]);
-    return std::make_shared<Bool>(flt->getValue() != 0);
-}
 std::shared_ptr<const Operand> FloatOperations::thernardouble(const std::vector<std::shared_ptr<const Operand> >& arguments) {
     auto boolean = std::static_pointer_cast<const Bool>(arguments[0]);
     auto flt1 = std::static_pointer_cast<const Float>(arguments[1]);

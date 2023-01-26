@@ -17,8 +17,8 @@ public:
 public:
     std::shared_ptr<const Operand> evaluate(std::string& inputExpression);
 
-    void addOperator(OperationHandler Operator, const OperationKey& key, int precedence, Associativity associativity, Notation notation);
-    void addFunction(OperationHandler Function, const OperationKey& key);
+    void addOperator(const OperationSigniture& key, OperationHandler Operator, int precedence, Associativity associativity, Notation notation);
+    void addFunction(const OperationSigniture& key, OperationHandler Function);
     void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction);
 private:
     void buildExpressionTree(std::string& inputExpression);

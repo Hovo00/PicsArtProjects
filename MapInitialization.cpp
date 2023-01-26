@@ -1,30 +1,30 @@
 #include "MapInitialization.hpp"
 
 void initEvaluatorOperationMap(Evaluator& evaluator) {
-    evaluator.addOperator(MatrixOperations::matrixAddition, OperationKey("+", std::vector<std::string>{"matrix", "matrix"}), 3, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixSubtraction, OperationKey("-", std::vector<std::string>{"matrix", "matrix"}), 3, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixMultiplication, OperationKey("*", std::vector<std::string>{"matrix", "matrix"}), 4, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixFloatDivision, OperationKey("/", std::vector<std::string>{"matrix", "float"}), 4, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixEqual, OperationKey("==", std::vector<std::string>{"matrix", "matrix"}), 2, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(FloatOperations::thernardouble, OperationKey("?:", std::vector<std::string>{"bool", "float", "float"}), 1, Associativity::RightToLeft, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("+", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixAddition, 3, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("-", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixSubtraction, 3, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("*", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixMultiplication, 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("/", std::vector<std::string>{"matrix", "float"}), MatrixOperations::matrixFloatDivision, 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("==", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixEqual, 2, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("?:", std::vector<std::string>{"bool", "float", "float"}), FloatOperations::thernardouble, 1, Associativity::RightToLeft, Notation::Infix);
 
-    evaluator.addFunction(MatrixOperations::matrixInverse,OperationKey("inverse", std::vector<std::string>{"matrix"}));
-    evaluator.addFunction(FloatOperations::sinus, OperationKey("sin", std::vector<std::string>{"float"}));
-    evaluator.addFunction(FloatOperations::cosinus, OperationKey("cos", std::vector<std::string>{"float"}));
-    evaluator.addFunction(MatrixOperations::matrixDeterminant, OperationKey("det", std::vector<std::string>{"matrix"}));
-    evaluator.addFunction(MatrixOperations::Select, OperationKey("select", std::vector<std::string>{"matrix", "matrix", "matrix"}));
-    evaluator.addFunction(MatrixOperations::matrixTranspose, OperationKey("transpose", std::vector<std::string>{"matrix"}));
+    evaluator.addFunction(OperationSigniture("inverse", std::vector<std::string>{"matrix"}), MatrixOperations::matrixInverse);
+    evaluator.addFunction(OperationSigniture("sin", std::vector<std::string>{"float"}), FloatOperations::sinus);
+    evaluator.addFunction(OperationSigniture("cos", std::vector<std::string>{"float"}), FloatOperations::cosinus);
+    evaluator.addFunction(OperationSigniture("det", std::vector<std::string>{"matrix"}), MatrixOperations::matrixDeterminant);
+    evaluator.addFunction(OperationSigniture("select", std::vector<std::string>{"matrix", "matrix", "matrix"}), MatrixOperations::Select);
+    evaluator.addFunction(OperationSigniture("transpose", std::vector<std::string>{"matrix"}), MatrixOperations::matrixTranspose);
+    evaluator.addFunction(OperationSigniture("inverse", std::vector<std::string>{"float"}), FloatOperations::doubleInverse);
 
-    evaluator.addFunction(FloatOperations::doubleInverse, OperationKey("inverse", std::vector<std::string>{"float"}));
-    evaluator.addOperator(FloatOperations::doubleAddition, OperationKey("+", std::vector<std::string>{"float", "float"}), 3, Associativity::LeftToRight, Notation::Infix );
-    evaluator.addOperator(FloatOperations::doubleSubtraction, OperationKey("-", std::vector<std::string>{"float", "float"}), 3, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(FloatOperations::doubleDivision, OperationKey("/", std::vector<std::string>{"float", "float"}), 4, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(FloatOperations::doubleMultiplication, OperationKey("*", std::vector<std::string>{"float", "float"}), 4, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(FloatOperations::doubleEqual, OperationKey("==", std::vector<std::string>{"float", "float"}), 2, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixFloatMultiplication, OperationKey("*", std::vector<std::string>{"matrix", "float"}), 4, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixFloatAddition, OperationKey("+", std::vector<std::string>{"matrix", "float"}), 3, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::matrixFloatSubtraction, OperationKey("-", std::vector<std::string>{"matrix", "float"}), 3, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(MatrixOperations::doubleMatrixMultiplication, OperationKey("*", std::vector<std::string>{"float", "matrix"}), 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("+", std::vector<std::string>{"float", "float"}), FloatOperations::doubleAddition, 3, Associativity::LeftToRight, Notation::Infix );
+    evaluator.addOperator(OperationSigniture("-", std::vector<std::string>{"float", "float"}), FloatOperations::doubleSubtraction, 3, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("/", std::vector<std::string>{"float", "float"}), FloatOperations::doubleDivision, 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("*", std::vector<std::string>{"float", "float"}), FloatOperations::doubleMultiplication, 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("==", std::vector<std::string>{"float", "float"}), FloatOperations::doubleEqual, 2, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("*", std::vector<std::string>{"matrix", "float"}), MatrixOperations::matrixFloatMultiplication, 4, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("+", std::vector<std::string>{"matrix", "float"}), MatrixOperations::matrixFloatAddition, 3, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("-", std::vector<std::string>{"matrix", "float"}), MatrixOperations::matrixFloatSubtraction, 3, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("*", std::vector<std::string>{"float", "matrix"}), MatrixOperations::doubleMatrixMultiplication, 4, Associativity::LeftToRight, Notation::Infix);
     evaluator.addConversion("bool", "float", TypeConversionFunctions::boolToFloat);
     evaluator.addConversion("float", "bool", TypeConversionFunctions::FloatToBool);
 }

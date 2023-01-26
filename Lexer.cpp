@@ -173,39 +173,36 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
     bool flagForTernar = false;
     for (const auto& lexem : infix) {
         if (lexem.first == "oper" || lexem.first == "separator") {
-            if (lexem.second == _ternarSymbols.first || lexem.second ==_ternarSymbols.second) {
-                while (!st.empty() && registry.operationInfo(_ternarSymbols.second).second.precedence <  registry.operationInfo(st.top().second).second.precedence){
+           if (lexem.first == "separator") {
+                while (!st.empty() && precedence(st.top().second, registry) > precedence(lexem.second, registry)) {
                     postfix.push_back(st.top());
                     st.pop();
                 }
-                if (lexem.second == _ternarSymbols.first) {
-                    ++ternarSymbolCount;
+                st.push(lexem);
+           }
+           else if (lexem.second == ternOperator) {
+                while (!st.empty() && st.top().second != separator) {
+                    postfix.push_back(st.top());
+                    st.pop();
                 }
-                else {
-                    --ternarSymbolCount;
-                    if (flagForTernar) {
-                        postfix.push_back(lexem);
-                        flagForTernar = false;
-                    }
-                    if (ternarSymbolCount > 0) {
-                        flagForTernar = true;
-                    }
-                    if (ternarSymbolCount == 0) {
-                        st.push(lexem);
-                    }
+                st.pop();
+                while (!st.empty() && isOperator(st.top().second, registry) && precedence(st.top().second , registry) >= precedence(lexem.second , registry)) {
+                    postfix.push_back(st.top());
+                    st.pop();
                 }
-            }
+                st.push(lexem);
+           }
             else if (st.empty()) {
                 st.push(lexem);
             }
             else if (st.top().first != "oper" ||
-                    registry.operationInfo(st.top().second).second.precedence < registry.operationInfo(lexem.second).second.precedence) {
+                    precedence(st.top().second, registry) < precedence(lexem.second, registry)) {
                 st.push(lexem);
             }
             else {
                 while (!st.empty() && st.top().first == "oper" &&
-                      (registry.operationInfo(st.top().second).second.precedence >= registry.operationInfo(lexem.second).second.precedence)) {
-                    if ((registry.operationInfo(st.top().second).second.precedence == registry.operationInfo(lexem.second).second.precedence) &&
+                      precedence(st.top().second, registry) >= precedence(lexem.second, registry)) {
+                    if (precedence(st.top().second, registry) < precedence(lexem.second, registry) &&
                          registry.operationInfo(st.top().second).second.associativity == Associativity::RightToLeft) {
                         break;
                     }
@@ -242,9 +239,6 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
     for(auto & i : postfix) {
         std::cout << i.second << " "  << i.first << std::endl;
     }
-    // if (ternarSymbolCount != 0) {
-
-    // }
     return postfix;
 }
 
@@ -397,17 +391,26 @@ bool Lexer::isFunction(const std::string& expression, const OperationRegistry& r
 bool Lexer::isOperatorSymbol(char symbol) const {
     return std::find(_symbolRegistry.begin(), _symbolRegistry.end(), symbol) != _symbolRegistry.end();
 }
-void Lexer::registerSymbols(const OperationKey& key) {
+void Lexer::registerSymbols(const OperationSigniture& key) {
     if (key.argumentsType.size() == 3) {
         if (key.operationName.size() != 2) {
             throw std::string("Error addOperator : ternar operator must have two symbols");
         }
-        if (_ternarSymbols.first.empty() && _ternarSymbols.second.empty()) {
-            _ternarSymbols.first.push_back(key.operationName[0]);
-            _ternarSymbols.second.push_back(key.operationName[1]);
+        // if (_ternarSymbols.first.empty() && _ternarSymbols.second.empty()) {
+        //     _ternarSymbols.first.push_back(key.operationName[0]);
+        //     _ternarSymbols.second.push_back(key.operationName[1]);
+        // }
+        // else {
+        //     if (_ternarSymbols.first + _ternarSymbols.second != key.operationName) {
+        //         throw std::string("Error addOperator : ternar operator symbol can't be changed after first registration");
+        //     }
+        // }
+        if (separator.empty() && ternOperator.empty()) {
+            separator.push_back(key.operationName[0]);
+            ternOperator.push_back(key.operationName[1]);
         }
         else {
-            if (_ternarSymbols.first + _ternarSymbols.second != key.operationName) {
+            if (separator + ternOperator != key.operationName) {
                 throw std::string("Error addOperator : ternar operator symbol can't be changed after first registration");
             }
         }
@@ -419,5 +422,21 @@ void Lexer::registerSymbols(const OperationKey& key) {
     }
 }
 bool Lexer::isSeparator(const std::string& expression) {
-    return expression == _ternarSymbols.first;
+    //change
+    return expression == separator;
 }
+
+int Lexer::separatorPrec(std::string separator, const OperationRegistry& registry) {
+    //change
+    return registry.operationInfo(ternOperator).second.precedence;
+}
+
+int Lexer::precedence(const std::string& operation, const OperationRegistry& registry) {
+    if (isSeparator(operation)) {
+        return separatorPrec(operation, registry);
+    }
+    else {
+        return registry.operationInfo(operation).second.precedence;
+    }
+}
+
