@@ -6,8 +6,8 @@ void initEvaluatorOperationMap(Evaluator& evaluator) {
     evaluator.addOperator(OperationSigniture("*", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixMultiplication, 4, Associativity::LeftToRight, Notation::Infix);
     evaluator.addOperator(OperationSigniture("/", std::vector<std::string>{"matrix", "float"}), MatrixOperations::matrixFloatDivision, 4, Associativity::LeftToRight, Notation::Infix);
     evaluator.addOperator(OperationSigniture("==", std::vector<std::string>{"matrix", "matrix"}), MatrixOperations::matrixEqual, 2, Associativity::LeftToRight, Notation::Infix);
-    evaluator.addOperator(OperationSigniture("?:", std::vector<std::string>{"bool", "float", "float"}), FloatOperations::thernardouble, 1, Associativity::RightToLeft, Notation::Infix);
-
+    evaluator.addOperator(OperationSigniture("?:", std::vector<std::string>{"bool", "float", "float"}), FloatOperations::thernardouble, 1, Associativity::LeftToRight, Notation::Infix);
+    evaluator.addOperator(OperationSigniture("[|]", std::vector<std::string>{"bool", "float", "float", "float"}), FloatOperations::fornarydouble, 0, Associativity::LeftToRight, Notation::Infix);
     evaluator.addFunction(OperationSigniture("inverse", std::vector<std::string>{"matrix"}), MatrixOperations::matrixInverse);
     evaluator.addFunction(OperationSigniture("sin", std::vector<std::string>{"float"}), FloatOperations::sinus);
     evaluator.addFunction(OperationSigniture("cos", std::vector<std::string>{"float"}), FloatOperations::cosinus);

@@ -32,7 +32,6 @@ const double& Matrix::at(int row, int col) const{
 
 double& Matrix::at(int row, int col) {
     return const_cast<double&>(const_cast<const Matrix*>(this)->at(row, col));
-
 }
 
 std::string Matrix::toString() const {

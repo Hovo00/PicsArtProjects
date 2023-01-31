@@ -19,16 +19,12 @@ bool OperationSigniture::operator==(const OperationSigniture &otherSigniture) co
 }
 void OperationRegistry::addOperator(const OperationSigniture& key, OperationHandler Operator, int precedence, Associativity associativity, Notation notation) {
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add operator with already existing key");
-    if (key.argumentsType.size() == 3 && key.operationName.size() == 2) {
-        addOperator(OperationSigniture(":", key.argumentsType), Operator, precedence, associativity, notation);
-        return;
-    }
     if (_operationInfo.find(key.operationName) != _operationInfo.end()) {
         if (_operationInfo.at(key.operationName).second.precedence != precedence ||
             _operationInfo.at(key.operationName).second.associativity != associativity ||
             _operationInfo.at(key.operationName).second.notation != notation) {
                 //change Exception ||||
-                throw EmptyExpression();
+                throw std::string("precedence, associativity and notation of overloaded operation cant be overloaded");
         }
         _operationMap[key] = Operator;
         _operationInfo[key.operationName].first.push_back(key.argumentsType);
@@ -64,7 +60,6 @@ OperationRegistry::OperandRef OperationRegistry::operate(const OperationSignitur
 bool OperationRegistry::existOperation(const std::string& operationName) const{
     return _operationInfo.find(operationName) != _operationInfo.end();
 }
-
 
 const OperationRegistry::OperationInfo& OperationRegistry::operationInfo(const std::string& operationName) const{
     if (_operationInfo.find(operationName) == _operationInfo.end()) {

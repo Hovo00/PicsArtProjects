@@ -22,6 +22,13 @@ void Evaluator::buildExpressionTree(std::string& inputExpression) {
 }
 void Evaluator::addOperator(const OperationSigniture& key, OperationHandler Operator, int precedence, Associativity associativity, Notation notation) {
     _lexer.registerSymbols(key);
+    if (key.argumentsType.size() > 2) {
+        if (key.operationName.size() != key.argumentsType.size() - 1) {
+            throw std::string("Characters count of Operator which have more then 2 arguments must be equal to argument count - 1");
+        }
+        _operationRegistry.addOperator(OperationSigniture(std::string{key.operationName.back()}, key.argumentsType), Operator, precedence, associativity, notation);
+        return;
+    }
     _operationRegistry.addOperator(key, Operator, precedence, associativity, notation);
 }
 void Evaluator::addFunction(const OperationSigniture& key, OperationHandler Function) {

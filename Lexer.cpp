@@ -1,7 +1,9 @@
 #include "Lexer.hpp"
 #include "Exception.hpp"
 #include "OperationRegistry.hpp"
+#include <algorithm>
 #include <exception>
+#include <string>
 
 Lexer::VectorOfLexems Lexer::divideTolexems(const std::string& inpStr, const OperationRegistry& registry){
     Lexer::VectorOfLexems lexems;
@@ -169,26 +171,50 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
     //  std::cout << std::endl;
     Lexer::VectorOfLexems postfix;
     std::stack<std::pair<std::string, std::string> > st;
-    int ternarSymbolCount = 0;
-    bool flagForTernar = false;
     for (const auto& lexem : infix) {
         if (lexem.first == "oper" || lexem.first == "separator") {
            if (lexem.first == "separator") {
-                while (!st.empty() && precedence(st.top().second, registry) > precedence(lexem.second, registry)) {
+                updateCount(lexem.second);
+                while (!st.empty() && st.top().second != "(" &&
+                       precedence(st.top().second, registry) > precedence(lexem.second, registry)
+                       ) {
                     postfix.push_back(st.top());
                     st.pop();
                 }
-                st.push(lexem);
+                if (getSeparator(lexem.second).empty()) {
+                    st.push(lexem);
+                }
+                else {
+                    if (st.top().second != getSeparator(lexem.second)) {
+                        while (!st.empty() && st.top().second != getSeparator(lexem.second) && st.top().second != "(") {
+                            postfix.push_back(st.top());
+                            st.pop();
+                        }
+                        st.pop();
+                        st.push(lexem);
+                        //throw std::string("something wrong");
+                    }
+                    else {
+                        st.pop();
+                        st.push(lexem);
+                    }
+                }
            }
-           else if (lexem.second == ternOperator) {
-                while (!st.empty() && st.top().second != separator) {
+           else if (isMultiOperandOperator(lexem.second)) {
+            //optimize
+                auto res = getSeparator(lexem.second);
+                updateCount(lexem.second);
+                while (!st.empty() && st.top().second != res) {
                     postfix.push_back(st.top());
                     st.pop();
                 }
+                //here check
                 st.pop();
-                while (!st.empty() && isOperator(st.top().second, registry) && precedence(st.top().second , registry) >= precedence(lexem.second , registry)) {
-                    postfix.push_back(st.top());
-                    st.pop();
+                if (getCount(lexem.second) > 0) {
+                    while (!st.empty() && isOperator(st.top().second, registry) && precedence(st.top().second , registry) >= precedence(lexem.second , registry)) {
+                        postfix.push_back(st.top());
+                        st.pop();
+                    }
                 }
                 st.push(lexem);
            }
@@ -389,46 +415,47 @@ bool Lexer::isFunction(const std::string& expression, const OperationRegistry& r
             registry.operationInfo(expression).second.operationType == OperationType::Function);
 }
 bool Lexer::isOperatorSymbol(char symbol) const {
-    return std::find(_symbolRegistry.begin(), _symbolRegistry.end(), symbol) != _symbolRegistry.end();
+    return std::find(_symbolRegistry.begin(), _symbolRegistry.end(), symbol) != _symbolRegistry.end() ||
+           isSeparator(std::string{symbol});
 }
-void Lexer::registerSymbols(const OperationSigniture& key) {
-    if (key.argumentsType.size() == 3) {
-        if (key.operationName.size() != 2) {
-            throw std::string("Error addOperator : ternar operator must have two symbols");
+void Lexer::registerSymbols(const OperationSigniture& signiture) {
+    if (signiture.argumentsType.size() > 2) {
+        if (signiture.operationName.size() != signiture.argumentsType.size() - 1) {
+            throw std::string("Characters count of Operator which have more then 2 arguments must be equal to argument count - 1");
         }
-        // if (_ternarSymbols.first.empty() && _ternarSymbols.second.empty()) {
-        //     _ternarSymbols.first.push_back(key.operationName[0]);
-        //     _ternarSymbols.second.push_back(key.operationName[1]);
-        // }
-        // else {
-        //     if (_ternarSymbols.first + _ternarSymbols.second != key.operationName) {
-        //         throw std::string("Error addOperator : ternar operator symbol can't be changed after first registration");
-        //     }
-        // }
-        if (separator.empty() && ternOperator.empty()) {
-            separator.push_back(key.operationName[0]);
-            ternOperator.push_back(key.operationName[1]);
-        }
-        else {
-            if (separator + ternOperator != key.operationName) {
-                throw std::string("Error addOperator : ternar operator symbol can't be changed after first registration");
-            }
-        }
+        //add checking
+        _separatorRegistry.push_back(std::make_pair(signiture.operationName, 0));
+        _symbolRegistry.push_back(signiture.operationName.back());
+        return;
     }
-    for (const auto & symbol : key.operationName) {
+    for (const auto & symbol : signiture.operationName) {
         if (std::find(_symbolRegistry.begin(), _symbolRegistry.end(), symbol) == _symbolRegistry.end()) {
             _symbolRegistry.push_back(symbol);
         }
     }
 }
-bool Lexer::isSeparator(const std::string& expression) {
-    //change
-    return expression == separator;
+bool Lexer::isSeparator(const std::string& expression) const{
+    //assume for simplicity separator have one symbol
+    char separator = expression[0];
+    for (const auto& reg : _separatorRegistry) {
+        int size = reg.first.size() - 1;
+        for (int i = 0; i < size; ++i) {
+            if (reg.first[i] == separator) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
-int Lexer::separatorPrec(std::string separator, const OperationRegistry& registry) {
-    //change
-    return registry.operationInfo(ternOperator).second.precedence;
+int Lexer::separatorPrec(const std::string& separator, const OperationRegistry& registry) {
+    char sep = separator[0];
+    for (const auto& reg : _separatorRegistry) {
+        if (std::find(reg.first.begin(), reg.first.end(), sep) != reg.first.end()) {
+            return registry.operationInfo(std::string{reg.first.back()}).second.precedence;
+        }
+    }
+    return 0;
 }
 
 int Lexer::precedence(const std::string& operation, const OperationRegistry& registry) {
@@ -438,5 +465,44 @@ int Lexer::precedence(const std::string& operation, const OperationRegistry& reg
     else {
         return registry.operationInfo(operation).second.precedence;
     }
+}
+bool Lexer::isMultiOperandOperator(const std::string& exprik) {
+    char iso = exprik[0];
+    for (const auto& reg : _separatorRegistry) {
+        if (reg.first.back() == iso) {
+            return true;
+        }
+    }
+    return false;
+}
+void Lexer::updateCount(const std::string& symbol) {
+    char symb = symbol[0];
+    for (auto & reg : _separatorRegistry) {
+        auto it = std::find(reg.first.begin(), reg.first.end(), symb);
+        if (it != reg.first.end()) {
+            reg.second += *it == reg.first.back() ? -reg.first.size() : 1;
+        }
+    }
+}
+int Lexer::getCount(const std::string& symbol) {
+    char symb = symbol[0];
+    for (auto & reg : _separatorRegistry) {
+        if (std::find(reg.first.begin(), reg.first.end(), symb) != reg.first.end()) {
+            return reg.second;
+        }
+    }
+    return 0;
+}
+
+std::string Lexer::getSeparator(const std::string& symbol) {
+    char symb = symbol[0];
+    for (const auto& reg : _separatorRegistry) {
+        for (int i = 0; i < reg.first.size(); ++i) {
+            if (reg.first[i] == symb && i > 0) {
+                return std::string{reg.first[i-1]};
+            }
+        }
+    }
+    return "";
 }
 

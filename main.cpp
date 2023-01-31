@@ -20,8 +20,9 @@ int main(int argc, char *argv[]) {
     else {
         inputExpression = argv[1];
     }
-    std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9)<< std::endl;
-    inputExpression = "0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9";
+   //std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 + 2 ? 7 : 4 + 12 ? 6 : 17 ? 22 : 24 + 18 : 1) << std::endl;
+   // std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9)<< std::endl;
+    //inputExpression = "1 [ (0 ? 1 : 2 ) | 3 ] 2";
     Evaluator evaluator;
     initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);

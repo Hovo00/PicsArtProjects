@@ -17,6 +17,8 @@ namespace FloatOperations {
     std::shared_ptr<const Operand> cosinus(const std::vector<std::shared_ptr<const Operand> >& arguments);
     std::shared_ptr<const Operand> sinus(const std::vector<std::shared_ptr<const Operand> >& arguments);
     std::shared_ptr<const Operand> thernardouble(const std::vector<std::shared_ptr<const Operand> >& arguments);
+    std::shared_ptr<const Operand> fornarydouble(const std::vector<std::shared_ptr<const Operand> >& arguments);
+
 };
 
 #endif

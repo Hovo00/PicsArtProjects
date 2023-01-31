@@ -46,5 +46,14 @@ std::shared_ptr<const Operand> FloatOperations::thernardouble(const std::vector<
         return std::make_shared<Float>(flt1->getValue());
     }
     return std::make_shared<Float>(flt2->getValue());
-    return boolean->getValue() ? arguments[1] : arguments[2];
+}
+std::shared_ptr<const Operand> FloatOperations::fornarydouble(const std::vector<std::shared_ptr<const Operand> >& arguments) {
+    auto boolean = std::static_pointer_cast<const Bool>(arguments[0]);
+    auto flt1 = std::static_pointer_cast<const Float>(arguments[1]);
+    auto flt2 = std::static_pointer_cast<const Float>(arguments[2]);
+    auto flt3 = std::static_pointer_cast<const Float>(arguments[3]);
+    if (boolean->getValue()) {
+        return std::make_shared<Float>(flt1->getValue() * flt2->getValue());
+    }
+    return std::make_shared<Float>(flt2->getValue() * flt3->getValue());
 }
