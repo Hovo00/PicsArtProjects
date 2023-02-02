@@ -7,11 +7,12 @@ UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std
                                                                                                                          candidateArguments(candidateArgs) {
 }
 
+//revisit
 char const* UnsupportedOperatorArguments::what() const noexcept {
     errorMessage = "operator ";
-    errorMessage += (operatorType + " unsupported for arguments of type ");
+    errorMessage += (operatorType + " unsupported for arguments of type (complete error)");
     for (const auto& operand : arguments) {
-        errorMessage += operand->getTypeName() + ", ";
+       // errorMessage += operand->getTypeName() + ", ";
     }
     return errorMessage.data();
 }

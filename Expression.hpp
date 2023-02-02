@@ -10,7 +10,7 @@ class Operand;
 
 class Expression {
 public:
-    virtual std::shared_ptr<const Operand> evaluate(const OperationRegistry&) const = 0;
+    virtual std::shared_ptr<const Operand> evaluate() const = 0;
 };
 
 #endif

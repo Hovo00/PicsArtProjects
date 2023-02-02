@@ -1,8 +1,5 @@
 #include "Matrix.hpp"
 
-std::string Matrix::getTypeName() const {
-    return "matrix";
-}
 
 Matrix::Matrix(const std::vector<std::vector<double> >& matrix) : _matrix(matrix) {
     _colCount = matrix[0].size();

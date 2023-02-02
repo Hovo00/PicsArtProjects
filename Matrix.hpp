@@ -20,7 +20,6 @@ public:
 
 public:
     std::string toString() const override;
-    std::string getTypeName() const override;
 private:
     int _rowCount;
     int _colCount;

@@ -1,7 +1,4 @@
-#include <fstream>
-#include "Exception.hpp"
 #include "Input.hpp"
-#include "Evaluator.hpp"
 #include "Output.hpp"
 #include "MapInitialization.hpp"
 
@@ -20,9 +17,7 @@ int main(int argc, char *argv[]) {
     else {
         inputExpression = argv[1];
     }
-   //std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 + 2 ? 7 : 4 + 12 ? 6 : 17 ? 22 : 24 + 18 : 1) << std::endl;
-   // std::cout << (0 + 144 ? 175 + 15 ? (144 == 55) ? 0 : 12 == 28 ? 9 : 22 : 1: 2 == 2 ? 5 : 9)<< std::endl;
-    //inputExpression = "1 [ (0 ? 1 : 2 ) | 3 ] 2";
+    //inputExpression = "{{2 2} {2 2}} + 4 * {{2 33.3} {2 3}} + det({{2 12} {122 7}})";
     Evaluator evaluator;
     initEvaluatorOperationMap(evaluator);
     auto result = evaluator.evaluate(inputExpression);
