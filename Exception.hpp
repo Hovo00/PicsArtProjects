@@ -8,14 +8,15 @@
 
 class UnsupportedOperatorArguments : public std::exception {
 public:
-    UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& arguments, const std::string& operatorType, 
-                                 const std::vector<std::vector<std::string> >& candidateArguments);
+    UnsupportedOperatorArguments(const std::string& operationType,
+                                 const std::vector<std::string>& argTypes,
+                                 const std::vector<std::vector<std::string> >& candidateArgTypes);
     char const* what() const noexcept override;
 private:
-    std::vector<std::shared_ptr<const Operand> > arguments;
-    std::string operatorType;
-    std::vector<std::vector<std::string> > candidateArguments;
-    mutable std::string errorMessage;
+    std::vector<std::string> _argTypes;
+    std::string _operationType;
+    std::vector<std::vector<std::string> > _candidateArgTypes;
+    mutable std::string _errorMessage;
 };
 
 class CustomException : public std::exception {

@@ -1,5 +1,6 @@
 #ifndef EVALUATOR_H
 #define EVALUATOR_H
+#include "OperationInfo.hpp"
 #include "Operator.hpp"
 #include "ConvertFunctions.hpp"
 #include "Lexer.hpp"
@@ -16,7 +17,7 @@ public:
 public:
     std::shared_ptr<const Operand> evaluate(std::string& inputExpression);
 
-    void addOperator(const OperationSigniture& key, const std::string& returnType, OperationHandler Operator, int precedence, Associativity associativity, Notation notation);
+    void addOperator(const OperationSigniture& key, const std::string& returnType, OperationHandler Operator, Properties props);
     void addFunction(const OperationSigniture& key, const std::string& returnType, OperationHandler Function);
     void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction);
 private:

@@ -18,7 +18,9 @@ public:
 class ConsoleOutput : public OutputBase {
 public:
     static void showErrorPlace(const std::string& errorMessage, const std::string& inputExpression, int pos);
-    static void printErrorMessage(const std::string& errorMessage);
+    static void printErrorMessageRedWhite(const std::string& errorMessage);
+    static void printErrorMessageRed(const std::string& errorMessage);
+    static void printResult(const std::string& result);
     //static void showTernarErrorPlace(const std::string& errorMessage);
 };
 

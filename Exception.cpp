@@ -1,20 +1,30 @@
 #include "Exception.hpp"
+#include "OperationRegistry.hpp"
 #include <string>
 
-UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::vector<std::shared_ptr<const Operand> >& args, const std::string& operType,
-                                                           const std::vector<std::vector<std::string> >& candidateArgs) : arguments(args),
-                                                                                                                         operatorType(operType),
-                                                                                                                         candidateArguments(candidateArgs) {
+UnsupportedOperatorArguments::UnsupportedOperatorArguments(const std::string& operationType,
+                                                           const std::vector<std::string>& argTypes,
+                                                           const std::vector<std::vector<std::string> >& candidateArgTypes) : _operationType(operationType),
+                                                                                                                              _argTypes(argTypes),
+                                                                                                                              _candidateArgTypes(candidateArgTypes) {
 }
 
 //revisit
 char const* UnsupportedOperatorArguments::what() const noexcept {
-    errorMessage = "operator ";
-    errorMessage += (operatorType + " unsupported for arguments of type (complete error)");
-    for (const auto& operand : arguments) {
-       // errorMessage += operand->getTypeName() + ", ";
+    _errorMessage = "operation ";
+    _errorMessage += (_operationType + " unsupported for arguments of type ");
+    for (const auto& argType: _argTypes) {
+        _errorMessage += argType + " ";
     }
-    return errorMessage.data();
+    _errorMessage += "\n\nCandidate arguments are \n  ";
+
+    for (const auto& candidates : _candidateArgTypes) {
+        for (const auto& argType : candidates) {
+            _errorMessage += argType + " ";
+        }
+        _errorMessage += "\n  ";
+    }
+    return _errorMessage.data();
 }
 
 CustomException::CustomException(int col, const std::string& inputExpr) : column(col),

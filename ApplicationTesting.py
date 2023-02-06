@@ -10,7 +10,7 @@ def getResultFromString(output):
 
 def runTestCase(case):
     exec_dir = os.path.join(build_dir, 'expression_evaluator ')
-    program = exec_dir + '-s "' + case + '"' + '> res.txt'
+    program = exec_dir + ' "' + case + '"' + '> res.txt'
     sub.run(program, shell = True)
     with open("res.txt", "r") as file:
         output = file.read()

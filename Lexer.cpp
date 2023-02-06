@@ -262,9 +262,9 @@ Lexer::VectorOfLexems Lexer::infixToPostfix(const Lexer::VectorOfLexems& infix, 
         postfix.push_back(st.top());
         st.pop();
     }
-    for(auto & i : postfix) {
-        std::cout << i.second << " "  << i.first << std::endl;
-    }
+    // for(auto & i : postfix) {
+    //     std::cout << i.second << " "  << i.first << std::endl;
+    // }
     return postfix;
 }
 
@@ -505,4 +505,3 @@ std::string Lexer::getSeparator(const std::string& symbol) {
     }
     return "";
 }
-

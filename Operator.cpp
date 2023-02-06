@@ -12,6 +12,5 @@ std::shared_ptr<const Operand> Operator::evaluate() const{
     for (int i = 0; i < _arguments.size(); ++i) {
         args.push_back(_arguments[i]->evaluate());
     }
-    std::reverse(args.begin(), args.end());
     return _handler(args);
 }
