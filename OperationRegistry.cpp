@@ -19,7 +19,7 @@ bool OperationSigniture::operator==(const OperationSigniture &otherSigniture) co
     }
     return true;
 }
-void OperationRegistry::addOperator(const OperationSigniture& key, const ReturnType& type, OperationHandler Operator, Properties properties) {
+void OperationRegistry::registerOperator(const OperationSigniture& key, ReturnType returnType, OperationHandler Operator, Properties properties) {
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add operator with already existing key");
     if (_operationInfoMap.find(key.operationName) != _operationInfoMap.end()) {
         if (_operationInfoMap.at(key.operationName).second.precedence != properties.precedence ||
@@ -29,28 +29,28 @@ void OperationRegistry::addOperator(const OperationSigniture& key, const ReturnT
                 throw std::string("precedence, associativity and notation of overloaded operation cant be overloaded");
         }
         _operationMap[key].second = Operator;
-        _operationMap[key].first = type;
+        _operationMap[key].first = returnType;
         _operationInfoMap[key.operationName].first.push_back(key.argumentsType);
         return;
     }
     int argc = key.argumentsType.size();
     _operationInfoMap[key.operationName].second = OperationProperties{properties, OperationType::Operator, argc};
     _operationMap[key].second = Operator;
-    _operationMap[key].first = type;
+    _operationMap[key].first = returnType;
     _operationInfoMap[key.operationName].first.push_back(key.argumentsType);
 }
-void OperationRegistry::addFunction(const OperationSigniture& key, const ReturnType& type, OperationHandler Function) {
+void OperationRegistry::registerFunction(const OperationSigniture& key, ReturnType returnType, OperationHandler Function) {
     assert(_operationMap.find(key) == _operationMap.end() && "error , trying add function with already existing key");
     if (_operationInfoMap.find(key.operationName) != _operationInfoMap.end()) {
         _operationMap[key].second = Function;
-        _operationMap[key].first = type;
+        _operationMap[key].first = returnType;
         _operationInfoMap[key.operationName].first.push_back(key.argumentsType);
     }
     _operationInfoMap[key.operationName].first.push_back(key.argumentsType);
     int argc = key.argumentsType.size();
     _operationInfoMap[key.operationName].second = OperationProperties{Properties{10000,Associativity::LeftToRight, Notation::Prefix}, OperationType::Function, argc};
     _operationMap[key].second = Function;
-    _operationMap[key].first = type;
+    _operationMap[key].first = returnType;
 }
 
 bool OperationRegistry::existSigniture(const OperationSigniture& key) const{
@@ -75,22 +75,17 @@ const OperationRegistry::OperationInfo& OperationRegistry::operationInfo(const s
     return _operationInfoMap.at(operationName);
 }
 
-void OperationRegistry::addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction) {
+void OperationRegistry::registerConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction) {
     _operationMap[OperationSigniture("conversion",std::vector<std::string>{operandType1, operandType2})].second = convertFunction;
     _conversionInfoMap[operandType1].push_back(operandType2);
 }
-bool OperationRegistry::areConvertableTypes(const std::string& operandType1, const std::string& operandType2) const{
-    if (_conversionInfoMap.find(operandType1) == _conversionInfoMap.end()) {
-        return false;
-    }
-    auto convertableTypes = _conversionInfoMap.at(operandType1);
-    return std::find(convertableTypes.begin(), convertableTypes.end(), operandType2) != convertableTypes.end();
+
+const std::vector<std::string>& OperationRegistry::conversionInfo(const std::string& operandType) const{
+    return _conversionInfoMap.at(operandType);
 }
 
-const std::vector<std::string>& OperationRegistry::conversionInfo(const std::string& typeName) const{
-    if (_conversionInfoMap.find(typeName) == _conversionInfoMap.end()) {
-        return std::vector<std::string>{};
-    }
-    return _conversionInfoMap.at(typeName);
+bool OperationRegistry::existConversion(const std::string& operandType) const {
+     return _conversionInfoMap.find(operandType) != _conversionInfoMap.end() ;
 }
+
 

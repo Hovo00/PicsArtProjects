@@ -8,20 +8,21 @@ public:
     using OperationHandler = std::function<std::shared_ptr<const Operand>(std::vector<std::shared_ptr<const Operand> >)>;
     using OverloadInfo = std::vector<std::vector<std::string> >;
     using OperationInfo = std::pair<OverloadInfo, OperationProperties>;
-    using ReturnType = std::string;
+    using ReturnType = const std::string&;
     using HandlerInfo = std::pair<ReturnType, OperationHandler>;
 public:
-    void addOperator(const OperationSigniture& sign, const std::string& returnType, OperationHandler handler, Properties);
-    void addFunction(const OperationSigniture& sign, const std::string& returnType, OperationHandler handler);
-    void addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler conversion);
+    void registerOperator(const OperationSigniture& signiture, ReturnType type, OperationHandler handler, Properties props);
+    void registerFunction(const OperationSigniture& signiture, ReturnType type, OperationHandler handler);
+    void registerConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler conversion);
 
     HandlerInfo handlerInfo(const OperationSigniture& sign) const;
     const OperationInfo& operationInfo(const std::string& OperationHandler) const;
-    const std::vector<std::string>& conversionInfo(const std::string& typeName) const;
+    const std::vector<std::string>& conversionInfo(const std::string& operandType) const;
 public:
-    bool areConvertableTypes(const std::string& operandType1, const std::string& operandType2) const;
+
     bool existSigniture(const OperationSigniture& sign) const;
     bool existOperation(const std::string& operationName) const;
+    bool existConversion(const std::string& operandType) const;
 private:
     std::unordered_map<std::string, std::vector<std::string> > _conversionInfoMap;
     std::unordered_map<OperationSigniture, HandlerInfo > _operationMap;

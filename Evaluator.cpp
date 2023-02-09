@@ -26,22 +26,22 @@ void Evaluator::buildExpressionTree(std::string& inputExpression) {
     _head = treeStack.top().first;
     treeStack.pop();
 }
-void Evaluator::addOperator(const OperationSigniture& key, const std::string& returnType, OperationHandler Operator, Properties properties) {
+void Evaluator::registerOperator(const OperationSigniture& key, const std::string& returnType, OperationHandler Operator, Properties properties) {
     _lexer.registerSymbols(key);
     if (key.argumentsType.size() > 2) {
         if (key.operationName.size() != key.argumentsType.size() - 1) {
             throw std::string("Characters count of Operator which have more then 2 arguments must be equal to argument count - 1");
         }
-        _operationRegistry.addOperator(OperationSigniture(std::string{key.operationName.back()}, key.argumentsType), returnType, Operator, properties);
+        _operationRegistry.registerOperator(OperationSigniture(std::string{key.operationName.back()}, key.argumentsType), returnType, Operator, properties);
         return;
     }
-    _operationRegistry.addOperator(key, returnType, Operator, properties);
+    _operationRegistry.registerOperator(key, returnType, Operator, properties);
 }
-void Evaluator::addFunction(const OperationSigniture& key, const std::string& returnType, OperationHandler Function) {
-    _operationRegistry.addFunction(key, returnType, Function);
+void Evaluator::registerFunction(const OperationSigniture& key, const std::string& returnType, OperationHandler Function) {
+    _operationRegistry.registerFunction(key, returnType, Function);
 }
-void Evaluator::addConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction) {
-    _operationRegistry.addConversion(operandType1, operandType2, convertFunction);
+void Evaluator::registerConversion(const std::string& operandType1, const std::string& operandType2, OperationHandler convertFunction) {
+    _operationRegistry.registerConversion(operandType1, operandType2, convertFunction);
 }
 
 std::pair<std::shared_ptr<Expression>, std::string> Evaluator::makeExpression(const std::pair<std::string, std::string>& lexem,
@@ -56,10 +56,10 @@ std::pair<std::shared_ptr<Expression>, std::string> Evaluator::makeExpression(co
                 std::vector<std::shared_ptr<Expression> > convertedArguments;
                 std::vector<std::string> convertedArgumentsType;
                 for (const auto & argType : candidateSigniture) {
-                    if (_operationRegistry.areConvertableTypes(argumentsType[i], argType)) {
+                    if (areConvertableTypes(argumentsType[i], argType)) {
                         auto key = OperationSigniture("conversion", std::vector<std::string>{argumentsType[i], argType});
                         auto castHandler = _operationRegistry.handlerInfo(key).second;
-                        convertedArguments.push_back(std::make_shared<Operator>("conversion", std::vector<std::shared_ptr<Expression> >{arguments[i]}, castHandler));
+                        convertedArguments.push_back(std::make_shared<Operator>(std::vector<std::shared_ptr<Expression> >{arguments[i]}, castHandler));
                         convertedArgumentsType.push_back(argType);
                     }
                     else {
@@ -68,7 +68,7 @@ std::pair<std::shared_ptr<Expression>, std::string> Evaluator::makeExpression(co
                     }
                     if (_operationRegistry.existSigniture(OperationSigniture(lexem.second, convertedArgumentsType))) {
                         auto handler = _operationRegistry.handlerInfo(OperationSigniture(lexem.second, convertedArgumentsType));
-                        return std::make_pair(std::make_shared<Operator>(lexem.second, convertedArguments, handler.second), handler.first);
+                        return std::make_pair(std::make_shared<Operator>(convertedArguments, handler.second), handler.first);
                     }
                     ++i;
                 }
@@ -76,13 +76,10 @@ std::pair<std::shared_ptr<Expression>, std::string> Evaluator::makeExpression(co
             throw UnsupportedOperatorArguments(lexem.second, argumentsType, candidateSignitures);
         }
         auto handlerInfo = _operationRegistry.handlerInfo(OperationSigniture{lexem.second, argumentsType});
-        return std::make_pair(std::make_shared<Operator>(lexem.second, arguments, handlerInfo.second), handlerInfo.first);
+        return std::make_pair(std::make_shared<Operator>(arguments, handlerInfo.second), handlerInfo.first);
     }
-    else if (lexem.first == "matrix") {
-        return std::make_pair(std::make_shared<Matrix>(ConvertFunctions::stringToMatrix(lexem.second)), lexem.first);
-    }
-    else if (lexem.first == "float") {
-        return std::make_pair(std::make_shared<Float>(ConvertFunctions::stringToFloat(lexem.second)), lexem.first);
+    else {
+        return std::make_pair(_operandCreatorMap[lexem.first](lexem.second), lexem.first);
     }
     return std::make_pair(std::make_shared<Float>(0), "");
  }
@@ -94,3 +91,17 @@ std::pair<std::shared_ptr<Expression>, std::string> Evaluator::makeExpression(co
     buildExpressionTree(inputExpression);
     return _evaluate(_head);
 }
+void Evaluator::addOperand(const std::string& operandName, Validator validator, Creator creator) {
+    _lexer.registerValidator(operandName, validator);
+    _operandCreatorMap[operandName] = creator;
+}
+
+bool Evaluator::areConvertableTypes(const std::string& operandType1, const std::string& operandType2) const {
+     if (!_operationRegistry.existConversion(operandType1)) {
+        return false;
+    }
+    auto convertableTypes = _operationRegistry.conversionInfo(operandType1);
+    return std::find(convertableTypes.begin(), convertableTypes.end(), operandType2) != convertableTypes.end();
+}
+
+

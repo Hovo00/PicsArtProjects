@@ -7,7 +7,7 @@
 
 // class InputBase {
 // public:
-//     virtual void getInput(std::string& inpStr) = 0;
+//     virtual void getInput(std::string& _inputExpression) = 0;
 // };
 
 
@@ -15,7 +15,7 @@ class ConsoleInput {
 public:
     static void getInput(Evaluator& evaluator, bool loopInputMode, std::string inputExpression);
 private:
-    static void _getInput(std::string& inpStr);
+    static void _getInput(std::string& inputExpression);
 };
 
 #endif

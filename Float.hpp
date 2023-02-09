@@ -8,7 +8,6 @@ public:
     Float(double number);
 public:
     std::string toString() const override;
-    //std::string getTypeName() const override;
 public:
     double getValue() const;
 private:

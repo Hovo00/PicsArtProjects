@@ -41,4 +41,4 @@ def runAllCases(testCases):
 testCases = getTestCasesFromFile()
 flag = runAllCases(testCases)
 if flag == True:
-    print("All casses sucseed")
+    print("All cases succeeded ")

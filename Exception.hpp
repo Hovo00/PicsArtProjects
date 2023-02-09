@@ -63,10 +63,10 @@ public:
 // public:
 //     using VectorOfLexems  = std::vector<std::pair<std::string, std::string> >;
 // public:
-//     invalidTernar(VectorOfLexems inputExpression, int ternSymbolCount, const std::pair<std::string, std::string> ternarSymbols);
+//     invalidTernar(VectorOfLexems _inputExpression, int ternSymbolCount, const std::pair<std::string, std::string> ternarSymbols);
 //     mutable std::string errorMessage;
 //     const std::pair<std::string, std::string> ternarSymbols;
-//     const std::string inputExpression;
+//     const std::string _inputExpression;
 //     const int ternSymbolCount;
 //     char const* what() const noexcept override;
 // };

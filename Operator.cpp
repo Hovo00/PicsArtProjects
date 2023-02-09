@@ -1,9 +1,7 @@
 #include "Operator.hpp"
 
-Operator::Operator(std::string operType,
-                   const std::vector<std::shared_ptr<Expression> >& args,
-                   OperationHandler handler) : _operatorName(operType),
-                                               _arguments(args),
+Operator::Operator(const std::vector<std::shared_ptr<Expression> >& args,
+                   OperationHandler handler) : _arguments(args),
                                                _handler(handler) {
 }
 

@@ -16,7 +16,7 @@ void ConsoleInput::getInput(Evaluator& evaluator, bool loopInputMode, std::strin
       } while(loopInputMode);
 }
 
-void ConsoleInput::_getInput(std::string& inpStr){
+void ConsoleInput::_getInput(std::string& inputExpression){
    std::cout << std::endl << NOCOLOR <<"Enter expression : ";
-   std::getline(std::cin, inpStr);
+   std::getline(std::cin, inputExpression);
 }

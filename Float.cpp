@@ -1,10 +1,6 @@
 #include "Float.hpp"
 #include <string>
 
-// std::string Float::getTypeName() const {
-//     return "float";
-// }
-
 std::string Float::toString() const {
     //string stream for removing trailing zeroes
     std::stringstream number;

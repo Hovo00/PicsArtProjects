@@ -8,9 +8,9 @@ Properties::Properties(int prec, Associativity assoc, Notation note) {
 
 
 OperationProperties::OperationProperties(Properties props,
-                                        OperationType type,
-                                        int argCount) : Properties(props),
-                                                        operationType(type),
-                                                        argumentCount(argCount) {
+                                         OperationType type,
+                                         int argCount) : Properties(props),
+                                                         operationType(type),
+                                                         argumentCount(argCount) {
 
 }
